@@ -1,0 +1,27 @@
+[package]
+name = "tba-rs"
+version = "0.1.0"
+edition = "2024"
+authors = ["Trevor Sears <trevor@trevorsears.com>"]
+description = "An async Rust client for The Blue Alliance API."
+readme = "README.md"
+license = "LGPL-3.0-or-later"
+documentation = "https://docs.rs/tba-rs"
+repository = "https://github.com/AthenaFRC/tba-rs"
+keywords = ["frc", "first-robotics", "the-blue-alliance", "api", "async"]
+categories = ["api-bindings", "web-programming::http-client"]
+
+[lib]
+name = "tba_rs"
+path = "src/lib.rs"
+
+[[bin]]
+name = "tba"
+path = "src/main.rs"
+
+[dependencies]
+reqwest = { version = "0.13.4", features = ["json"] }
+tokio = { version = "1.53.1", features = ["rt", "rt-multi-thread", "macros"] }
+dotenvy = "0.15.7"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.145"

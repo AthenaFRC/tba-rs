@@ -1,0 +1,65 @@
+use crate::api_result::APIResult;
+
+const API_KEY_ENV_VAR: &str = "X_TBA_AUTH_KEY";
+const BASE_API_URL_ENV_VAR: &str = "BASE_API_URL";
+const BASE_API_URL_FALLBACK: &str = "https://www.thebluealliance.com/api/v3";
+
+pub struct APIClient {
+	pub client: reqwest::Client,
+	pub api_key: String,
+	pub base_api_url: String,
+}
+
+impl APIClient {
+	pub async fn new() -> Result<APIClient, reqwest::Error> {
+		Self::new_with(None, None).await
+	}
+
+	pub async fn new_with(
+		api_key: Option<String>,
+		base_api_url: Option<String>,
+	) -> Result<APIClient, reqwest::Error> {
+		Ok(APIClient {
+			client: reqwest::Client::builder().build()?,
+			api_key: api_key
+				.or_else(|| std::env::var(API_KEY_ENV_VAR).ok())
+				.unwrap_or_else(|| {
+					panic!(
+						"API key must be provided either as an argument or in \
+						 the environment variable '{}'.",
+						API_KEY_ENV_VAR
+					)
+				}),
+			base_api_url: base_api_url.unwrap_or_else(|| {
+				std::env::var(BASE_API_URL_ENV_VAR)
+					.unwrap_or_else(|_| BASE_API_URL_FALLBACK.to_string())
+			}),
+		})
+	}
+
+	pub async fn get<T: serde::de::DeserializeOwned>(
+		&self,
+		url: &str,
+		e_tag: Option<String>,
+	) -> APIResult<T> {
+		let mut headers = reqwest::header::HeaderMap::new();
+
+		headers.insert("X-TBA-Auth-Key", self.api_key.parse().unwrap());
+
+		if let Some(etag) = e_tag {
+			headers.insert("If-None-Match", etag.parse().unwrap());
+		}
+
+		let response = self
+			.client
+			.get(self.base_api_url.to_string() + url)
+			.headers(headers)
+			.send()
+			.await;
+
+		match response {
+			Ok(response) => APIResult::from_response(response).await,
+			Err(err) => APIResult::Err(format!("Request failed: {}", err)),
+		}
+	}
+}
