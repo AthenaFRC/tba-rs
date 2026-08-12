@@ -1,6 +1,6 @@
-# tba-rs
+# tba
 
-`tba-rs` is an async Rust client for
+`tba` is an async Rust client for
 [The Blue Alliance API v3](https://www.thebluealliance.com/apidocs/v3).
 
 The crate provides generated endpoint accessors, serde response models, ETag
@@ -20,20 +20,20 @@ FRC tools that want typed access to TBA data without hand-building request URLs.
 ## Installation
 
 ```sh
-cargo add tba-rs
+cargo add tba
 ```
 
 or add it to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-tba-rs = "0.1"
+tba = "0.1"
 ```
 
 ## Quick Start
 
 ```rust
-use tba_rs::{
+use tba::{
     api,
     APIClient,
     APIResult,
@@ -120,7 +120,7 @@ let client = APIClient::new_with(
 ).await?;
 ```
 
-Creating instances of `tba_rs::APIClient` without specifying an API key will
+Creating instances of `tba::APIClient` without specifying an API key will
 read `X_TBA_AUTH_KEY` from the environment, and will cause a `panic` if the key
 is not set.
 
@@ -174,10 +174,10 @@ if matches!(second, APIResult::NotModified) {
 
 ## Models
 
-Response models are exported from `tba_rs::models`.
+Response models are exported from `tba::models`.
 
 ```rust
-use tba_rs::models::{
+use tba::models::{
 	Event,
 	Match,
 	Team,

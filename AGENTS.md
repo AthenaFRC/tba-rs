@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This repository contains `tba-rs`, an async Rust client for The Blue Alliance API. The crate is organized around:
+This repository contains `tba`, an async Rust client for The Blue Alliance API. The crate is organized around:
 
 - `src/api_client.rs`: shared HTTP client, authentication, base URL handling, and GET request execution.
 - `src/api_result.rs`: response wrapper for successful results, ETag caching, `304 Not Modified`, unauthorized responses, and API errors.

@@ -1,5 +1,5 @@
 [package]
-name = "tba-rs"
+name = "tba"
 version = "0.1.0"
 edition = "2024"
 authors = ["Trevor Sears <trevor@trevorsears.com>"]
@@ -12,7 +12,7 @@ keywords = ["frc", "first-robotics", "the-blue-alliance", "api", "async"]
 categories = ["api-bindings", "web-programming::http-client"]
 
 [lib]
-name = "tba_rs"
+name = "tba"
 path = "src/lib.rs"
 
 [[bin]]
