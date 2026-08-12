@@ -1,3 +1,10 @@
+#[cfg(feature = "rate-limit")]
+use governor::{
+	DefaultDirectRateLimiter,
+	Quota,
+	RateLimiter,
+};
+
 use crate::api_result::APIResult;
 
 const API_KEY_ENV_VAR: &str = "X_TBA_AUTH_KEY";
@@ -5,9 +12,19 @@ const BASE_API_URL_ENV_VAR: &str = "BASE_API_URL";
 const BASE_API_URL_FALLBACK: &str = "https://www.thebluealliance.com/api/v3";
 
 pub struct APIClient {
-	pub client: reqwest::Client,
-	pub api_key: String,
-	pub base_api_url: String,
+	/// The Reqwest client used to facilitate API interaction.
+	client: reqwest::Client,
+
+	/// The TBA API key that will be provided for authentication alongside each
+	/// request from this API client.
+	api_key: String,
+
+	/// The base API URL that will be used for all requests from this API
+	/// client.
+	base_api_url: String,
+
+	#[cfg(feature = "rate-limit")]
+	rate_limiter: Option<DefaultDirectRateLimiter>,
 }
 
 impl APIClient {
@@ -34,7 +51,19 @@ impl APIClient {
 				std::env::var(BASE_API_URL_ENV_VAR)
 					.unwrap_or_else(|_| BASE_API_URL_FALLBACK.to_string())
 			}),
+			#[cfg(feature = "rate-limit")]
+			rate_limiter: None,
 		})
+	}
+
+	#[cfg(feature = "rate-limit")]
+	pub fn with_rate_limiter(self, quota: Quota) -> APIClient {
+		APIClient {
+			client: self.client,
+			api_key: self.api_key,
+			base_api_url: self.base_api_url,
+			rate_limiter: Some(RateLimiter::direct(quota)),
+		}
 	}
 
 	pub async fn get<T: serde::de::DeserializeOwned>(
@@ -48,6 +77,11 @@ impl APIClient {
 
 		if let Some(etag) = e_tag {
 			headers.insert("If-None-Match", etag.parse().unwrap());
+		}
+
+		#[cfg(feature = "rate-limit")]
+		if let Some(limiter) = &self.rate_limiter {
+			limiter.until_ready().await;
 		}
 
 		let response = self
