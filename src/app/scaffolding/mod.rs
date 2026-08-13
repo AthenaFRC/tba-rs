@@ -4,6 +4,8 @@ pub use cli::*;
 mod completions;
 pub use completions::*;
 
+pub(crate) mod endpoint_manifest;
+
 mod cli_endpoint;
 pub use cli_endpoint::*;
 

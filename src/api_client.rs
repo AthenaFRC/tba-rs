@@ -7,9 +7,14 @@ use governor::{
 
 use crate::api_result::APIResult;
 
-const API_KEY_ENV_VAR: &str = "X_TBA_AUTH_KEY";
-const BASE_API_URL_ENV_VAR: &str = "BASE_API_URL";
-const BASE_API_URL_FALLBACK: &str = "https://www.thebluealliance.com/api/v3";
+pub const API_KEY_ENV_VAR: &str = "X_TBA_AUTH_KEY";
+pub const BASE_API_URL_ENV_VAR: &str = "BASE_API_URL";
+pub const BASE_API_URL_FALLBACK: &str = "https://www.thebluealliance.com/api/v3";
+
+pub enum APIClientInitializationError {
+	ReqwestClientInitializationError(reqwest::Error),
+	APIKeyError(String),
+}
 
 pub struct APIClient {
 	/// The Reqwest client used to facilitate API interaction.
@@ -28,25 +33,25 @@ pub struct APIClient {
 }
 
 impl APIClient {
-	pub async fn new() -> Result<APIClient, reqwest::Error> {
+	pub async fn new() -> Result<APIClient, APIClientInitializationError> {
 		Self::new_with(None, None).await
 	}
 
 	pub async fn new_with(
 		api_key: Option<String>,
 		base_api_url: Option<String>,
-	) -> Result<APIClient, reqwest::Error> {
+	) -> Result<APIClient, APIClientInitializationError> {
 		Ok(APIClient {
-			client: reqwest::Client::builder().build()?,
+			client: reqwest::Client::builder()
+				.build()
+				.map_err(APIClientInitializationError::ReqwestClientInitializationError)?,
 			api_key: api_key
 				.or_else(|| std::env::var(API_KEY_ENV_VAR).ok())
-				.unwrap_or_else(|| {
-					panic!(
-						"API key must be provided either as an argument or in \
-						 the environment variable '{}'.",
-						API_KEY_ENV_VAR
-					)
-				}),
+				.ok_or_else(|| APIClientInitializationError::APIKeyError(format!(
+					"API key must be provided either as an argument or in \
+					 the environment variable '{}'.",
+					API_KEY_ENV_VAR
+				)))?,
 			base_api_url: base_api_url.unwrap_or_else(|| {
 				std::env::var(BASE_API_URL_ENV_VAR)
 					.unwrap_or_else(|_| BASE_API_URL_FALLBACK.to_string())

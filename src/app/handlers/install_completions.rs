@@ -24,32 +24,51 @@ const BLOCK_END: &str = "# <<< tba completions <<<";
 
 pub fn install_completions(
 	shell: Option<Shell>,
-) -> Result<(), Box<dyn std::error::Error>> {
-	let shell = shell.or_else(Shell::from_env).ok_or_else(|| {
+) {
+	let shell = match shell.or_else(Shell::from_env).ok_or_else(|| {
 		io::Error::new(
 			ErrorKind::NotFound,
 			"no shell specified and the current shell could not be determined",
 		)
-	})?;
+	}) {
+		Ok(shell) => shell,
+		Err(error) => {
+			eprintln!("Error: {}", error);
+			return;
+		},
+	};
 
-	let installation = installation_for(shell)?;
+	let installation = match installation_for(shell) {
+		Ok(installation) => installation,
+		Err(error) => {
+			eprintln!("Error: {}", error);
+			return;
+		},
+	};
 
 	if let Some(parent) = installation.script.parent() {
-		fs::create_dir_all(parent)?;
+		if let Err(error) = fs::create_dir_all(parent) {
+			eprintln!("Error: {}", error);
+			return;
+		}
 	}
 
-	fs::write(&installation.script, get_completions(shell))?;
+	if let Err(error) = fs::write(&installation.script, get_completions(shell)) {
+		eprintln!("Error: {}", error);
+		return;
+	}
 
 	if let Some(activation) = installation.activation {
-		install_activation(&activation.file, &activation.command)?;
+		if let Err(error) = install_activation(&activation.file, &activation.command) {
+			eprintln!("Error: {}", error);
+			return;
+		}
 	}
 
 	println!(
 		"Installed {shell} completions to {}",
 		installation.script.display()
 	);
-
-	Ok(())
 }
 
 struct Installation {

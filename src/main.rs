@@ -22,9 +22,9 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			e_tag,
 			format,
 			endpoint,
-		}) => get_endpoint(endpoint, api_key, base_url, e_tag, format).await?,
-		Some(Commands::Completions { shell }) => generate_completions(shell)?,
-		Some(Commands::InstallCompletions) => install_completions(None)?,
+		}) => get_endpoint(endpoint, api_key, base_url, e_tag, format).await,
+		Some(Commands::Completions { shell }) => generate_completions(shell),
+		Some(Commands::InstallCompletions) => install_completions(None),
 		None => {}
 	}
 
