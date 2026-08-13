@@ -2,7 +2,6 @@
 name = "tba"
 version = "0.1.0"
 edition = "2024"
-build = "build.rs"
 authors = ["Trevor Sears <trevor@trevorsears.com>"]
 description = "An async Rust client for The Blue Alliance API."
 readme = "README.md"
