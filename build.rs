@@ -1,5 +1,4 @@
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-	
 	#[cfg(feature = "cli")]
 	generate_completions()?;
 
@@ -25,7 +24,6 @@ mod commands;
 
 #[cfg(feature = "cli")]
 fn generate_completions() -> Result<(), Box<dyn std::error::Error>> {
-	
 	let outdir = match env::var_os("OUT_DIR") {
 		None => return Ok(()),
 		Some(outdir) => outdir,
