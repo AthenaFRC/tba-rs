@@ -69,8 +69,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		// into its Ok variant, which contains the deserialized `TeamSimple`
 		// struct and the ETag for the response.
 		APIResult::Ok { result, e_tag } => {
-		println!("{}: {}", result.key, result.nickname);
-		println!("etag: {e_tag}");
+			println!("{}: {}", result.key, result.nickname);
+			println!("etag: {e_tag}");
 		},
 		
 		// If we provided an ETag that the server determined was still valid,
