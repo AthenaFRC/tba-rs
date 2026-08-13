@@ -1,30 +1,32 @@
 use clap::Parser;
-use tba::app::CLI;
-
-// tba
+use tba::app::{
+	handlers::{
+		generate_completions,
+		get_endpoint,
+		install_completions,
+	},
+	scaffolding::{
+		CLI,
+		Commands,
+	},
+};
 
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 	let cli: CLI = CLI::parse();
 
-	if let Some(name) = cli.command.as_ref() {
-		println!("Command: {:#?}", name);
+	match cli.command {
+		Some(Commands::Get {
+			api_key,
+			base_url,
+			e_tag,
+			format,
+			endpoint,
+		}) => get_endpoint(endpoint, api_key, base_url, e_tag, format).await?,
+		Some(Commands::Completions { shell }) => generate_completions(shell)?,
+		Some(Commands::InstallCompletions) => install_completions(None)?,
+		None => {}
 	}
-
-	if let Some(path) = cli.config.as_deref() {
-		println!("Config: {}", path.display());
-	}
-
-	// if let Err(error) = dotenvy::dotenv() {
-	// 	println!("Failed to load environment variables: {}", error);
-	// }
-	//
-	// let api: APIClient = APIClient::new().await?;
-	//
-	// println!(
-	// 	"API Status: {:#?}",
-	// 	api::team::team_media_by_year(&api, "frc1711", 2024, None).await
-	// );
 
 	Ok(())
 }
