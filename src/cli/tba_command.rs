@@ -39,5 +39,5 @@ pub struct TBACommand {
 	help: Option<bool>,
 
 	#[command(subcommand)]
-	pub command: Option<crate::cli::TBASubcommand>,
+	pub subcommand: Option<crate::cli::TBASubcommand>,
 }
