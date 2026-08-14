@@ -44,7 +44,15 @@ pub struct CLIGetRequest {
 		help = "The format to output the result in."
 	)]
 	format: OutputFormat,
-
+	
+	#[arg(
+		long,
+		global = true,
+		default_value_t = false,
+		help = "Whether to print the ETag value.",
+	)]
+	print_e_tag: bool,
+	
 	#[command(subcommand)]
 	endpoint: GetSubcommand,
 }
