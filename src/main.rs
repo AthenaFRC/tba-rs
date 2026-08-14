@@ -1,31 +1,25 @@
-use std::io::Write;
-
-use clap::Parser;
-use tba::cli::{
-	TBACommand,
-	TBASubcommand,
-	generate_completions,
-	handlers::{
-		get_endpoint,
-		install_completions,
-	},
+use clap::{
+	CommandFactory,
+	Parser,
 };
+use tba::cli::TBACommand;
 
 #[tokio::main]
-pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
-	let cli: TBACommand = TBACommand::parse();
+pub async fn main() {
+	let tba_command: TBACommand = TBACommand::parse();
 
-	match cli.command {
-		Some(TBASubcommand::Get { request }) => get_endpoint(request).await,
-		Some(TBASubcommand::Completions { shell }) => {
-			let completions = generate_completions(shell);
-			if let Err(error) = std::io::stdout().write_all(&completions) {
-				eprintln!("Error: {}", error);
-			}
+	let subcommand_result = match tba_command.subcommand {
+		Some(subcommand) => subcommand.execute().await,
+		None => {
+			TBACommand::command()
+				.print_help()
+				.expect("Failed to print help message.");
+			std::process::exit(1);
 		}
-		Some(TBASubcommand::InstallCompletions) => install_completions(None),
-		None => {}
-	}
+	};
 
-	Ok(())
+	if let Err(error) = subcommand_result {
+		eprintln!("Error: {}", error);
+		std::process::exit(1);
+	}
 }
