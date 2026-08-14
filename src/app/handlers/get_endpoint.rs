@@ -44,7 +44,7 @@ pub struct CLIGetRequest {
 		help = "The format to output the result in."
 	)]
 	format: OutputFormat,
-	
+
 	#[command(subcommand)]
 	endpoint: GetSubcommand,
 }
