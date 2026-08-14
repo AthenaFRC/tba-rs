@@ -1,4 +1,4 @@
-use crate::app::handlers::CLIGetRequest;
+use crate::cli::handlers::CLIGetRequest;
 
 #[derive(clap::Subcommand, Debug)]
 pub enum TBASubcommand {

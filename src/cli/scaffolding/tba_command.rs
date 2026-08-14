@@ -1,6 +1,6 @@
 use std::path::PathBuf;
 
-use crate::app::scaffolding::TBASubcommand;
+use crate::cli::scaffolding::TBASubcommand;
 
 #[derive(clap::Parser, Debug)]
 #[command(

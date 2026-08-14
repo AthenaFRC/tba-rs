@@ -8,7 +8,7 @@ use crate::{
 	APIClient,
 	APIClientInitializationError,
 	APIResult,
-	app::scaffolding::OutputFormat,
+	cli::scaffolding::OutputFormat,
 	endpoints::GetSubcommand,
 };
 

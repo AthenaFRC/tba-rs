@@ -12,4 +12,4 @@ mod endpoints_macro;
 pub mod endpoints;
 
 #[cfg(feature = "cli")]
-pub mod app;
+pub mod cli;

@@ -1,7 +1,7 @@
 use std::io::Write;
 
 use clap::Parser;
-use tba::app::{
+use tba::cli::{
 	handlers::{
 		get_endpoint,
 		install_completions,

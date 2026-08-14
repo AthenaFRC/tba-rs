@@ -16,7 +16,7 @@ use clap_complete::{
 	Shell,
 };
 
-use crate::app::scaffolding::generate_completions;
+use crate::cli::scaffolding::generate_completions;
 
 const COMMAND_NAME: &str = "tba";
 const BLOCK_START: &str = "# >>> tba completions >>>";
