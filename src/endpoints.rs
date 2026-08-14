@@ -29,7 +29,7 @@ macro_rules! endpoints {
 					$domain {
 						#[command(subcommand)]
 						endpoint: [<$domain:snake>]::[<$domain Subcommand>],
-					}
+					},
 				)*
 			}
 			
@@ -69,7 +69,7 @@ macro_rules! endpoints {
 										}
 									)*
 								}
-							}
+							},
 						)*
 					}
 				}
