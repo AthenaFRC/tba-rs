@@ -3,20 +3,43 @@ use serde_json::{
 	ser::PrettyFormatter,
 };
 
-use crate::{app::scaffolding::{
-	CLIEndpoint,
-	OutputFormat,
-}, APIClient, APIClientInitializationError, APIResult, API_KEY_ENV_VAR};
+use crate::{
+	app::scaffolding::{
+		OutputFormat,
+	},
+	endpoints::GetSubcommand,
+	APIClient,
+	APIClientInitializationError,
+	APIResult,
+	API_KEY_ENV_VAR,
+};
 
-pub async fn get_endpoint(
-	endpoint: CLIEndpoint,
+#[derive(clap::Args, Debug, Clone)]
+pub struct CLIGetRequest {
+	/// The API key to use to authenticate to the TBA API.
+	#[arg(long, global = true)]
 	api_key: Option<String>,
+	
+	/// The base URL to use for the TBA API.
+	#[arg(long, global = true)]
 	base_url: Option<String>,
+	
+	/// The ETag value to send with the request.
+	#[arg(long, global = true)]
 	e_tag: Option<String>,
-	format: Option<OutputFormat>,
-) {
-	let format = format.unwrap_or(OutputFormat::JSON);
-	let client = match APIClient::new_with(api_key, base_url).await {
+	
+	/// The format to output the result in.
+	#[arg(short, long, global = true, default_value = "json")]
+	format: OutputFormat,
+	
+	/// The endpoint from which to fetch information.
+	#[command(subcommand)]
+	endpoint: GetSubcommand,
+}
+
+pub async fn get_endpoint(request: CLIGetRequest) {
+	let format = request.format;
+	let client = match APIClient::new_with(request.api_key, request.base_url).await {
 		Ok(client) => client,
 		Err(APIClientInitializationError::ReqwestClientInitializationError(err)) => {
 			eprintln!("Error: Failed to initialize Reqwest client: {}", err);
@@ -28,10 +51,10 @@ pub async fn get_endpoint(
 			return;
 		},
 	};
-	
-	if let Err(response) = endpoint.get(&client, e_tag, format).await {
-		eprintln!("Error: {}", response);
-	}
+	let api_result = request.endpoint.get(&client, request.e_tag).await;
+	print_result(api_result, true, format).unwrap_or_else(|err| {
+		eprintln!("Error: {}", err);
+	});
 }
 
 pub(crate) fn print_result<T: serde::Serialize>(
