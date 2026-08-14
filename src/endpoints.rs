@@ -32,7 +32,8 @@ macro_rules! endpoints {
 					}
 				)*
 			}
-
+			
+			#[cfg(feature = "cli")]
 			impl GetSubcommand {
 				pub async fn get(
 					self,
