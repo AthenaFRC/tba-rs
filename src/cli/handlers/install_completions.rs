@@ -16,9 +16,9 @@ use clap_complete::{
 	Shell,
 };
 
-const COMMAND_NAME: &str = "tba";
-const BLOCK_START: &str = "# >>> tba completions >>>";
-const BLOCK_END: &str = "# <<< tba completions <<<";
+const COMMAND_NAME: &str = env!("CARGO_PKG_NAME");
+const BLOCK_START: &str = concat!("# >>> ", env!("CARGO_PKG_NAME"), " completions >>>");
+const BLOCK_END: &str = concat!("# <<< ", env!("CARGO_PKG_NAME"), " completions <<<");
 
 pub fn install_completions(shell: Option<Shell>) {
 	let shell = match shell.or_else(Shell::from_env).ok_or_else(|| {
@@ -128,7 +128,7 @@ fn installation_for(shell: Shell) -> io::Result<Installation> {
 			script: config_home.join("elvish/lib").join(file_name),
 			activation: Some(Activation {
 				file: config_home.join("elvish/rc.elv"),
-				command: "use tba".to_owned(),
+				command: format!("use {}", COMMAND_NAME),
 			}),
 		},
 		Shell::PowerShell => {
@@ -171,7 +171,7 @@ fn install_activation(path: &Path, command: &str) -> io::Result<()> {
 				io::Error::new(
 					ErrorKind::InvalidData,
 					format!(
-						"{} contains an incomplete tba completions block",
+						"{} contains an incomplete {COMMAND_NAME} completions block",
 						path.display()
 					),
 				)
@@ -252,7 +252,7 @@ mod tests {
 			.unwrap()
 			.as_nanos();
 		let directory =
-			env::temp_dir().join(format!("tba-completions-{unique}"));
+			env::temp_dir().join(format!("{COMMAND_NAME}-completions-{unique}"));
 		let profile = directory.join("profile");
 
 		install_activation(&profile, "first command").unwrap();
@@ -278,8 +278,8 @@ mod tests {
 	#[test]
 	fn posix_paths_are_single_quote_escaped() {
 		let quoted =
-			quote_posix_path(Path::new("/home/tester's/_tba")).unwrap();
-
-		assert_eq!(quoted, "'/home/tester'\\''s/_tba'");
+			quote_posix_path(Path::new(concat!("/home/tester's/_", env!("CARGO_PKG_NAME")))).unwrap();
+		
+		assert_eq!(quoted, concat!("'/home/tester'\\''s/_", env!("CARGO_PKG_NAME"), "'"));
 	}
 }
