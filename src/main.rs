@@ -7,24 +7,24 @@ use tba::app::{
 	},
 	scaffolding::{
 		generate_completions,
-		CLI,
-		Commands,
+		TBACommand,
+		TBASubcommand,
 	},
 };
 
 #[tokio::main]
 pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
-	let cli: CLI = CLI::parse();
+	let cli: TBACommand = TBACommand::parse();
 
 	match cli.command {
-		Some(Commands::Get { request }) => get_endpoint(request).await,
-		Some(Commands::Completions { shell }) => {
+		Some(TBASubcommand::Get { request }) => get_endpoint(request).await,
+		Some(TBASubcommand::Completions { shell }) => {
 			let completions = generate_completions(shell);
 			if let Err(error) = std::io::stdout().write_all(&completions) {
 				eprintln!("Error: {}", error);
 			}
 		},
-		Some(Commands::InstallCompletions) => install_completions(None),
+		Some(TBASubcommand::InstallCompletions) => install_completions(None),
 		None => {}
 	}
 
