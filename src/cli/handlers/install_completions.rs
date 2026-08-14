@@ -16,8 +16,6 @@ use clap_complete::{
 	Shell,
 };
 
-use crate::cli::scaffolding::generate_completions;
-
 const COMMAND_NAME: &str = "tba";
 const BLOCK_START: &str = "# >>> tba completions >>>";
 const BLOCK_END: &str = "# <<< tba completions <<<";
@@ -51,9 +49,10 @@ pub fn install_completions(shell: Option<Shell>) {
 		}
 	}
 
-	if let Err(error) =
-		fs::write(&installation.script, generate_completions(shell))
-	{
+	if let Err(error) = fs::write(
+		&installation.script,
+		crate::cli::generate_completions(shell),
+	) {
 		eprintln!("Error: {}", error);
 		return;
 	}

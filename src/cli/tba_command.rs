@@ -1,7 +1,3 @@
-use std::path::PathBuf;
-
-use crate::cli::scaffolding::TBASubcommand;
-
 #[derive(clap::Parser, Debug)]
 #[command(
 	about,
@@ -22,7 +18,7 @@ pub struct TBACommand {
 		global = true,
 		help = "Sets the custom config file to use."
 	)]
-	pub config: Option<PathBuf>,
+	pub config: Option<std::path::PathBuf>,
 
 	#[arg(
 		short,
@@ -43,5 +39,5 @@ pub struct TBACommand {
 	help: Option<bool>,
 
 	#[command(subcommand)]
-	pub command: Option<TBASubcommand>,
+	pub command: Option<crate::cli::TBASubcommand>,
 }

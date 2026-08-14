@@ -2,14 +2,12 @@ use std::io::Write;
 
 use clap::Parser;
 use tba::cli::{
+	TBACommand,
+	TBASubcommand,
+	generate_completions,
 	handlers::{
 		get_endpoint,
 		install_completions,
-	},
-	scaffolding::{
-		TBACommand,
-		TBASubcommand,
-		generate_completions,
 	},
 };
 
