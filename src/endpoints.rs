@@ -6,7 +6,7 @@ macro_rules! endpoints {
 			$(
 				$(#[$endpoint_meta:meta])*
 				$endpoint_name_pascal:ident {
-					$(snake_case: $endpoint_name_snake:ident,)?
+					snake_case: $endpoint_name_snake:ident,
 					path: $endpoint_path:expr,
 					input: {
 						$(
@@ -47,7 +47,7 @@ macro_rules! endpoints {
 								match endpoint {
 									$(
 										[<$domain:snake>]::[<$domain Subcommand>]::$endpoint_name_pascal { $($field,)* } => {
-											let result = [<$domain:snake>]::[<$endpoint_name_pascal:snake>](
+											let result = [<$domain:snake>]::$endpoint_name_snake(
 												client,
 												$($field,)*
 												e_tag,
@@ -80,7 +80,7 @@ macro_rules! endpoints {
 				$(#[$domain_meta])*
 				pub mod [<$domain:snake>] {
 					$(
-						pub async fn [<$endpoint_name_pascal:snake>](
+						pub async fn $endpoint_name_snake(
 							client: &$crate::APIClient,
 							$(
 								$field: $field_type,
@@ -140,6 +140,7 @@ endpoints!(
 		/// abbreviation. This accounts for district abbreviation
 		/// changes, such as MAR to FMA.
 		History {
+			snake_case: history,
 			path: "/district/{district_abbreviation}/history",
 			input: {
 				/// The abbreviated district name (e.g. `ne` or `fim`).
@@ -150,6 +151,7 @@ endpoints!(
 
 		/// Gets insights for a given district.
 		Insights {
+			snake_case: insights,
 			path: "/district/{district_abbreviation}/insights",
 			input: {
 				/// The abbreviated district name (e.g. `ne` or `fim`).
@@ -160,6 +162,7 @@ endpoints!(
 
 		/// Gets a list of advancement information per team in a district.
 		Advancement {
+			snake_case: advancement,
 			path: "/district/{district_key}/advancement",
 			input: {
 				/// The TBA district key (e.g. `2016fim`).
