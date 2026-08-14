@@ -6,7 +6,7 @@ use serde_json::{
 use crate::{
 	API_KEY_ENV_VAR,
 	APIClient,
-	APIClientInitializationError,
+	APIClientInitError,
 	APIResult,
 	cli::OutputFormat,
 	endpoints::GetSubcommand,
@@ -56,12 +56,12 @@ pub async fn get_endpoint(request: CLIGetRequest) {
 	{
 		Ok(client) => client,
 		Err(
-			APIClientInitializationError::ReqwestClientInitializationError(err),
+			APIClientInitError::ReqwestClientInitError(err),
 		) => {
 			eprintln!("Error: Failed to initialize Reqwest client: {}", err);
 			return;
 		}
-		Err(APIClientInitializationError::APIKeyError(_)) => {
+		Err(APIClientInitError::APIKeyError(_)) => {
 			eprintln!(
 				"Error: API key must be provided either via the '--api-key' \
 				 flag or in the environment variable '{}'",

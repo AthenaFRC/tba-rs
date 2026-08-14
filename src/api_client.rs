@@ -12,8 +12,8 @@ pub const BASE_API_URL_ENV_VAR: &str = "BASE_API_URL";
 pub const BASE_API_URL_FALLBACK: &str =
 	"https://www.thebluealliance.com/api/v3";
 
-pub enum APIClientInitializationError {
-	ReqwestClientInitializationError(reqwest::Error),
+pub enum APIClientInitError {
+	ReqwestClientInitError(reqwest::Error),
 	APIKeyError(String),
 }
 
@@ -34,22 +34,22 @@ pub struct APIClient {
 }
 
 impl APIClient {
-	pub async fn new() -> Result<APIClient, APIClientInitializationError> {
+	pub async fn new() -> Result<APIClient, APIClientInitError> {
 		Self::new_with(None, None).await
 	}
 
 	pub async fn new_with(
 		api_key: Option<String>,
 		base_api_url: Option<String>,
-	) -> Result<APIClient, APIClientInitializationError> {
+	) -> Result<APIClient, APIClientInitError> {
 		Ok(APIClient {
 			client: reqwest::Client::builder().build().map_err(
-				APIClientInitializationError::ReqwestClientInitializationError,
+				APIClientInitError::ReqwestClientInitError,
 			)?,
 			api_key: api_key
 				.or_else(|| std::env::var(API_KEY_ENV_VAR).ok())
 				.ok_or_else(|| {
-					APIClientInitializationError::APIKeyError(format!(
+					APIClientInitError::APIKeyError(format!(
 						"API key must be provided either as an argument or in \
 						 the environment variable '{}'.",
 						API_KEY_ENV_VAR
