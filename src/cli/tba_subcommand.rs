@@ -3,19 +3,19 @@ use crate::cli::handlers::*;
 #[derive(clap::Subcommand, Debug)]
 pub enum TBASubcommand {
 	#[command(
-		about = "Generates an autocompletion script for a specified shell."
-	)]
-	Completions {
-		#[clap(flatten)]
-		command: CLIPrintCompletionsCommand,
-	},
-
-	#[command(
 		about = "Fetches information from the specified TBA API endpoint."
 	)]
 	Get {
 		#[clap(flatten)]
 		request: CLIGetRequest,
+	},
+
+	#[command(
+		about = "Generates an autocompletion script for a specified shell."
+	)]
+	Completions {
+		#[clap(flatten)]
+		command: CLIPrintCompletionsCommand,
 	},
 
 	#[command(about = "Attempts to install autocompletion scripts for the \
