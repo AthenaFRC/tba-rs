@@ -1,4 +1,94 @@
 #[rustfmt::skip]
+macro_rules! __tba_endpoint_call {
+	(
+		$domain:ident,
+		$endpoint_name_pascal:ident,
+		$endpoint_name_snake:ident;
+		$client:expr,
+		$e_tag:expr;
+		$($field:ident,)*
+	) => {
+		paste::paste! {
+			[<$domain:snake>]::$endpoint_name_snake(
+				$client,
+				$($field,)*
+				$e_tag,
+			).await
+		}
+	};
+	(
+		$domain:ident,
+		$endpoint_name_pascal:ident;
+		$client:expr,
+		$e_tag:expr;
+		$($field:ident,)*
+	) => {
+		paste::paste! {
+			[<$domain:snake>]::[<$endpoint_name_pascal:snake>](
+				$client,
+				$($field,)*
+				$e_tag,
+			).await
+		}
+	};
+}
+
+#[rustfmt::skip]
+macro_rules! __tba_endpoint_fn {
+	(
+		$endpoint_name_pascal:ident,
+		$endpoint_name_snake:ident;
+		path: $endpoint_path:expr,
+		input: {
+			$(
+				$(#[$field_meta:meta])*
+				$field:ident: $field_type:ty,
+			)*
+		},
+		output: $output:ty,
+	) => {
+		pub async fn $endpoint_name_snake(
+			client: &$crate::APIClient,
+			$(
+				$field: $field_type,
+			)*
+			e_tag: Option<String>,
+		) -> $crate::APIResult<$output> {
+			client.get(
+				format!($endpoint_path).as_str(),
+				e_tag
+			).await
+		}
+	};
+	(
+		$endpoint_name_pascal:ident;
+		path: $endpoint_path:expr,
+		input: {
+			$(
+				$(#[$field_meta:meta])*
+				$field:ident: $field_type:ty,
+			)*
+		},
+		output: $output:ty,
+	) => {
+		paste::paste! {
+			pub async fn [<$endpoint_name_pascal:snake>](
+				client: &$crate::APIClient,
+				$(
+					$field: $field_type,
+				)*
+				e_tag: Option<String>,
+			) -> $crate::APIResult<$output> {
+				client.get(
+					format!($endpoint_path).as_str(),
+					e_tag
+				).await
+			}
+		}
+	};
+}
+
+#[rustfmt::skip]
 macro_rules! endpoints {
 	($(
 		$(#[$domain_meta:meta])*
@@ -6,7 +96,7 @@ macro_rules! endpoints {
 			$(
 				$(#[$endpoint_meta:meta])*
 				$endpoint_name_pascal:ident {
-					snake_case: $endpoint_name_snake:ident,
+					$(snake_case: $endpoint_name_snake:ident,)?
 					path: $endpoint_path:expr,
 					input: {
 						$(
@@ -19,6 +109,7 @@ macro_rules! endpoints {
 			)*
 		}
 	)*) => {
+
 		paste::paste! {
 			#[cfg(feature = "cli")]
 			#[derive(clap::Subcommand, Debug, Clone)]
@@ -47,11 +138,14 @@ macro_rules! endpoints {
 								match endpoint {
 									$(
 										[<$domain:snake>]::[<$domain Subcommand>]::$endpoint_name_pascal { $($field,)* } => {
-											let result = [<$domain:snake>]::$endpoint_name_snake(
+											let result = __tba_endpoint_call!(
+												$domain,
+												$endpoint_name_pascal
+												$(, $endpoint_name_snake)?;
 												client,
+												e_tag;
 												$($field,)*
-												e_tag,
-											).await;
+											);
 											match result {
 												$crate::APIResult::Ok { result, e_tag } => {
 													let result = match serde_json::to_value(result) {
@@ -80,17 +174,17 @@ macro_rules! endpoints {
 				$(#[$domain_meta])*
 				pub mod [<$domain:snake>] {
 					$(
-						pub async fn $endpoint_name_snake(
-							client: &$crate::APIClient,
-							$(
-								$field: $field_type,
-							)*
-							e_tag: Option<String>,
-						) -> $crate::APIResult<$output> {
-							client.get(
-								format!($endpoint_path).as_str(),
-								e_tag
-							).await
+						__tba_endpoint_fn! {
+							$endpoint_name_pascal
+							$(, $endpoint_name_snake)?;
+							path: $endpoint_path,
+							input: {
+								$(
+									$(#[$field_meta])*
+									$field: $field_type,
+								)*
+							},
+							output: $output,
 						}
 					)*
 
@@ -117,5 +211,3 @@ macro_rules! endpoints {
 		}
 	};
 }
-
-pub(crate) use endpoints;

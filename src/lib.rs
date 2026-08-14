@@ -6,7 +6,8 @@ pub use api_client::*;
 mod api_result;
 pub use api_result::*;
 
-pub(crate) mod endpoints_macro;
+#[macro_use]
+mod endpoints_macro;
 
 pub mod endpoints;
 
