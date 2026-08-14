@@ -51,7 +51,8 @@ pub fn install_completions(shell: Option<Shell>) {
 		}
 	}
 
-	if let Err(error) = fs::write(&installation.script, generate_completions(shell))
+	if let Err(error) =
+		fs::write(&installation.script, generate_completions(shell))
 	{
 		eprintln!("Error: {}", error);
 		return;

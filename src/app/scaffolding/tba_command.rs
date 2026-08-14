@@ -8,7 +8,7 @@ use crate::app::scaffolding::TBASubcommand;
 	about,
 	max_term_width = 120,
 	arg_required_else_help = true,
-	help_expected = true,
+	help_expected = true
 )]
 pub struct TBACommand {
 	#[arg(
@@ -16,7 +16,7 @@ pub struct TBACommand {
 		long,
 		value_name = "FILE",
 		global = true,
-		help = "Sets the custom config file to use.",
+		help = "Sets the custom config file to use."
 	)]
 	pub config: Option<PathBuf>,
 

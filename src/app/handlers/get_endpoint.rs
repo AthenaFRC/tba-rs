@@ -17,7 +17,7 @@ pub struct CLIGetRequest {
 	#[arg(
 		long,
 		global = true,
-		help = "The API key to use to authenticate to the TBA API.",
+		help = "The API key to use to authenticate to the TBA API."
 	)]
 	api_key: Option<String>,
 
@@ -32,7 +32,7 @@ pub struct CLIGetRequest {
 	#[arg(
 		long,
 		global = true,
-		help = "The ETag value to send with the request.",
+		help = "The ETag value to send with the request."
 	)]
 	e_tag: Option<String>,
 
@@ -41,7 +41,7 @@ pub struct CLIGetRequest {
 		long,
 		global = true,
 		default_value = "json",
-		help = "The format to output the result in.",
+		help = "The format to output the result in."
 	)]
 	format: OutputFormat,
 	
