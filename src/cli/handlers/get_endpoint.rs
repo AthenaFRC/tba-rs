@@ -132,6 +132,6 @@ fn get_pretty_json_string<T: serde::Serialize>(
 	value
 		.serialize(&mut serializer)
 		.map_err(|e| format!("Failed to serialize JSON: {}", e))?;
-	Ok(String::from_utf8(buffer)
-		.map_err(|e| format!("Failed to convert JSON to string: {}", e))?)
+	String::from_utf8(buffer)
+		.map_err(|e| format!("Failed to convert JSON to string: {}", e))
 }
