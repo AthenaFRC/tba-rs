@@ -36,10 +36,9 @@ pub struct APIStatus {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum AllianceColor {
-	#[serde(rename = "red")]
 	Red,
-	#[serde(rename = "blue")]
 	Blue,
 	#[serde(rename = "")]
 	Empty,
@@ -48,8 +47,7 @@ pub enum AllianceColor {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum AutoChargeStationRobot2023 {
 	Docked,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
@@ -60,8 +58,7 @@ pub enum AutoLineRobot2024 {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum AutoRobot2018 {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	AutoRun,
 }
 
@@ -84,8 +81,7 @@ pub struct Award {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum Bay2019 {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Panel,
 	PanelAndCargo,
 }
@@ -99,15 +95,15 @@ pub enum BridgeState2023 {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum CompLevel {
 	#[serde(rename = "qm")]
-	Qm,
+	QualificationMatch,
 	#[serde(rename = "ef")]
-	Ef,
+	EighthFinal,
 	#[serde(rename = "qf")]
-	Qf,
+	QuarterFinal,
 	#[serde(rename = "sf")]
-	Sf,
+	SemiFinal,
 	#[serde(rename = "f")]
-	F,
+	Final,
 }
 
 pub type EventType = i64;
@@ -232,12 +228,10 @@ pub struct EliminationAllianceBackup {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum EliminationAllianceStatusStatus {
-	#[serde(rename = "eliminated")]
 	Eliminated,
-	#[serde(rename = "playing")]
 	Playing,
-	#[serde(rename = "won")]
 	Won,
 }
 
@@ -266,8 +260,7 @@ pub struct EliminationAlliance {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum EndGameChargeStationRobot2023 {
 	Docked,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Park,
 	Parked,
 }
@@ -275,8 +268,7 @@ pub enum EndGameChargeStationRobot2023 {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum EndGameRobot2024 {
 	CenterStage,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Parked,
 	StageLeft,
 	StageRight,
@@ -285,8 +277,7 @@ pub enum EndGameRobot2024 {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum EndGameRobot2025 {
 	DeepCage,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Parked,
 	ShallowCage,
 }
@@ -296,47 +287,29 @@ pub enum TowerRobot2026 {
 	Level1,
 	Level2,
 	Level3,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct HubScore2026 {
-	#[serde(rename = "autoCount")]
 	pub auto_count: i64,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: i64,
-	#[serde(rename = "endgameCount")]
 	pub endgame_count: i64,
-	#[serde(rename = "endgamePoints")]
 	pub endgame_points: i64,
-	#[serde(rename = "shift1Count")]
 	pub shift1_count: i64,
-	#[serde(rename = "shift1Points")]
 	pub shift1_points: i64,
-	#[serde(rename = "shift2Count")]
 	pub shift2_count: i64,
-	#[serde(rename = "shift2Points")]
 	pub shift2_points: i64,
-	#[serde(rename = "shift3Count")]
 	pub shift3_count: i64,
-	#[serde(rename = "shift3Points")]
 	pub shift3_points: i64,
-	#[serde(rename = "shift4Count")]
 	pub shift4_count: i64,
-	#[serde(rename = "shift4Points")]
 	pub shift4_points: i64,
-	#[serde(rename = "teleopCount")]
 	pub teleop_count: i64,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: i64,
-	#[serde(rename = "totalCount")]
 	pub total_count: i64,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
-	#[serde(rename = "transitionCount")]
 	pub transition_count: i64,
-	#[serde(rename = "transitionPoints")]
 	pub transition_points: i64,
 }
 
@@ -344,8 +317,7 @@ pub struct HubScore2026 {
 pub enum EndgameRobot2018 {
 	Climbing,
 	Levitate,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Parking,
 	Unknown,
 }
@@ -355,16 +327,14 @@ pub enum EndgameRobot2019 {
 	HabLevel1,
 	HabLevel2,
 	HabLevel3,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Unknown,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum EndgameRobot2020 {
 	Hang,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Park,
 }
 
@@ -373,8 +343,7 @@ pub enum EndgameRobot2022 {
 	High,
 	Low,
 	Mid,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Traversal,
 }
 
@@ -385,40 +354,27 @@ pub enum EndgameRungIsLevel2020 {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum WebcastType {
-	#[serde(rename = "youtube")]
 	Youtube,
-	#[serde(rename = "twitch")]
 	Twitch,
-	#[serde(rename = "ustream")]
 	Ustream,
-	#[serde(rename = "iframe")]
 	Iframe,
-	#[serde(rename = "html5")]
 	Html5,
-	#[serde(rename = "rtmp")]
 	Rtmp,
-	#[serde(rename = "livestream")]
 	Livestream,
-	#[serde(rename = "direct_link")]
 	DirectLink,
-	#[serde(rename = "mms")]
 	Mms,
-	#[serde(rename = "justin")]
 	Justin,
-	#[serde(rename = "stemtv")]
 	Stemtv,
-	#[serde(rename = "dacast")]
 	Dacast,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum WebcastStatus {
-	#[serde(rename = "unknown")]
 	Unknown,
-	#[serde(rename = "online")]
 	Online,
-	#[serde(rename = "offline")]
 	Offline,
 }
 
@@ -675,8 +631,7 @@ pub struct EventSimple {
 pub enum HabLine2019 {
 	CrossedHabLineInSandstorm,
 	CrossedHabLineInTeleop,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Unknown,
 }
 
@@ -689,8 +644,7 @@ pub struct History {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum InitLineRobot2020 {
 	Exited,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -700,12 +654,10 @@ pub struct LeaderboardInsightDataRankingsItem {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum LeaderboardInsightDataKeyType {
-	#[serde(rename = "team")]
 	Team,
-	#[serde(rename = "event")]
 	Event,
-	#[serde(rename = "match")]
 	Match,
 }
 
@@ -768,8 +720,7 @@ pub struct MatchScoreBreakdown2015Alliance {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2015Coopertition {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Unknown,
 	Stack,
 }
@@ -785,8 +736,7 @@ pub struct MatchScoreBreakdown2015 {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum RobotAuto2016WithUnknown {
 	Crossed,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Reached,
 	Unknown,
 }
@@ -795,16 +745,14 @@ pub enum RobotAuto2016WithUnknown {
 pub enum RobotAuto2016WithoutUnknown {
 	Crossed,
 	Reached,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum TowerFace2016 {
 	Both,
 	Challenged,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Scaled,
 	Unknown,
 }
@@ -833,66 +781,38 @@ pub enum Position2016 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2016Alliance {
-	#[serde(rename = "autoPoints")]
 	pub auto_points: i64,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: Option<i64>,
-	#[serde(rename = "breachPoints")]
 	pub breach_points: i64,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
-	#[serde(rename = "capturePoints")]
 	pub capture_points: i64,
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
 	#[serde(rename = "tba_rpEarned")]
 	pub tba_rp_earned: Option<i64>,
-	#[serde(rename = "robot1Auto")]
 	pub robot1_auto: Option<RobotAuto2016WithUnknown>,
-	#[serde(rename = "robot2Auto")]
 	pub robot2_auto: Option<RobotAuto2016WithoutUnknown>,
-	#[serde(rename = "robot3Auto")]
 	pub robot3_auto: Option<RobotAuto2016WithUnknown>,
-	#[serde(rename = "autoReachPoints")]
 	pub auto_reach_points: i64,
-	#[serde(rename = "autoCrossingPoints")]
 	pub auto_crossing_points: i64,
-	#[serde(rename = "autoBouldersLow")]
 	pub auto_boulders_low: Option<i64>,
-	#[serde(rename = "autoBouldersHigh")]
 	pub auto_boulders_high: Option<i64>,
-	#[serde(rename = "autoBoulderPoints")]
 	pub auto_boulder_points: i64,
-	#[serde(rename = "teleopCrossingPoints")]
 	pub teleop_crossing_points: i64,
-	#[serde(rename = "teleopBouldersLow")]
 	pub teleop_boulders_low: i64,
-	#[serde(rename = "teleopBouldersHigh")]
 	pub teleop_boulders_high: i64,
-	#[serde(rename = "teleopBoulderPoints")]
 	pub teleop_boulder_points: i64,
-	#[serde(rename = "teleopDefensesBreached")]
 	pub teleop_defenses_breached: bool,
-	#[serde(rename = "teleopChallengePoints")]
 	pub teleop_challenge_points: i64,
-	#[serde(rename = "teleopScalePoints")]
 	pub teleop_scale_points: i64,
-	#[serde(rename = "teleopTowerCaptured")]
 	pub teleop_tower_captured: bool,
-	#[serde(rename = "towerFaceA")]
 	pub tower_face_a: Option<TowerFace2016>,
-	#[serde(rename = "towerFaceB")]
 	pub tower_face_b: Option<TowerFace2016>,
-	#[serde(rename = "towerFaceC")]
 	pub tower_face_c: Option<TowerFace2016>,
-	#[serde(rename = "towerEndStrength")]
 	pub tower_end_strength: Option<i64>,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: Option<i64>,
-	#[serde(rename = "foulCount")]
 	pub foul_count: Option<i64>,
 	pub position2: Position2016,
 	pub position3: Position2016,
@@ -914,87 +834,53 @@ pub struct MatchScoreBreakdown2016 {
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum RobotAuto2017 {
 	Mobility,
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Unknown,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum Touchpad2017 {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	ReadyForTakeoff,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2017Alliance {
-	#[serde(rename = "autoPoints")]
 	pub auto_points: i64,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: i64,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
-	#[serde(rename = "robot1Auto")]
 	pub robot1_auto: Option<RobotAuto2017>,
-	#[serde(rename = "robot2Auto")]
 	pub robot2_auto: Option<RobotAuto2017>,
-	#[serde(rename = "robot3Auto")]
 	pub robot3_auto: Option<RobotAuto2017>,
-	#[serde(rename = "rotor1Auto")]
 	pub rotor1_auto: bool,
-	#[serde(rename = "rotor2Auto")]
 	pub rotor2_auto: bool,
-	#[serde(rename = "autoFuelLow")]
 	pub auto_fuel_low: i64,
-	#[serde(rename = "autoFuelHigh")]
 	pub auto_fuel_high: i64,
-	#[serde(rename = "autoMobilityPoints")]
 	pub auto_mobility_points: i64,
-	#[serde(rename = "autoRotorPoints")]
 	pub auto_rotor_points: i64,
-	#[serde(rename = "autoFuelPoints")]
 	pub auto_fuel_points: i64,
-	#[serde(rename = "teleopFuelPoints")]
 	pub teleop_fuel_points: i64,
-	#[serde(rename = "teleopFuelLow")]
 	pub teleop_fuel_low: i64,
-	#[serde(rename = "teleopFuelHigh")]
 	pub teleop_fuel_high: i64,
-	#[serde(rename = "teleopRotorPoints")]
 	pub teleop_rotor_points: i64,
-	#[serde(rename = "kPaRankingPointAchieved")]
 	pub k_pa_ranking_point_achieved: bool,
-	#[serde(rename = "teleopTakeoffPoints")]
 	pub teleop_takeoff_points: i64,
-	#[serde(rename = "kPaBonusPoints")]
 	pub k_pa_bonus_points: i64,
-	#[serde(rename = "rotorBonusPoints")]
 	pub rotor_bonus_points: i64,
-	#[serde(rename = "rotor1Engaged")]
 	pub rotor1_engaged: bool,
-	#[serde(rename = "rotor2Engaged")]
 	pub rotor2_engaged: bool,
-	#[serde(rename = "rotor3Engaged")]
 	pub rotor3_engaged: bool,
-	#[serde(rename = "rotor4Engaged")]
 	pub rotor4_engaged: bool,
-	#[serde(rename = "rotorRankingPointAchieved")]
 	pub rotor_ranking_point_achieved: bool,
 	#[serde(rename = "tba_rpEarned")]
 	pub tba_rp_earned: Option<i64>,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: Option<i64>,
-	#[serde(rename = "foulCount")]
 	pub foul_count: Option<i64>,
-	#[serde(rename = "touchpadNear")]
 	pub touchpad_near: Option<Touchpad2017>,
-	#[serde(rename = "touchpadMiddle")]
 	pub touchpad_middle: Option<Touchpad2017>,
-	#[serde(rename = "touchpadFar")]
 	pub touchpad_far: Option<Touchpad2017>,
 }
 
@@ -1015,77 +901,43 @@ pub enum MatchScoreBreakdown2018AllianceTbaGameData {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2018Alliance {
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "autoOwnershipPoints")]
 	pub auto_ownership_points: i64,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: i64,
-	#[serde(rename = "autoQuestRankingPoint")]
 	pub auto_quest_ranking_point: Option<bool>,
-	#[serde(rename = "autoRobot1")]
 	pub auto_robot1: Option<AutoRobot2018>,
-	#[serde(rename = "autoRobot2")]
 	pub auto_robot2: Option<AutoRobot2018>,
-	#[serde(rename = "autoRobot3")]
 	pub auto_robot3: Option<AutoRobot2018>,
-	#[serde(rename = "autoRunPoints")]
 	pub auto_run_points: i64,
-	#[serde(rename = "autoScaleOwnershipSec")]
 	pub auto_scale_ownership_sec: i64,
-	#[serde(rename = "autoSwitchAtZero")]
 	pub auto_switch_at_zero: Option<bool>,
-	#[serde(rename = "autoSwitchOwnershipSec")]
 	pub auto_switch_ownership_sec: i64,
-	#[serde(rename = "endgamePoints")]
 	pub endgame_points: i64,
-	#[serde(rename = "endgameRobot1")]
 	pub endgame_robot1: Option<EndgameRobot2018>,
-	#[serde(rename = "endgameRobot2")]
 	pub endgame_robot2: Option<EndgameRobot2018>,
-	#[serde(rename = "endgameRobot3")]
 	pub endgame_robot3: Option<EndgameRobot2018>,
-	#[serde(rename = "faceTheBossRankingPoint")]
 	pub face_the_boss_ranking_point: bool,
-	#[serde(rename = "foulCount")]
 	pub foul_count: Option<i64>,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
 	pub rp: f64,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: Option<i64>,
-	#[serde(rename = "teleopOwnershipPoints")]
 	pub teleop_ownership_points: i64,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: i64,
-	#[serde(rename = "teleopScaleBoostSec")]
 	pub teleop_scale_boost_sec: i64,
-	#[serde(rename = "teleopScaleForceSec")]
 	pub teleop_scale_force_sec: Option<i64>,
-	#[serde(rename = "teleopScaleOwnershipSec")]
 	pub teleop_scale_ownership_sec: i64,
-	#[serde(rename = "teleopSwitchBoostSec")]
 	pub teleop_switch_boost_sec: i64,
-	#[serde(rename = "teleopSwitchForceSec")]
 	pub teleop_switch_force_sec: Option<i64>,
-	#[serde(rename = "teleopSwitchOwnershipSec")]
 	pub teleop_switch_ownership_sec: i64,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
-	#[serde(rename = "vaultBoostPlayed")]
 	pub vault_boost_played: i64,
-	#[serde(rename = "vaultBoostTotal")]
 	pub vault_boost_total: i64,
-	#[serde(rename = "vaultForcePlayed")]
 	pub vault_force_played: i64,
-	#[serde(rename = "vaultForceTotal")]
 	pub vault_force_total: i64,
-	#[serde(rename = "vaultLevitatePlayed")]
 	pub vault_levitate_played: i64,
-	#[serde(rename = "vaultLevitateTotal")]
 	pub vault_levitate_total: i64,
-	#[serde(rename = "vaultPoints")]
 	pub vault_points: i64,
 	#[serde(rename = "tba_gameData")]
 	pub tba_game_data: Option<MatchScoreBreakdown2018AllianceTbaGameData>,
@@ -1105,10 +957,9 @@ pub enum PreMatchBay2019 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2019Alliance {
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: Option<i64>,
 	pub bay1: Bay2019,
 	pub bay2: Bay2019,
@@ -1118,86 +969,46 @@ pub struct MatchScoreBreakdown2019Alliance {
 	pub bay6: Bay2019,
 	pub bay7: Bay2019,
 	pub bay8: Bay2019,
-	#[serde(rename = "cargoPoints")]
 	pub cargo_points: i64,
-	#[serde(rename = "completeRocketRankingPoint")]
 	pub complete_rocket_ranking_point: bool,
-	#[serde(rename = "completedRocketFar")]
 	pub completed_rocket_far: Option<bool>,
-	#[serde(rename = "completedRocketNear")]
 	pub completed_rocket_near: Option<bool>,
-	#[serde(rename = "endgameRobot1")]
 	pub endgame_robot1: EndgameRobot2019,
-	#[serde(rename = "endgameRobot2")]
 	pub endgame_robot2: EndgameRobot2019,
-	#[serde(rename = "endgameRobot3")]
 	pub endgame_robot3: EndgameRobot2019,
-	#[serde(rename = "foulCount")]
 	pub foul_count: Option<i64>,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
-	#[serde(rename = "habClimbPoints")]
 	pub hab_climb_points: i64,
-	#[serde(rename = "habDockingRankingPoint")]
 	pub hab_docking_ranking_point: bool,
-	#[serde(rename = "habLineRobot1")]
 	pub hab_line_robot1: HabLine2019,
-	#[serde(rename = "habLineRobot2")]
 	pub hab_line_robot2: HabLine2019,
-	#[serde(rename = "habLineRobot3")]
 	pub hab_line_robot3: HabLine2019,
-	#[serde(rename = "hatchPanelPoints")]
 	pub hatch_panel_points: i64,
-	#[serde(rename = "lowLeftRocketFar")]
 	pub low_left_rocket_far: Bay2019,
-	#[serde(rename = "lowLeftRocketNear")]
 	pub low_left_rocket_near: Bay2019,
-	#[serde(rename = "lowRightRocketFar")]
 	pub low_right_rocket_far: Bay2019,
-	#[serde(rename = "lowRightRocketNear")]
 	pub low_right_rocket_near: Bay2019,
-	#[serde(rename = "midLeftRocketFar")]
 	pub mid_left_rocket_far: Bay2019,
-	#[serde(rename = "midLeftRocketNear")]
 	pub mid_left_rocket_near: Bay2019,
-	#[serde(rename = "midRightRocketFar")]
 	pub mid_right_rocket_far: Bay2019,
-	#[serde(rename = "midRightRocketNear")]
 	pub mid_right_rocket_near: Bay2019,
-	#[serde(rename = "preMatchBay1")]
 	pub pre_match_bay1: PreMatchBay2019,
-	#[serde(rename = "preMatchBay2")]
 	pub pre_match_bay2: PreMatchBay2019,
-	#[serde(rename = "preMatchBay3")]
 	pub pre_match_bay3: PreMatchBay2019,
-	#[serde(rename = "preMatchBay6")]
 	pub pre_match_bay6: PreMatchBay2019,
-	#[serde(rename = "preMatchBay7")]
 	pub pre_match_bay7: PreMatchBay2019,
-	#[serde(rename = "preMatchBay8")]
 	pub pre_match_bay8: PreMatchBay2019,
-	#[serde(rename = "preMatchLevelRobot1")]
 	pub pre_match_level_robot1: EndgameRobot2019,
-	#[serde(rename = "preMatchLevelRobot2")]
 	pub pre_match_level_robot2: EndgameRobot2019,
-	#[serde(rename = "preMatchLevelRobot3")]
 	pub pre_match_level_robot3: EndgameRobot2019,
 	pub rp: f64,
-	#[serde(rename = "sandStormBonusPoints")]
 	pub sand_storm_bonus_points: i64,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: Option<i64>,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: i64,
-	#[serde(rename = "topLeftRocketFar")]
 	pub top_left_rocket_far: Bay2019,
-	#[serde(rename = "topLeftRocketNear")]
 	pub top_left_rocket_near: Bay2019,
-	#[serde(rename = "topRightRocketFar")]
 	pub top_right_rocket_far: Bay2019,
-	#[serde(rename = "topRightRocketNear")]
 	pub top_right_rocket_near: Bay2019,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
 }
 
@@ -1217,73 +1028,43 @@ pub enum Stage3TargetColor2020 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2020Alliance {
-	#[serde(rename = "initLineRobot1")]
 	pub init_line_robot1: InitLineRobot2020,
-	#[serde(rename = "endgameRobot1")]
 	pub endgame_robot1: EndgameRobot2020,
-	#[serde(rename = "initLineRobot2")]
 	pub init_line_robot2: InitLineRobot2020,
-	#[serde(rename = "endgameRobot2")]
 	pub endgame_robot2: EndgameRobot2020,
-	#[serde(rename = "initLineRobot3")]
 	pub init_line_robot3: InitLineRobot2020,
-	#[serde(rename = "endgameRobot3")]
 	pub endgame_robot3: EndgameRobot2020,
-	#[serde(rename = "autoCellsBottom")]
 	pub auto_cells_bottom: i64,
-	#[serde(rename = "autoCellsOuter")]
 	pub auto_cells_outer: i64,
-	#[serde(rename = "autoCellsInner")]
 	pub auto_cells_inner: i64,
-	#[serde(rename = "teleopCellsBottom")]
 	pub teleop_cells_bottom: i64,
-	#[serde(rename = "teleopCellsOuter")]
 	pub teleop_cells_outer: i64,
-	#[serde(rename = "teleopCellsInner")]
 	pub teleop_cells_inner: i64,
-	#[serde(rename = "stage1Activated")]
 	pub stage1_activated: bool,
-	#[serde(rename = "stage2Activated")]
 	pub stage2_activated: bool,
-	#[serde(rename = "stage3Activated")]
 	pub stage3_activated: bool,
-	#[serde(rename = "stage3TargetColor")]
 	pub stage3_target_color: Stage3TargetColor2020,
-	#[serde(rename = "endgameRungIsLevel")]
 	pub endgame_rung_is_level: EndgameRungIsLevel2020,
-	#[serde(rename = "autoInitLinePoints")]
 	pub auto_init_line_points: i64,
-	#[serde(rename = "autoCellPoints")]
 	pub auto_cell_points: i64,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: i64,
-	#[serde(rename = "teleopCellPoints")]
 	pub teleop_cell_points: i64,
-	#[serde(rename = "controlPanelPoints")]
 	pub control_panel_points: i64,
-	#[serde(rename = "endgamePoints")]
 	pub endgame_points: i64,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: i64,
-	#[serde(rename = "shieldOperationalRankingPoint")]
 	pub shield_operational_ranking_point: bool,
-	#[serde(rename = "shieldEnergizedRankingPoint")]
 	pub shield_energized_ranking_point: bool,
 	#[serde(rename = "tba_shieldEnergizedRankingPointFromFoul")]
 	pub tba_shield_energized_ranking_point_from_foul: Option<bool>,
 	#[serde(rename = "tba_numRobotsHanging")]
 	pub tba_num_robots_hanging: Option<i64>,
-	#[serde(rename = "foulCount")]
 	pub foul_count: i64,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: i64,
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
 	pub rp: Option<f64>,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
 }
 
@@ -1300,85 +1081,47 @@ pub enum TaxiRobot2022 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2022Alliance {
-	#[serde(rename = "taxiRobot1")]
 	pub taxi_robot1: Option<TaxiRobot2022>,
-	#[serde(rename = "endgameRobot1")]
 	pub endgame_robot1: Option<EndgameRobot2022>,
-	#[serde(rename = "taxiRobot2")]
 	pub taxi_robot2: Option<TaxiRobot2022>,
-	#[serde(rename = "endgameRobot2")]
 	pub endgame_robot2: Option<EndgameRobot2022>,
-	#[serde(rename = "taxiRobot3")]
 	pub taxi_robot3: Option<TaxiRobot2022>,
-	#[serde(rename = "endgameRobot3")]
 	pub endgame_robot3: Option<EndgameRobot2022>,
-	#[serde(rename = "autoCargoLowerNear")]
 	pub auto_cargo_lower_near: Option<i64>,
-	#[serde(rename = "autoCargoLowerFar")]
 	pub auto_cargo_lower_far: Option<i64>,
-	#[serde(rename = "autoCargoLowerBlue")]
 	pub auto_cargo_lower_blue: Option<i64>,
-	#[serde(rename = "autoCargoLowerRed")]
 	pub auto_cargo_lower_red: Option<i64>,
-	#[serde(rename = "autoCargoUpperNear")]
 	pub auto_cargo_upper_near: Option<i64>,
-	#[serde(rename = "autoCargoUpperFar")]
 	pub auto_cargo_upper_far: Option<i64>,
-	#[serde(rename = "autoCargoUpperBlue")]
 	pub auto_cargo_upper_blue: Option<i64>,
-	#[serde(rename = "autoCargoUpperRed")]
 	pub auto_cargo_upper_red: Option<i64>,
-	#[serde(rename = "autoCargoTotal")]
 	pub auto_cargo_total: Option<i64>,
-	#[serde(rename = "teleopCargoLowerNear")]
 	pub teleop_cargo_lower_near: Option<i64>,
-	#[serde(rename = "teleopCargoLowerFar")]
 	pub teleop_cargo_lower_far: Option<i64>,
-	#[serde(rename = "teleopCargoLowerBlue")]
 	pub teleop_cargo_lower_blue: Option<i64>,
-	#[serde(rename = "teleopCargoLowerRed")]
 	pub teleop_cargo_lower_red: Option<i64>,
-	#[serde(rename = "teleopCargoUpperNear")]
 	pub teleop_cargo_upper_near: Option<i64>,
-	#[serde(rename = "teleopCargoUpperFar")]
 	pub teleop_cargo_upper_far: Option<i64>,
-	#[serde(rename = "teleopCargoUpperBlue")]
 	pub teleop_cargo_upper_blue: Option<i64>,
-	#[serde(rename = "teleopCargoUpperRed")]
 	pub teleop_cargo_upper_red: Option<i64>,
-	#[serde(rename = "teleopCargoTotal")]
 	pub teleop_cargo_total: Option<i64>,
-	#[serde(rename = "matchCargoTotal")]
 	pub match_cargo_total: Option<i64>,
-	#[serde(rename = "autoTaxiPoints")]
 	pub auto_taxi_points: Option<i64>,
-	#[serde(rename = "autoCargoPoints")]
 	pub auto_cargo_points: Option<i64>,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: Option<i64>,
-	#[serde(rename = "quintetAchieved")]
 	pub quintet_achieved: Option<bool>,
-	#[serde(rename = "teleopCargoPoints")]
 	pub teleop_cargo_points: Option<i64>,
-	#[serde(rename = "endgamePoints")]
 	pub endgame_points: Option<i64>,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: Option<i64>,
-	#[serde(rename = "cargoBonusRankingPoint")]
 	pub cargo_bonus_ranking_point: Option<bool>,
-	#[serde(rename = "hangarBonusRankingPoint")]
 	pub hangar_bonus_ranking_point: Option<bool>,
-	#[serde(rename = "foulCount")]
 	pub foul_count: Option<i64>,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: Option<i64>,
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: Option<i64>,
 	pub rp: Option<f64>,
-	#[serde(rename = "totalPoints")]
 	pub total_points: Option<i64>,
 }
 
@@ -1390,35 +1133,30 @@ pub struct MatchScoreBreakdown2022 {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2023AllianceAutoCommunityBItem {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Cone,
 	Cube,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2023AllianceAutoCommunityMItem {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Cone,
 	Cube,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2023AllianceAutoCommunityTItem {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Cone,
 	Cube,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "UPPERCASE")]
 pub struct MatchScoreBreakdown2023AllianceAutoCommunity {
-	#[serde(rename = "B")]
 	pub b: Vec<MatchScoreBreakdown2023AllianceAutoCommunityBItem>,
-	#[serde(rename = "M")]
 	pub m: Vec<MatchScoreBreakdown2023AllianceAutoCommunityMItem>,
-	#[serde(rename = "T")]
 	pub t: Vec<MatchScoreBreakdown2023AllianceAutoCommunityTItem>,
 }
 
@@ -1430,8 +1168,7 @@ pub enum MobilityRobot2023 {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2023AllianceLinksItemNodesItem {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Cone,
 	Cube,
 }
@@ -1451,114 +1188,74 @@ pub struct MatchScoreBreakdown2023AllianceLinksItem {
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2023AllianceTeleopCommunityBItem {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Cone,
 	Cube,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2023AllianceTeleopCommunityMItem {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Cone,
 	Cube,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
 pub enum MatchScoreBreakdown2023AllianceTeleopCommunityTItem {
-	#[serde(rename = "None")]
-	NoneValue,
+	None,
 	Cone,
 	Cube,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "UPPERCASE")]
 pub struct MatchScoreBreakdown2023AllianceTeleopCommunity {
-	#[serde(rename = "B")]
 	pub b: Vec<MatchScoreBreakdown2023AllianceTeleopCommunityBItem>,
-	#[serde(rename = "M")]
 	pub m: Vec<MatchScoreBreakdown2023AllianceTeleopCommunityMItem>,
-	#[serde(rename = "T")]
 	pub t: Vec<MatchScoreBreakdown2023AllianceTeleopCommunityTItem>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2023Alliance {
-	#[serde(rename = "activationBonusAchieved")]
 	pub activation_bonus_achieved: Option<bool>,
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "autoBridgeState")]
 	pub auto_bridge_state: Option<BridgeState2023>,
-	#[serde(rename = "autoChargeStationPoints")]
 	pub auto_charge_station_points: Option<i64>,
-	#[serde(rename = "autoChargeStationRobot1")]
 	pub auto_charge_station_robot1: Option<AutoChargeStationRobot2023>,
-	#[serde(rename = "autoChargeStationRobot2")]
 	pub auto_charge_station_robot2: Option<AutoChargeStationRobot2023>,
-	#[serde(rename = "autoChargeStationRobot3")]
 	pub auto_charge_station_robot3: Option<AutoChargeStationRobot2023>,
-	#[serde(rename = "autoDocked")]
 	pub auto_docked: Option<bool>,
-	#[serde(rename = "autoCommunity")]
 	pub auto_community: Option<MatchScoreBreakdown2023AllianceAutoCommunity>,
-	#[serde(rename = "autoGamePieceCount")]
 	pub auto_game_piece_count: Option<i64>,
-	#[serde(rename = "autoGamePiecePoints")]
 	pub auto_game_piece_points: Option<i64>,
-	#[serde(rename = "autoMobilityPoints")]
 	pub auto_mobility_points: i64,
-	#[serde(rename = "mobilityRobot1")]
 	pub mobility_robot1: MobilityRobot2023,
-	#[serde(rename = "mobilityRobot2")]
 	pub mobility_robot2: MobilityRobot2023,
-	#[serde(rename = "mobilityRobot3")]
 	pub mobility_robot3: MobilityRobot2023,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: i64,
-	#[serde(rename = "coopGamePieceCount")]
 	pub coop_game_piece_count: Option<i64>,
-	#[serde(rename = "coopertitionCriteriaMet")]
 	pub coopertition_criteria_met: Option<bool>,
-	#[serde(rename = "endGameBridgeState")]
 	pub end_game_bridge_state: Option<BridgeState2023>,
-	#[serde(rename = "endGameChargeStationPoints")]
 	pub end_game_charge_station_points: Option<i64>,
-	#[serde(rename = "endGameChargeStationRobot1")]
 	pub end_game_charge_station_robot1: Option<EndGameChargeStationRobot2023>,
-	#[serde(rename = "endGameChargeStationRobot2")]
 	pub end_game_charge_station_robot2: Option<EndGameChargeStationRobot2023>,
-	#[serde(rename = "endGameChargeStationRobot3")]
 	pub end_game_charge_station_robot3: Option<EndGameChargeStationRobot2023>,
-	#[serde(rename = "endGameParkPoints")]
 	pub end_game_park_points: Option<i64>,
-	#[serde(rename = "extraGamePieceCount")]
 	pub extra_game_piece_count: Option<i64>,
-	#[serde(rename = "foulCount")]
 	pub foul_count: i64,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: i64,
-	#[serde(rename = "linkPoints")]
 	pub link_points: Option<i64>,
 	pub links: Option<Vec<MatchScoreBreakdown2023AllianceLinksItem>>,
-	#[serde(rename = "sustainabilityBonusAchieved")]
 	pub sustainability_bonus_achieved: Option<bool>,
-	#[serde(rename = "teleopCommunity")]
 	pub teleop_community:
 		Option<MatchScoreBreakdown2023AllianceTeleopCommunity>,
-	#[serde(rename = "teleopGamePieceCount")]
 	pub teleop_game_piece_count: Option<i64>,
-	#[serde(rename = "teleopGamePiecePoints")]
 	pub teleop_game_piece_points: Option<i64>,
-	#[serde(rename = "totalChargeStationPoints")]
 	pub total_charge_station_points: Option<i64>,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: i64,
 	pub rp: f64,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
 }
 
@@ -1569,109 +1266,59 @@ pub struct MatchScoreBreakdown2023 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2024Alliance {
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "autoAmpNoteCount")]
 	pub auto_amp_note_count: Option<i64>,
-	#[serde(rename = "autoAmpNotePoints")]
 	pub auto_amp_note_points: Option<i64>,
-	#[serde(rename = "autoLeavePoints")]
 	pub auto_leave_points: Option<i64>,
-	#[serde(rename = "autoLineRobot1")]
 	pub auto_line_robot1: Option<AutoLineRobot2024>,
-	#[serde(rename = "autoLineRobot2")]
 	pub auto_line_robot2: Option<AutoLineRobot2024>,
-	#[serde(rename = "autoLineRobot3")]
 	pub auto_line_robot3: Option<AutoLineRobot2024>,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: Option<i64>,
-	#[serde(rename = "autoSpeakerNoteCount")]
 	pub auto_speaker_note_count: Option<i64>,
-	#[serde(rename = "autoSpeakerNotePoints")]
 	pub auto_speaker_note_points: Option<i64>,
-	#[serde(rename = "autoTotalNotePoints")]
 	pub auto_total_note_points: Option<i64>,
-	#[serde(rename = "coopNotePlayed")]
 	pub coop_note_played: Option<bool>,
-	#[serde(rename = "coopertitionBonusAchieved")]
 	pub coopertition_bonus_achieved: Option<bool>,
-	#[serde(rename = "coopertitionCriteriaMet")]
 	pub coopertition_criteria_met: Option<bool>,
-	#[serde(rename = "endGameHarmonyPoints")]
 	pub end_game_harmony_points: Option<i64>,
-	#[serde(rename = "endGameNoteInTrapPoints")]
 	pub end_game_note_in_trap_points: Option<i64>,
-	#[serde(rename = "endGameOnStagePoints")]
 	pub end_game_on_stage_points: Option<i64>,
-	#[serde(rename = "endGameParkPoints")]
 	pub end_game_park_points: Option<i64>,
-	#[serde(rename = "endGameRobot1")]
 	pub end_game_robot1: Option<EndGameRobot2024>,
-	#[serde(rename = "endGameRobot2")]
 	pub end_game_robot2: Option<EndGameRobot2024>,
-	#[serde(rename = "endGameRobot3")]
 	pub end_game_robot3: Option<EndGameRobot2024>,
-	#[serde(rename = "endGameSpotLightBonusPoints")]
 	pub end_game_spot_light_bonus_points: Option<i64>,
-	#[serde(rename = "endGameTotalStagePoints")]
 	pub end_game_total_stage_points: Option<i64>,
-	#[serde(rename = "ensembleBonusAchieved")]
 	pub ensemble_bonus_achieved: Option<bool>,
-	#[serde(rename = "ensembleBonusOnStageRobotsThreshold")]
 	pub ensemble_bonus_on_stage_robots_threshold: Option<i64>,
-	#[serde(rename = "ensembleBonusStagePointsThreshold")]
 	pub ensemble_bonus_stage_points_threshold: Option<i64>,
-	#[serde(rename = "foulCount")]
 	pub foul_count: Option<i64>,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: Option<i64>,
-	#[serde(rename = "g206Penalty")]
 	pub g206_penalty: Option<bool>,
-	#[serde(rename = "g408Penalty")]
 	pub g408_penalty: Option<bool>,
-	#[serde(rename = "g424Penalty")]
 	pub g424_penalty: Option<bool>,
-	#[serde(rename = "melodyBonusAchieved")]
 	pub melody_bonus_achieved: Option<bool>,
-	#[serde(rename = "melodyBonusThreshold")]
 	pub melody_bonus_threshold: Option<i64>,
-	#[serde(rename = "melodyBonusThresholdCoop")]
 	pub melody_bonus_threshold_coop: Option<i64>,
-	#[serde(rename = "melodyBonusThresholdNonCoop")]
 	pub melody_bonus_threshold_non_coop: Option<i64>,
-	#[serde(rename = "micCenterStage")]
 	pub mic_center_stage: Option<bool>,
-	#[serde(rename = "micStageLeft")]
 	pub mic_stage_left: Option<bool>,
-	#[serde(rename = "micStageRight")]
 	pub mic_stage_right: Option<bool>,
 	pub rp: f64,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: Option<i64>,
-	#[serde(rename = "teleopAmpNoteCount")]
 	pub teleop_amp_note_count: Option<i64>,
-	#[serde(rename = "teleopAmpNotePoints")]
 	pub teleop_amp_note_points: Option<i64>,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: Option<i64>,
-	#[serde(rename = "teleopSpeakerNoteAmplifiedCount")]
 	pub teleop_speaker_note_amplified_count: Option<i64>,
-	#[serde(rename = "teleopSpeakerNoteAmplifiedPoints")]
 	pub teleop_speaker_note_amplified_points: Option<i64>,
-	#[serde(rename = "teleopSpeakerNoteCount")]
 	pub teleop_speaker_note_count: Option<i64>,
-	#[serde(rename = "teleopSpeakerNotePoints")]
 	pub teleop_speaker_note_points: Option<i64>,
-	#[serde(rename = "teleopTotalNotePoints")]
 	pub teleop_total_note_points: Option<i64>,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
-	#[serde(rename = "trapCenterStage")]
 	pub trap_center_stage: Option<bool>,
-	#[serde(rename = "trapStageLeft")]
 	pub trap_stage_left: Option<bool>,
-	#[serde(rename = "trapStageRight")]
 	pub trap_stage_right: Option<bool>,
 }
 
@@ -1682,40 +1329,27 @@ pub struct MatchScoreBreakdown2024 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ReefRow2025 {
-	#[serde(rename = "nodeA")]
 	pub node_a: bool,
-	#[serde(rename = "nodeB")]
 	pub node_b: bool,
-	#[serde(rename = "nodeC")]
 	pub node_c: bool,
-	#[serde(rename = "nodeD")]
 	pub node_d: bool,
-	#[serde(rename = "nodeE")]
 	pub node_e: bool,
-	#[serde(rename = "nodeF")]
 	pub node_f: bool,
-	#[serde(rename = "nodeG")]
 	pub node_g: bool,
-	#[serde(rename = "nodeH")]
 	pub node_h: bool,
-	#[serde(rename = "nodeI")]
 	pub node_i: bool,
-	#[serde(rename = "nodeJ")]
 	pub node_j: bool,
-	#[serde(rename = "nodeK")]
 	pub node_k: bool,
-	#[serde(rename = "nodeL")]
 	pub node_l: bool,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2025AllianceAutoReef {
-	#[serde(rename = "topRow")]
 	pub top_row: ReefRow2025,
-	#[serde(rename = "midRow")]
 	pub mid_row: ReefRow2025,
-	#[serde(rename = "botRow")]
 	pub bot_row: ReefRow2025,
 	pub trough: i64,
 	#[serde(rename = "tba_botRowCount")]
@@ -1727,12 +1361,10 @@ pub struct MatchScoreBreakdown2025AllianceAutoReef {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2025AllianceTeleopReef {
-	#[serde(rename = "topRow")]
 	pub top_row: ReefRow2025,
-	#[serde(rename = "midRow")]
 	pub mid_row: ReefRow2025,
-	#[serde(rename = "botRow")]
 	pub bot_row: ReefRow2025,
 	pub trough: i64,
 	#[serde(rename = "tba_botRowCount")]
@@ -1744,71 +1376,40 @@ pub struct MatchScoreBreakdown2025AllianceTeleopReef {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2025Alliance {
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: Option<i64>,
-	#[serde(rename = "algaePoints")]
 	pub algae_points: i64,
-	#[serde(rename = "autoBonusAchieved")]
 	pub auto_bonus_achieved: Option<bool>,
-	#[serde(rename = "autoCoralCount")]
 	pub auto_coral_count: i64,
-	#[serde(rename = "autoCoralPoints")]
 	pub auto_coral_points: i64,
-	#[serde(rename = "autoLineRobot1")]
 	pub auto_line_robot1: AutoLineRobot2024,
-	#[serde(rename = "autoLineRobot2")]
 	pub auto_line_robot2: AutoLineRobot2024,
-	#[serde(rename = "autoLineRobot3")]
 	pub auto_line_robot3: AutoLineRobot2024,
-	#[serde(rename = "autoMobilityPoints")]
 	pub auto_mobility_points: i64,
-	#[serde(rename = "autoPoints")]
 	pub auto_points: i64,
-	#[serde(rename = "autoReef")]
 	pub auto_reef: MatchScoreBreakdown2025AllianceAutoReef,
-	#[serde(rename = "bargeBonusAchieved")]
 	pub barge_bonus_achieved: Option<bool>,
-	#[serde(rename = "coopertitionCriteriaMet")]
 	pub coopertition_criteria_met: Option<bool>,
-	#[serde(rename = "coralBonusAchieved")]
 	pub coral_bonus_achieved: Option<bool>,
-	#[serde(rename = "endGameBargePoints")]
 	pub end_game_barge_points: i64,
-	#[serde(rename = "endGameRobot1")]
 	pub end_game_robot1: EndGameRobot2025,
-	#[serde(rename = "endGameRobot2")]
 	pub end_game_robot2: EndGameRobot2025,
-	#[serde(rename = "endGameRobot3")]
 	pub end_game_robot3: EndGameRobot2025,
-	#[serde(rename = "foulCount")]
 	pub foul_count: i64,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
-	#[serde(rename = "g206Penalty")]
 	pub g206_penalty: bool,
-	#[serde(rename = "g410Penalty")]
 	pub g410_penalty: bool,
-	#[serde(rename = "g418Penalty")]
 	pub g418_penalty: bool,
-	#[serde(rename = "g428Penalty")]
 	pub g428_penalty: bool,
-	#[serde(rename = "netAlgaeCount")]
 	pub net_algae_count: i64,
 	pub rp: f64,
-	#[serde(rename = "techFoulCount")]
 	pub tech_foul_count: i64,
-	#[serde(rename = "teleopCoralCount")]
 	pub teleop_coral_count: i64,
-	#[serde(rename = "teleopCoralPoints")]
 	pub teleop_coral_points: i64,
-	#[serde(rename = "teleopPoints")]
 	pub teleop_points: i64,
-	#[serde(rename = "teleopReef")]
 	pub teleop_reef: MatchScoreBreakdown2025AllianceTeleopReef,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
-	#[serde(rename = "wallAlgaeCount")]
 	pub wall_algae_count: i64,
 }
 
@@ -1819,49 +1420,29 @@ pub struct MatchScoreBreakdown2025 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MatchScoreBreakdown2026Alliance {
-	#[serde(rename = "adjustPoints")]
 	pub adjust_points: i64,
-	#[serde(rename = "autoTowerPoints")]
 	pub auto_tower_points: i64,
-	#[serde(rename = "autoTowerRobot1")]
 	pub auto_tower_robot1: TowerRobot2026,
-	#[serde(rename = "autoTowerRobot2")]
 	pub auto_tower_robot2: TowerRobot2026,
-	#[serde(rename = "autoTowerRobot3")]
 	pub auto_tower_robot3: TowerRobot2026,
-	#[serde(rename = "endGameTowerPoints")]
 	pub end_game_tower_points: i64,
-	#[serde(rename = "endGameTowerRobot1")]
 	pub end_game_tower_robot1: TowerRobot2026,
-	#[serde(rename = "endGameTowerRobot2")]
 	pub end_game_tower_robot2: TowerRobot2026,
-	#[serde(rename = "endGameTowerRobot3")]
 	pub end_game_tower_robot3: TowerRobot2026,
-	#[serde(rename = "energizedAchieved")]
 	pub energized_achieved: bool,
-	#[serde(rename = "foulPoints")]
 	pub foul_points: i64,
-	#[serde(rename = "g206Penalty")]
 	pub g206_penalty: bool,
-	#[serde(rename = "hubScore")]
 	pub hub_score: HubScore2026,
-	#[serde(rename = "majorFoulCount")]
 	pub major_foul_count: i64,
-	#[serde(rename = "minorFoulCount")]
 	pub minor_foul_count: i64,
 	pub rp: f64,
-	#[serde(rename = "superchargedAchieved")]
 	pub supercharged_achieved: bool,
-	#[serde(rename = "totalAutoPoints")]
 	pub total_auto_points: i64,
-	#[serde(rename = "totalPoints")]
 	pub total_points: i64,
-	#[serde(rename = "totalTeleopPoints")]
 	pub total_teleop_points: i64,
-	#[serde(rename = "totalTowerPoints")]
 	pub total_tower_points: i64,
-	#[serde(rename = "traversalAchieved")]
 	pub traversal_achieved: bool,
 }
 
@@ -1967,8 +1548,8 @@ pub struct MatchTimeseries2018 {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MediaAvatarDetails {
-	#[serde(rename = "base64Image")]
 	pub base64_image: String,
 }
 
@@ -2040,28 +1621,18 @@ pub struct MediaGrabCad {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
 pub enum MediaNoDetailsType {
-	#[serde(rename = "youtube")]
 	Youtube,
-	#[serde(rename = "imgur")]
 	Imgur,
-	#[serde(rename = "facebook-profile")]
 	FacebookProfile,
-	#[serde(rename = "youtube-channel")]
 	YoutubeChannel,
-	#[serde(rename = "twitter-profile")]
 	TwitterProfile,
-	#[serde(rename = "github-profile")]
 	GithubProfile,
-	#[serde(rename = "instagram-profile")]
 	InstagramProfile,
-	#[serde(rename = "periscope-profile")]
 	PeriscopeProfile,
-	#[serde(rename = "gitlab-profile")]
 	GitlabProfile,
-	#[serde(rename = "instagram-image")]
 	InstagramImage,
-	#[serde(rename = "external-link")]
 	ExternalLink,
 }
 
@@ -2109,8 +1680,8 @@ pub enum Media {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
 pub struct MediaAvatarExtrasDetails {
-	#[serde(rename = "base64Image")]
 	pub base64_image: String,
 }
 
@@ -2122,38 +1693,23 @@ pub struct MediaAvatarExtras {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
 pub enum MediaBaseType {
-	#[serde(rename = "youtube")]
 	Youtube,
-	#[serde(rename = "cdphotothread")]
 	Cdphotothread,
-	#[serde(rename = "imgur")]
 	Imgur,
-	#[serde(rename = "facebook-profile")]
 	FacebookProfile,
-	#[serde(rename = "youtube-channel")]
 	YoutubeChannel,
-	#[serde(rename = "twitter-profile")]
 	TwitterProfile,
-	#[serde(rename = "github-profile")]
 	GithubProfile,
-	#[serde(rename = "instagram-profile")]
 	InstagramProfile,
-	#[serde(rename = "periscope-profile")]
 	PeriscopeProfile,
-	#[serde(rename = "gitlab-profile")]
 	GitlabProfile,
-	#[serde(rename = "grabcad")]
 	Grabcad,
-	#[serde(rename = "instagram-image")]
 	InstagramImage,
-	#[serde(rename = "external-link")]
 	ExternalLink,
-	#[serde(rename = "avatar")]
 	Avatar,
-	#[serde(rename = "onshape")]
 	Onshape,
-	#[serde(rename = "cd-thread")]
 	CdThread,
 }
 
@@ -2226,26 +1782,20 @@ pub struct NotablesInsight {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum InsightV2LeaderboardDataKeyType {
-	#[serde(rename = "team")]
 	Team,
-	#[serde(rename = "event")]
 	Event,
-	#[serde(rename = "match")]
 	Match,
-	#[serde(rename = "team_pair")]
 	TeamPair,
-	#[serde(rename = "alliance")]
 	Alliance,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum InsightV2LeaderboardDataContextType {
-	#[serde(rename = "event_list")]
 	EventList,
-	#[serde(rename = "none")]
-	NoneValue,
-	#[serde(rename = "match_alliance")]
+	None,
 	MatchAlliance,
 }
 
@@ -2303,14 +1853,11 @@ pub struct InsightV2Leaderboard {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum InsightV2StreakDataEntriesItemKeyType {
-	#[serde(rename = "team")]
 	Team,
-	#[serde(rename = "event")]
 	Event,
-	#[serde(rename = "match")]
 	Match,
-	#[serde(rename = "team_pair")]
 	TeamPair,
 }
 
@@ -2340,20 +1887,17 @@ pub struct InsightV2Streak {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum InsightV2TimeseriesDataXType {
-	#[serde(rename = "week")]
 	Week,
-	#[serde(rename = "year")]
 	Year,
-	#[serde(rename = "event")]
 	Event,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum InsightV2TimeseriesDataPointContextType {
-	#[serde(rename = "none")]
-	NoneValue,
-	#[serde(rename = "match_record")]
+	None,
 	MatchRecord,
 }
 
@@ -2414,12 +1958,10 @@ pub enum InsightV2 {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum InsightV2BaseCategory {
-	#[serde(rename = "leaderboard")]
 	Leaderboard,
-	#[serde(rename = "streak")]
 	Streak,
-	#[serde(rename = "timeseries")]
 	Timeseries,
 }
 
@@ -2569,12 +2111,10 @@ pub struct TeamEventStatusAlliance {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub enum TeamEventStatusPlayoffStatus {
-	#[serde(rename = "won")]
 	Won,
-	#[serde(rename = "eliminated")]
 	Eliminated,
-	#[serde(rename = "playing")]
 	Playing,
 }
 
