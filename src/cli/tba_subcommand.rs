@@ -1,4 +1,4 @@
-use crate::cli::handlers::CLIGetRequest;
+use crate::cli::handlers::*;
 
 #[derive(clap::Subcommand, Debug)]
 pub enum TBASubcommand {
@@ -6,9 +6,8 @@ pub enum TBASubcommand {
 		about = "Generates an autocompletion script for a specified shell."
 	)]
 	Completions {
-		/// The shell for which to generate the autocompletion script.
-		#[arg(value_enum)]
-		shell: clap_complete::Shell,
+		#[clap(flatten)]
+		command: CLIPrintCompletionsCommand,
 	},
 
 	#[command(
@@ -22,4 +21,14 @@ pub enum TBASubcommand {
 	#[command(about = "Attempts to install autocompletion scripts for the \
 	                   current shell.")]
 	InstallCompletions,
+}
+
+impl TBASubcommand {
+	pub async fn execute(self) -> Result<(), String> {
+		match self {
+			TBASubcommand::Get { request } => get_endpoint(request).await,
+			TBASubcommand::Completions { command } => print_completions(command),
+			TBASubcommand::InstallCompletions => install_completions(None),
+		}
+	}
 }
