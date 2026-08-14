@@ -22,9 +22,7 @@ const COMMAND_NAME: &str = "tba";
 const BLOCK_START: &str = "# >>> tba completions >>>";
 const BLOCK_END: &str = "# <<< tba completions <<<";
 
-pub fn install_completions(
-	shell: Option<Shell>,
-) {
+pub fn install_completions(shell: Option<Shell>) {
 	let shell = match shell.or_else(Shell::from_env).ok_or_else(|| {
 		io::Error::new(
 			ErrorKind::NotFound,
@@ -35,7 +33,7 @@ pub fn install_completions(
 		Err(error) => {
 			eprintln!("Error: {}", error);
 			return;
-		},
+		}
 	};
 
 	let installation = match installation_for(shell) {
@@ -43,7 +41,7 @@ pub fn install_completions(
 		Err(error) => {
 			eprintln!("Error: {}", error);
 			return;
-		},
+		}
 	};
 
 	if let Some(parent) = installation.script.parent() {
@@ -53,13 +51,16 @@ pub fn install_completions(
 		}
 	}
 
-	if let Err(error) = fs::write(&installation.script, get_completions(shell)) {
+	if let Err(error) = fs::write(&installation.script, get_completions(shell))
+	{
 		eprintln!("Error: {}", error);
 		return;
 	}
 
 	if let Some(activation) = installation.activation {
-		if let Err(error) = install_activation(&activation.file, &activation.command) {
+		if let Err(error) =
+			install_activation(&activation.file, &activation.command)
+		{
 			eprintln!("Error: {}", error);
 			return;
 		}

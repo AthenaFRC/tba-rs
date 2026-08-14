@@ -1,3 +1,4 @@
+#[rustfmt::skip]
 macro_rules! endpoints {
 	($(
 		$(#[$domain_meta:meta])*
@@ -31,7 +32,7 @@ macro_rules! endpoints {
 					}
 				)*
 			}
-			
+
 			impl GetSubcommand {
 				pub async fn get(
 					self,
@@ -72,7 +73,7 @@ macro_rules! endpoints {
 					}
 				}
 			}
-			
+
 			$(
 				$(#[$domain_meta])*
 				pub mod [<$domain:snake>] {
@@ -90,7 +91,7 @@ macro_rules! endpoints {
 							).await
 						}
 					)*
-					
+
 					#[cfg(feature = "cli")]
 					#[derive(clap::Subcommand, Debug, Clone)]
 					#[command(verbatim_doc_comment)]
@@ -105,20 +106,20 @@ macro_rules! endpoints {
 							},
 						)*
 					}
-					
+
 				}
-				
+
 			)*
 		}
 	};
 }
 
 endpoints!(
-	
+
 	/// Endpoints responsible for information about individual competition
 	/// districts.
 	District {
-		
+
 		/// Gets a list of DCMP events and awards for the given district
 		/// abbreviation.
 		DCMPHistory {
@@ -130,7 +131,7 @@ endpoints!(
 			},
 			output: Vec<crate::models::DistrictDCMPHistoryEntry>,
 		}
-		
+
 		/// Gets a list of District objects with the given district
 		/// abbreviation. This accounts for district abbreviation
 		/// changes, such as MAR to FMA.
@@ -142,7 +143,7 @@ endpoints!(
 			},
 			output: Vec<crate::models::District>,
 		}
-		
+
 		/// Gets insights for a given district.
 		Insights {
 			path: "/district/{district_abbreviation}/insights",
@@ -152,7 +153,7 @@ endpoints!(
 			},
 			output: crate::models::DistrictInsight,
 		}
-	
+
 		/// Gets a list of advancement information per team in a district.
 		Advancement {
 			path: "/district/{district_key}/advancement",
@@ -162,7 +163,7 @@ endpoints!(
 			},
 			output: Option<crate::models::DistrictAdvancementByTeam>,
 		}
-		
+
 	}
-	
+
 );

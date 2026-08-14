@@ -21,6 +21,6 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		Some(Commands::InstallCompletions) => install_completions(None),
 		None => {}
 	}
-	
+
 	Ok(())
 }
