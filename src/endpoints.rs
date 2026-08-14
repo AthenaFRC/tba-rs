@@ -1,3 +1,4 @@
+#[rustfmt::skip]
 endpoints!(
 
 	/// Endpoints responsible for information about individual competition
