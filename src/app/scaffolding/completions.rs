@@ -1,6 +1,6 @@
 use clap::CommandFactory;
 
-pub fn get_completions(shell: clap_complete::Shell) -> Vec<u8> {
+pub fn generate_completions(shell: clap_complete::Shell) -> Vec<u8> {
 	let mut cmd = crate::app::scaffolding::CLI::command();
 	let name = cmd.get_name().to_string();
 	let mut buffer = Vec::new();

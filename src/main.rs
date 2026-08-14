@@ -1,11 +1,12 @@
+use std::io::Write;
 use clap::Parser;
 use tba::app::{
 	handlers::{
-		generate_completions,
 		get_endpoint,
 		install_completions,
 	},
 	scaffolding::{
+		generate_completions,
 		CLI,
 		Commands,
 	},
@@ -17,7 +18,12 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 	match cli.command {
 		Some(Commands::Get { request }) => get_endpoint(request).await,
-		Some(Commands::Completions { shell }) => generate_completions(shell),
+		Some(Commands::Completions { shell }) => {
+			let completions = generate_completions(shell);
+			if let Err(error) = std::io::stdout().write_all(&completions) {
+				eprintln!("Error: {}", error);
+			}
+		},
 		Some(Commands::InstallCompletions) => install_completions(None),
 		None => {}
 	}
