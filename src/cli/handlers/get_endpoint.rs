@@ -57,31 +57,19 @@ pub struct CLIGetRequest {
 	endpoint: GetSubcommand,
 }
 
-pub async fn get_endpoint(request: CLIGetRequest) {
-	let format = request.format;
-	let client = match APIClient::new_with(request.api_key, request.base_url)
+pub async fn get_endpoint(request: CLIGetRequest) -> Result<(), String> {
+	let client = APIClient::new_with(request.api_key, request.base_url)
 		.await
-	{
-		Ok(client) => client,
-		Err(
-			APIClientInitError::ReqwestClientInitError(err),
-		) => {
-			eprintln!("Error: Failed to initialize Reqwest client: {}", err);
-			return;
-		}
-		Err(APIClientInitError::APIKeyError(_)) => {
-			eprintln!(
-				"Error: API key must be provided either via the '--api-key' \
+		.map_err(|client_init_error| match client_init_error {
+			APIClientInitError::ReqwestClientInitError(err) => err.to_string(),
+			APIClientInitError::APIKeyError(_) => format!(
+				"API key must be provided either via the '--api-key' \
 				 flag or in the environment variable '{}'",
 				API_KEY_ENV_VAR
-			);
-			return;
-		}
-	};
+			),
+		})?;
 	let api_result = request.endpoint.get(&client, request.e_tag).await;
-	print_result(api_result, true, format).unwrap_or_else(|err| {
-		eprintln!("Error: {}", err);
-	});
+	print_result(api_result, request.print_e_tag, request.format)
 }
 
 pub(crate) fn print_result<T: serde::Serialize>(
