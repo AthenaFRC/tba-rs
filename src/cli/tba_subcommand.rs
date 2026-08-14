@@ -27,7 +27,9 @@ impl TBASubcommand {
 	pub async fn execute(self) -> Result<(), String> {
 		match self {
 			TBASubcommand::Get { request } => get_endpoint(request).await,
-			TBASubcommand::Completions { command } => print_completions(command),
+			TBASubcommand::Completions { command } => {
+				print_completions(command)
+			}
 			TBASubcommand::InstallCompletions => install_completions(None),
 		}
 	}

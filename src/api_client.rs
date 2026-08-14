@@ -43,9 +43,9 @@ impl APIClient {
 		base_api_url: Option<String>,
 	) -> Result<APIClient, APIClientInitError> {
 		Ok(APIClient {
-			client: reqwest::Client::builder().build().map_err(
-				APIClientInitError::ReqwestClientInitError,
-			)?,
+			client: reqwest::Client::builder()
+				.build()
+				.map_err(APIClientInitError::ReqwestClientInitError)?,
 			api_key: api_key
 				.or_else(|| std::env::var(API_KEY_ENV_VAR).ok())
 				.ok_or_else(|| {

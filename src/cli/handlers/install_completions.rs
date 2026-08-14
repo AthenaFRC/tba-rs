@@ -13,35 +13,40 @@ use clap_complete::{
 };
 
 const COMMAND_NAME: &str = env!("CARGO_PKG_NAME");
-const BLOCK_START: &str = concat!("# >>> ", env!("CARGO_PKG_NAME"), " completions >>>");
-const BLOCK_END: &str = concat!("# <<< ", env!("CARGO_PKG_NAME"), " completions <<<");
+const BLOCK_START: &str =
+	concat!("# >>> ", env!("CARGO_PKG_NAME"), " completions >>>");
+const BLOCK_END: &str =
+	concat!("# <<< ", env!("CARGO_PKG_NAME"), " completions <<<");
 
 pub fn install_completions(shell: Option<Shell>) -> Result<(), String> {
-	let shell = shell
-		.or_else(Shell::from_env)
-		.ok_or("no shell specified and the current shell could not be determined")?;
+	let shell = shell.or_else(Shell::from_env).ok_or(
+		"no shell specified and the current shell could not be determined",
+	)?;
 	let installation = installation_for(shell)?;
-	
+
 	if let Some(parent) = installation.script.parent() {
-		fs::create_dir_all(parent)
-			.map_err(|e| format!("Failed to create completion script directories: {}", e))?;
+		fs::create_dir_all(parent).map_err(|e| {
+			format!("Failed to create completion script directories: {}", e)
+		})?;
 	}
-	
+
 	fs::write(
 		&installation.script,
 		crate::cli::generate_completions(shell),
-	).map_err(|error| format!("Failed to write completion script: {}", error))?;
+	)
+	.map_err(|error| format!("Failed to write completion script: {}", error))?;
 
 	if let Some(activation) = installation.activation {
-		install_activation(&activation.file, &activation.command)
-			.map_err(|e| format!("Failed to install activation script: {}", e))?;
+		install_activation(&activation.file, &activation.command).map_err(
+			|e| format!("Failed to install activation script: {}", e),
+		)?;
 	}
 
 	println!(
 		"Installed {shell} completions to {}",
 		installation.script.display()
 	);
-	
+
 	Ok(())
 }
 
@@ -58,37 +63,33 @@ struct Activation {
 fn installation_for(shell: Shell) -> Result<Installation, String> {
 	let file_name = shell.file_name(COMMAND_NAME);
 	let home = home_dir()?;
-	let config_home = env_path("XDG_CONFIG_HOME")
-		.unwrap_or_else(|| home.join(".config"));
-	let data_home = env_path("XDG_DATA_HOME")
-		.unwrap_or_else(|| home.join(".local/share"));
+	let config_home =
+		env_path("XDG_CONFIG_HOME").unwrap_or_else(|| home.join(".config"));
+	let data_home =
+		env_path("XDG_DATA_HOME").unwrap_or_else(|| home.join(".local/share"));
 
 	match shell {
 		Shell::Bash => {
 			let user_dir = env::var_os("BASH_COMPLETION_USER_DIR")
 				.as_deref()
-				.and_then(|paths| env::split_paths(paths)
-					.find(|path| !path.as_os_str().is_empty()))
+				.and_then(|paths| {
+					env::split_paths(paths)
+						.find(|path| !path.as_os_str().is_empty())
+				})
 				.unwrap_or_else(|| data_home.join("bash-completion"));
 			Ok(Installation {
-				script: user_dir
-					.join("completions")
-					.join(file_name),
+				script: user_dir.join("completions").join(file_name),
 				activation: None,
 			})
-		},
+		}
 		Shell::Fish => Ok(Installation {
-			script: config_home
-				.join("fish/completions")
-				.join(file_name),
+			script: config_home.join("fish/completions").join(file_name),
 			activation: None,
 		}),
 		Shell::Zsh => {
-			let script = data_home
-				.join("zsh/site-functions")
-				.join(file_name);
-			let profile_dir = env_path("ZDOTDIR")
-				.unwrap_or_else(|| home.to_path_buf());
+			let script = data_home.join("zsh/site-functions").join(file_name);
+			let profile_dir =
+				env_path("ZDOTDIR").unwrap_or_else(|| home.to_path_buf());
 			let quoted_script = quote_posix_path(&script)?;
 			Ok(Installation {
 				script,
@@ -100,7 +101,7 @@ fn installation_for(shell: Shell) -> Result<Installation, String> {
 					),
 				}),
 			})
-		},
+		}
 		Shell::Elvish => Ok(Installation {
 			script: config_home.join("elvish/lib").join(file_name),
 			activation: Some(Activation {
@@ -114,9 +115,7 @@ fn installation_for(shell: Shell) -> Result<Installation, String> {
 			} else {
 				config_home.join("powershell")
 			};
-			let script = profile_dir
-				.join("completions")
-				.join(file_name);
+			let script = profile_dir.join("completions").join(file_name);
 			let quoted_script = quote_powershell_path(&script)?;
 			Ok(Installation {
 				script,
@@ -125,7 +124,7 @@ fn installation_for(shell: Shell) -> Result<Installation, String> {
 					command: format!(". {quoted_script}"),
 				}),
 			})
-		},
+		}
 		_ => Err(format!(
 			"Automatic completion install is not supported for {shell}."
 		)),
@@ -135,19 +134,19 @@ fn installation_for(shell: Shell) -> Result<Installation, String> {
 fn install_activation(path: &Path, command: &str) -> Result<(), String> {
 	let mut contents = match fs::read_to_string(path) {
 		Ok(contents) => contents,
-		Err(error) if error.kind() == std::io::ErrorKind::NotFound => String::new(),
-		Err(error) =>Err(format!(
+		Err(error) if error.kind() == std::io::ErrorKind::NotFound => {
+			String::new()
+		}
+		Err(error) => Err(format!(
 			"Failed to read install script activation file: {error}"
 		))?,
 	};
 
 	if let Some(start) = contents.find(BLOCK_START) {
-		let relative_end = contents[start..]
-			.find(BLOCK_END)
-			.ok_or(format!(
-				"{} contains an incomplete {COMMAND_NAME} completions block.",
-				path.display()
-			))?;
+		let relative_end = contents[start..].find(BLOCK_END).ok_or(format!(
+			"{} contains an incomplete {COMMAND_NAME} completions block.",
+			path.display()
+		))?;
 		let mut end = start + relative_end + BLOCK_END.len();
 		if contents.as_bytes().get(end) == Some(&b'\n') {
 			end += 1;
@@ -166,8 +165,9 @@ fn install_activation(path: &Path, command: &str) -> Result<(), String> {
 	contents.push('\n');
 
 	if let Some(parent) = path.parent() {
-		fs::create_dir_all(parent)
-			.map_err(|e| format!("Failed to create activations directory: {}", e))?;
+		fs::create_dir_all(parent).map_err(|e| {
+			format!("Failed to create activations directory: {}", e)
+		})?;
 	}
 	fs::write(path, contents)
 		.map_err(|e| format!("Failed to write activation file: {}", e))
@@ -214,8 +214,8 @@ mod tests {
 			.duration_since(UNIX_EPOCH)
 			.unwrap()
 			.as_nanos();
-		let directory =
-			env::temp_dir().join(format!("{COMMAND_NAME}-completions-{unique}"));
+		let directory = env::temp_dir()
+			.join(format!("{COMMAND_NAME}-completions-{unique}"));
 		let profile = directory.join("profile");
 
 		install_activation(&profile, "first command").unwrap();
@@ -240,9 +240,15 @@ mod tests {
 
 	#[test]
 	fn posix_paths_are_single_quote_escaped() {
-		let quoted =
-			quote_posix_path(Path::new(concat!("/home/tester's/_", env!("CARGO_PKG_NAME")))).unwrap();
-		
-		assert_eq!(quoted, concat!("'/home/tester'\\''s/_", env!("CARGO_PKG_NAME"), "'"));
+		let quoted = quote_posix_path(Path::new(concat!(
+			"/home/tester's/_",
+			env!("CARGO_PKG_NAME")
+		)))
+		.unwrap();
+
+		assert_eq!(
+			quoted,
+			concat!("'/home/tester'\\''s/_", env!("CARGO_PKG_NAME"), "'")
+		);
 	}
 }

@@ -44,15 +44,15 @@ pub struct CLIGetRequest {
 		help = "The format to output the result in."
 	)]
 	format: OutputFormat,
-	
+
 	#[arg(
 		long,
 		global = true,
 		default_value_t = false,
-		help = "Whether to print the ETag value.",
+		help = "Whether to print the ETag value."
 	)]
 	print_e_tag: bool,
-	
+
 	#[command(subcommand)]
 	endpoint: GetSubcommand,
 }
@@ -63,8 +63,8 @@ pub async fn get_endpoint(request: CLIGetRequest) -> Result<(), String> {
 		.map_err(|client_init_error| match client_init_error {
 			APIClientInitError::ReqwestClientInitError(err) => err.to_string(),
 			APIClientInitError::APIKeyError(_) => format!(
-				"API key must be provided either via the '--api-key' \
-				 flag or in the environment variable '{}'",
+				"API key must be provided either via the '--api-key' flag or \
+				 in the environment variable '{}'",
 				API_KEY_ENV_VAR
 			),
 		})?;
