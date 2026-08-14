@@ -1,4 +1,5 @@
 use std::io::Write;
+
 use clap::Parser;
 use tba::app::{
 	handlers::{
@@ -6,9 +7,9 @@ use tba::app::{
 		install_completions,
 	},
 	scaffolding::{
-		generate_completions,
 		TBACommand,
 		TBASubcommand,
+		generate_completions,
 	},
 };
 
@@ -23,7 +24,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			if let Err(error) = std::io::stdout().write_all(&completions) {
 				eprintln!("Error: {}", error);
 			}
-		},
+		}
 		Some(TBASubcommand::InstallCompletions) => install_completions(None),
 		None => {}
 	}
