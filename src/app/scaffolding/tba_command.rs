@@ -3,13 +3,21 @@ use std::path::PathBuf;
 use crate::app::scaffolding::TBASubcommand;
 
 #[derive(clap::Parser, Debug)]
-#[command(version, about)]
-#[command(max_term_width = 120)]
-#[command(verbatim_doc_comment)]
-#[command(arg_required_else_help = true)]
+#[command(
+	version,
+	about,
+	max_term_width = 120,
+	arg_required_else_help = true,
+	help_expected = true,
+)]
 pub struct TBACommand {
-	/// Sets custom config file
-	#[arg(short, long, value_name = "FILE")]
+	#[arg(
+		short,
+		long,
+		value_name = "FILE",
+		global = true,
+		help = "Sets the custom config file to use.",
+	)]
 	pub config: Option<PathBuf>,
 
 	#[command(subcommand)]

@@ -26,6 +26,7 @@ macro_rules! endpoints {
 			pub enum GetSubcommand {
 				$(
 					$(#[$domain_meta])*
+					#[command(verbatim_doc_comment)]
 					$domain {
 						#[command(subcommand)]
 						endpoint: [<$domain:snake>]::[<$domain Subcommand>],
@@ -99,9 +100,11 @@ macro_rules! endpoints {
 					pub enum [<$domain Subcommand>] {
 						$(
 							$(#[$endpoint_meta])*
+							#[command(verbatim_doc_comment)]
 							$endpoint_name_pascal {
 								$(
 									$(#[$field_meta])*
+									#[arg(verbatim_doc_comment)]
 									$field: $field_type,
 								)*
 							},

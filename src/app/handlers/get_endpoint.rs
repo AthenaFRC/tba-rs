@@ -14,23 +14,37 @@ use crate::{
 
 #[derive(clap::Args, Debug, Clone)]
 pub struct CLIGetRequest {
-	/// The API key to use to authenticate to the TBA API.
-	#[arg(long, global = true)]
+	#[arg(
+		long,
+		global = true,
+		help = "The API key to use to authenticate to the TBA API.",
+	)]
 	api_key: Option<String>,
 
-	/// The base URL to use for the TBA API.
-	#[arg(long, global = true)]
+	#[arg(
+		long,
+		global = true,
+		default_value = crate::BASE_API_URL_FALLBACK,
+		help = "The base URL to use for the TBA API.",
+	)]
 	base_url: Option<String>,
 
-	/// The ETag value to send with the request.
-	#[arg(long, global = true)]
+	#[arg(
+		long,
+		global = true,
+		help = "The ETag value to send with the request.",
+	)]
 	e_tag: Option<String>,
 
-	/// The format to output the result in.
-	#[arg(short, long, global = true, default_value = "json")]
+	#[arg(
+		short,
+		long,
+		global = true,
+		default_value = "json",
+		help = "The format to output the result in.",
+	)]
 	format: OutputFormat,
-
-	/// The endpoint from which to fetch information.
+	
 	#[command(subcommand)]
 	endpoint: GetSubcommand,
 }
