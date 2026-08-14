@@ -1,8 +1,8 @@
 mod tba_command;
 pub use tba_command::*;
 
-mod completions;
-pub use completions::*;
+mod generate_completions;
+pub use generate_completions::*;
 
 mod tba_subcommand;
 pub use tba_subcommand::*;
