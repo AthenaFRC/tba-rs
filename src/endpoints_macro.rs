@@ -16,6 +16,17 @@ pub fn __tba_endpoint_cli_name(name: &'static str) -> String {
 	name.trim_end_matches('_').replace('_', "-")
 }
 
+#[cfg(feature = "cli")]
+pub fn __tba_endpoint_doc_comment(lines: &[&'static str]) -> String {
+	lines
+		.iter()
+		.flat_map(|line| line.split('\n'))
+		.map(|line| line.strip_prefix(' ').unwrap_or(line).trim())
+		.filter(|line| !line.is_empty())
+		.collect::<Vec<_>>()
+		.join(" ")
+}
+
 #[rustfmt::skip]
 macro_rules! __tba_endpoint_call {
 	(
@@ -109,16 +120,16 @@ macro_rules! __tba_endpoint_fn {
 #[rustfmt::skip]
 macro_rules! endpoints {
 	($(
-		$(#[$domain_meta:meta])*
+		$(#[doc = $domain_doc:expr])*
 		$domain:ident {
 			$(
-				$(#[$endpoint_meta:meta])*
+				$(#[doc = $endpoint_doc:expr])*
 				$endpoint_name_pascal:ident {
 					$(snake_case: $endpoint_name_snake:ident,)?
 					path: $endpoint_path:expr,
 					input: {
 						$(
-							$(#[$field_meta:meta])*
+							$(#[doc = $field_doc:expr])*
 							$field:ident: $field_type:ty,
 						)*
 					},
@@ -131,11 +142,11 @@ macro_rules! endpoints {
 		paste::paste! {
 			#[cfg(feature = "cli")]
 			#[derive(clap::Subcommand, Debug, Clone)]
-			#[command(verbatim_doc_comment)]
 			pub enum GetSubcommand {
 				$(
-					$(#[$domain_meta])*
-					#[command(verbatim_doc_comment)]
+					#[command(
+						about = $crate::__tba_endpoint_doc_comment(&[$($domain_doc),*])
+					)]
 					$domain {
 						#[command(subcommand)]
 						endpoint: [<$domain:snake>]::[<$domain Subcommand>],
@@ -189,7 +200,7 @@ macro_rules! endpoints {
 			}
 
 			$(
-				$(#[$domain_meta])*
+				$(#[doc = $domain_doc])*
 				pub mod [<$domain:snake>] {
 					$(
 						__tba_endpoint_fn! {
@@ -198,7 +209,7 @@ macro_rules! endpoints {
 							path: $endpoint_path,
 							input: {
 								$(
-									$(#[$field_meta])*
+									$(#[doc = $field_doc])*
 									$field: $field_type,
 								)*
 							},
@@ -208,21 +219,20 @@ macro_rules! endpoints {
 
 					#[cfg(feature = "cli")]
 					#[derive(clap::Subcommand, Debug, Clone)]
-					#[command(verbatim_doc_comment)]
 					pub enum [<$domain Subcommand>] {
 						$(
-							$(#[$endpoint_meta])*
 							#[command(
 								name = __tba_endpoint_cli_name!(
 									$endpoint_name_pascal,
 									$($endpoint_name_snake)?
 								),
-								verbatim_doc_comment,
+								about = $crate::__tba_endpoint_doc_comment(&[$($endpoint_doc),*]),
 							)]
 							$endpoint_name_pascal {
 								$(
-									$(#[$field_meta])*
-									#[arg(verbatim_doc_comment)]
+									#[arg(
+										help = $crate::__tba_endpoint_doc_comment(&[$($field_doc),*])
+									)]
 									$field: $field_type,
 								)*
 							},
