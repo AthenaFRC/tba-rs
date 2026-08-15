@@ -1,3 +1,5 @@
+use crate::cli::TBAConfig;
+
 #[derive(clap::Parser, Debug)]
 #[command(
 	about,
@@ -15,9 +17,10 @@ pub struct TBACommand {
 		long,
 		value_name = "FILE",
 		global = true,
+		default_value = TBAConfig::get_apparent_default_config_file_path(),
 		help = "Sets the custom config file to use."
 	)]
-	pub config: Option<std::path::PathBuf>,
+	pub config: std::path::PathBuf,
 
 	#[arg(
 		short,
