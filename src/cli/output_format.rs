@@ -1,10 +1,16 @@
 #[derive(
-	clap::ValueEnum, serde::Serialize, serde::Deserialize, Debug, Clone,
+	clap::ValueEnum,
+	serde::Serialize,
+	serde::Deserialize,
+	Default,
+	Debug,
+	Clone,
 )]
 pub enum OutputFormat {
 	/// Standard JSON format, without line breaks or indentation.
 	#[value(name = "json")]
 	#[serde(rename = "json")]
+	#[default]
 	JSON,
 
 	/// Pretty-printed JSON format, including line breaks and indentation via
@@ -40,10 +46,4 @@ pub enum OutputFormat {
 	#[value(name = "tsv")]
 	#[serde(rename = "tsv")]
 	TSV,
-}
-
-impl Default for OutputFormat {
-	fn default() -> Self {
-		OutputFormat::JSON
-	}
 }
