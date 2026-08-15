@@ -67,10 +67,12 @@ impl TBAConfig {
 		}
 		let config_file_content = std::fs::read_to_string(&config_file_path)
 			.map_err(|e| format!("Failed to read config file: {}", e))?;
-		match toml::from_str(&config_file_content) {
-			Ok(config) => Ok(Some(config)),
+		let mut config: Self = match toml::from_str(&config_file_content) {
+			Ok(config) => Ok(config),
 			Err(e) => Err(format!("Failed to parse config file: {}", e)),
-		}
+		}?;
+		config.path = Some(config_file_path.to_path_buf());
+		Ok(Some(config))
 	}
 
 	pub fn from_config_file() -> Result<Option<TBAConfig>, String> {
