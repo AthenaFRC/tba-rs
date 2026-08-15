@@ -187,6 +187,8 @@ macro_rules! endpoints {
 													$crate::APIResult::NotModified,
 												$crate::APIResult::Unauthorized =>
 													$crate::APIResult::Unauthorized,
+												$crate::APIResult::DecodeError(error) =>
+													$crate::APIResult::DecodeError(error),
 												$crate::APIResult::Err(error) =>
 													$crate::APIResult::Err(error),
 											}

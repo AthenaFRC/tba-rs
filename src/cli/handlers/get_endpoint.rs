@@ -126,6 +126,7 @@ pub(crate) fn print_result<T: serde::Serialize>(
 		APIResult::Unauthorized => {
 			eprintln!("Authorization failed. Ensure your API key is valid.")
 		}
+		APIResult::DecodeError(error) => eprintln!("Error: {error}"),
 		APIResult::Err(message) => eprintln!("Error: {}", message),
 		APIResult::Ok { result, e_tag } => {
 			println!(
