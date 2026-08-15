@@ -12,7 +12,7 @@ use clap_complete::{
 	Shell,
 };
 
-use crate::cli::fs_util::*;
+use crate::cli::util::fs::*;
 
 #[derive(clap::Args, Debug, Clone)]
 pub struct CLIInstallCompletionsCommandArgs {
@@ -30,7 +30,7 @@ const BLOCK_END: &str =
 pub fn install_completions(
 	args: CLIInstallCompletionsCommandArgs,
 ) -> Result<(), String> {
-	let shell = crate::cli::determine_shell(args.shell)?;
+	let shell = crate::cli::util::determine_shell(args.shell)?;
 	let installation = installation_for(shell)?;
 
 	if let Some(parent) = installation.script.parent() {
@@ -41,7 +41,7 @@ pub fn install_completions(
 
 	fs::write(
 		&installation.script,
-		crate::cli::generate_completions(shell),
+		crate::cli::util::generate_completions(shell),
 	)
 	.map_err(|error| format!("Failed to write completion script: {}", error))?;
 

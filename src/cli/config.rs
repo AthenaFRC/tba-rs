@@ -39,11 +39,11 @@ pub struct TBAConfig {
 
 impl TBAConfig {
 	pub fn get_default_config_file_path() -> Result<PathBuf, String> {
-		Ok(crate::cli::fs_util::home_dir()?.join(CONFIG_FILE_NAME))
+		Ok(crate::cli::util::fs::home_dir()?.join(CONFIG_FILE_NAME))
 	}
 
 	pub fn get_apparent_default_config_file_path() -> String {
-		crate::cli::fs_util::home_dir()
+		crate::cli::util::fs::home_dir()
 			.unwrap_or_else(|_| PathBuf::from("."))
 			.join(CONFIG_FILE_NAME)
 			.to_string_lossy()
