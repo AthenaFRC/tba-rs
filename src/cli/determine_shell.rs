@@ -7,7 +7,7 @@
 ///
 /// # Examples
 /// ```rust
-/// use tba::cli::determine_shell::determine_shell;
+/// use tba::cli::determine_shell;
 /// if let Some(shell) = determine_shell(None) {
 /// 	println!("Current shell: {:?}", shell);
 /// }
