@@ -4,11 +4,13 @@
 [The Blue Alliance API v3](https://www.thebluealliance.com/apidocs/v3).
 
 The crate provides generated endpoint accessors, serde response models, ETag
-support, and a small `tba` binary for local smoke testing. It is intended for
-FRC tools that want typed access to TBA data without hand-building request URLs.
+support, optional client-side rate limiting, and a feature-gated `tba` CLI. It
+is intended for FRC tools that want typed access to TBA data without
+hand-building request URLs.
 
 ## Table of Contents
 - [Installation](#installation)
+- [Optional Features](#optional-features)
 - [Quick Start](#quick-start)
 - [Authentication](#authentication)
 - [Endpoint Modules](#endpoint-modules)
@@ -30,41 +32,55 @@ or add it to your `Cargo.toml`:
 tba = "0.1"
 ```
 
+## Optional Features
+
+- `rate-limit` enables `APIClient::with_rate_limiter`.
+- `cli` builds the `tba` command-line client. Install it with:
+
+  ```sh
+  cargo install tba --features cli
+  ```
+
+  With `X_TBA_AUTH_KEY` set, an endpoint can then be queried with commands such
+  as `tba get team simple frc1711`.
+
 ## Quick Start
 
 ```rust
 use tba::{
-    api,
+    endpoints,
+    models::TeamSimple,
     APIClient,
     APIResult,
 };
 
 // This library relies on `tokio` for async execution, which you will need if
-// you do not already depend on it (cargo add tokio --features=full).
+// you do not already depend on it
+// (cargo add tokio --features macros,rt-multi-thread).
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-	
-	if let Err(error) = dotenvy::dotenv() {
-		println!("Did you configure your API key in a .env file? ({})", error);
-	}
-	
+async fn main() {
 	// Create an API client. This will read your TBA API key from the
 	// `X_TBA_AUTH_KEY` environment variable.
-	let client = APIClient::new().await?;
-	
+	let client = match APIClient::new().await {
+		Ok(client) => client,
+		Err(_) => {
+			eprintln!("failed to initialize the TBA API client");
+			return;
+		},
+	};
+
 	// If you have a cached response from a previous request, you can pass the
 	// ETag to avoid unnecessary data transfer. If you don't have a cached
 	// response, pass `None`.
-	let e_tag: Option<String> = Some("etag-from-previous-request".to_string());
-	
-	// Call the `team_simple` endpoint for team "frc1711".
+	let e_tag: Option<String> = None;
+
+	// Call the simple team endpoint for team "frc1711".
 	// The data from the endpoint is deserialized into a `TeamSimple` struct,
 	// which is wrapped in an `APIResult<T>` struct.
 	let response: APIResult<TeamSimple> =
-		api::team::team_simple(&client, "frc1711", e_tag).await;
-	
+		endpoints::team::simple(&client, "frc1711".to_string(), e_tag).await;
+
 	match response {
-		
 		// If the request was successful, we can destructure the `APIResult`
 		// into its Ok variant, which contains the deserialized `TeamSimple`
 		// struct and the ETag for the response.
@@ -72,26 +88,22 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 			println!("{}: {}", result.key, result.nickname);
 			println!("etag: {e_tag}");
 		},
-		
+
 		// If we provided an ETag that the server determined was still valid,
 		// we'll get a `NotModified` response, which means that the data we
 		// received alongside the aforementioned ETag is still fresh and can
 		// be used instead of ingesting a new response.
 		APIResult::NotModified => println!("cached response is still fresh"),
-		
+
 		// If our API key was invalid, we'll get an `Unauthorized` response.
 		// This is a good time to check that your `X_TBA_AUTH_KEY` environment
 		// variable is set correctly.
 		APIResult::Unauthorized => eprintln!("invalid TBA API key"),
-		
+
 		// If the request failed for any other reason, we'll get an `Err`
 		// response, which contains the error message.
 		APIResult::Err(error) => eprintln!("request failed: {error}"),
-		
 	}
-	
-	Ok(())
-
 }
 ```
 
@@ -107,22 +119,23 @@ use a library such as `dotenvy` to load it from a `.env` file) and simply call:
 let client = APIClient::new().await?;
 ```
 
-This is the preferred way to create an `APIClient` instance, as it reduces the
-risk of accidentally committing your API key to source control (assuming you
-remember to add `.env` to your `.gitignore`).
+The constructor returns a `Result`; on success, it contains the `APIClient`.
+Using the environment is preferred because it reduces the risk of accidentally
+committing your API key to source control (assuming you remember to add `.env`
+to your `.gitignore`).
 
 If you prefer to pass your API key directly, you can do so as follows:
 
 ```rust
-let client = APIClient::new_with(
+let client_result = APIClient::new_with(
 	Some("your-tba-api-key".to_string()),
 	None,
-).await?;
+).await;
 ```
 
-Creating instances of `tba::APIClient` without specifying an API key will
-read `X_TBA_AUTH_KEY` from the environment, and will cause a `panic` if the key
-is not set.
+Creating an `APIClient` without specifying an API key reads
+`X_TBA_AUTH_KEY` from the environment. If the key is not set, construction
+returns `APIClientInitError::APIKeyError`.
 
 If you (for some reason) want to override the base URL used for requests to the
 TBA API, you can do so by passing a `base_api_url` to `APIClient::new_with` or
@@ -132,23 +145,22 @@ by setting the `BASE_API_URL` environment variable.
 
 Generated accessors are grouped by the OpenAPI tag used by TBA:
 
-- `api::district`
-- `api::event`
-- `api::insight`
-- `api::match_api`
-- `api::regional_advancement`
-- `api::search`
-- `api::tba`
-- `api::team`
+- `endpoints::district`
+- `endpoints::event`
+- `endpoints::insight`
+- `endpoints::match_a_p_i`
+- `endpoints::regional_advancement`
+- `endpoints::search`
+- `endpoints::t_b_a`
+- `endpoints::team`
 
-Function names follow the TBA operation names in snake case with the leading
-`get` removed. Examples:
+Accessor names are snake case. Examples:
 
-- `api::tba::status(&client, None)`
-- `api::team::team(&client, "frc254", None)`
-- `api::team::team_events_by_year(&client, "frc254", 2024, None)`
-- `api::event::event_matches_simple(&client, "2024casj", None)`
-- `api::match_api::match_zebra(&client, "2024casj_qm1", None)`
+- `endpoints::t_b_a::status(&client, None)`
+- `endpoints::team::team(&client, "frc254".to_string(), None)`
+- `endpoints::team::events_by_year(&client, "frc254".to_string(), 2024, None)`
+- `endpoints::event::matches_simple(&client, "2024casj".to_string(), None)`
+- `endpoints::match_a_p_i::zebra(&client, "2024casj_qm1".to_string(), None)`
 
 Each accessor takes `&APIClient`, path parameters, and an optional ETag as the
 final argument. Each accessor returns `APIResult<T>`.
@@ -159,16 +171,22 @@ TBA supports HTTP ETags for caching. Successful responses include the response
 ETag:
 
 ```rust
-let first = api::event::event(&client, "2024casj", None).await;
+let first = endpoints::event::event(
+	&client,
+	"2024casj".to_string(),
+	None,
+).await;
 
-let APIResult::Ok { e_tag, .. } = first else {
-	return Ok(());
-};
+if let APIResult::Ok { e_tag, .. } = first {
+	let second = endpoints::event::event(
+		&client,
+		"2024casj".to_string(),
+		Some(e_tag),
+	).await;
 
-let second = api::event::event(&client, "2024casj", Some(e_tag)).await;
-
-if matches!(second, APIResult::NotModified) {
-	println!("use your cached event");
+	if matches!(second, APIResult::NotModified) {
+		println!("use your cached event");
+	}
 }
 ```
 
@@ -189,6 +207,17 @@ dynamic payloads use `UnknownJsonObject`, including event predictions, some
 year-specific event insights, media entries with no details schema, and match
 timeseries objects. Those parts of the TBA API are either explicitly
 year-specific or declared as empty objects in the upstream schema.
+
+## Development
+
+Run the formatter and all checks before submitting changes:
+
+```sh
+cargo +nightly fmt
+cargo check
+cargo test
+cargo clippy --all-targets -- -D warnings
+```
 
 ## License
 
