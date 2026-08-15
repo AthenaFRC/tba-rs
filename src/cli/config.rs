@@ -7,6 +7,11 @@ const CONFIG_FILE_NAME: &str = ".tbarc";
 
 #[derive(clap::Args, serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub struct TBAConfig {
+	/// The path that this config file originated from, if any.
+	#[arg(skip)]
+	#[serde(skip)]
+	pub path: Option<PathBuf>,
+
 	#[arg(
 		long,
 		global = true,
@@ -48,6 +53,16 @@ impl TBAConfig {
 			.to_string()
 	}
 
+	pub fn empty() -> Self {
+		Self {
+			path: None,
+			api_key: None,
+			base_url: None,
+			output_format: None,
+			print_e_tag: None,
+		}
+	}
+
 	pub fn from_custom_config_file(
 		config_file_path: &Path,
 	) -> Result<Option<TBAConfig>, String> {
@@ -79,6 +94,26 @@ impl TBAConfig {
 
 	pub fn write_config_file(&self) -> Result<(), String> {
 		self.write_custom_config_file(&Self::get_default_config_file_path()?)
+	}
+	
+	pub fn or(self, other: Self) -> Self {
+		Self {
+			path: None,
+			api_key: self.api_key.or(other.api_key),
+			base_url: self.base_url.or(other.base_url),
+			output_format: self.output_format.or(other.output_format),
+			print_e_tag: self.print_e_tag.or(other.print_e_tag),
+		}
+	}
+
+	pub fn is_from_default_config_file(&self) -> bool {
+		match &self.path {
+			Some(path) => {
+				path.to_string_lossy().to_string()
+					== Self::get_apparent_default_config_file_path()
+			}
+			None => false,
+		}
 	}
 }
 
