@@ -16,12 +16,12 @@ pub enum ConfigSubcommand {
 		#[clap(flatten)]
 		args: CLIConfigInitCommandArgs,
 	},
-	
+
 	#[command(about = "Prints the current configuration.")]
 	Show {
 		#[clap(flatten)]
 		args: CLIConfigShowCommandArgs,
-	}
+	},
 }
 
 impl ConfigSubcommand {
