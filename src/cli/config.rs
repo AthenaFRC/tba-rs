@@ -95,6 +95,17 @@ impl TBAConfig {
 		self.write_custom_config_file(&Self::get_default_config_file_path()?)
 	}
 
+	/// Resolves settings with command-line values (`self`) taking precedence,
+	/// followed by environment, config-file, and built-in values.
+	pub fn resolve(
+		self,
+		environment: Self,
+		config_file: Self,
+		built_in: Self,
+	) -> Self {
+		self.or(environment).or(config_file).or(built_in)
+	}
+
 	pub fn or(self, other: Self) -> Self {
 		Self {
 			path: None,
@@ -125,5 +136,147 @@ impl Default for TBAConfig {
 			output_format: Some(crate::cli::OutputFormat::default()),
 			print_e_tag: Some(false),
 		}
+	}
+}
+
+#[cfg(test)]
+mod tests {
+	use super::TBAConfig;
+	use crate::cli::OutputFormat;
+
+	fn config_with_api_key(api_key: Option<&str>) -> TBAConfig {
+		let mut config = TBAConfig::empty();
+		config.api_key = api_key.map(str::to_owned);
+		config
+	}
+
+	fn resolve_api_key(
+		command_line: Option<&str>,
+		environment: Option<&str>,
+		config_file: Option<&str>,
+		built_in: Option<&str>,
+	) -> Option<String> {
+		config_with_api_key(command_line)
+			.resolve(
+				config_with_api_key(environment),
+				config_with_api_key(config_file),
+				config_with_api_key(built_in),
+			)
+			.api_key
+	}
+
+	#[test]
+	fn command_line_source_is_used() {
+		assert_eq!(
+			resolve_api_key(Some("cli"), None, None, None).as_deref(),
+			Some("cli")
+		);
+	}
+
+	#[test]
+	fn environment_source_is_used() {
+		assert_eq!(
+			resolve_api_key(None, Some("environment"), None, None).as_deref(),
+			Some("environment")
+		);
+	}
+
+	#[test]
+	fn config_file_source_is_used() {
+		assert_eq!(
+			resolve_api_key(None, None, Some("config"), None).as_deref(),
+			Some("config")
+		);
+	}
+
+	#[test]
+	fn built_in_source_is_used() {
+		assert_eq!(
+			resolve_api_key(None, None, None, Some("built-in")).as_deref(),
+			Some("built-in")
+		);
+	}
+
+	#[test]
+	fn command_line_overrides_environment() {
+		assert_eq!(
+			resolve_api_key(Some("cli"), Some("environment"), None, None)
+				.as_deref(),
+			Some("cli")
+		);
+	}
+
+	#[test]
+	fn command_line_overrides_config_file() {
+		assert_eq!(
+			resolve_api_key(Some("cli"), None, Some("config"), None).as_deref(),
+			Some("cli")
+		);
+	}
+
+	#[test]
+	fn command_line_overrides_built_in() {
+		assert_eq!(
+			resolve_api_key(Some("cli"), None, None, Some("built-in"))
+				.as_deref(),
+			Some("cli")
+		);
+	}
+
+	#[test]
+	fn environment_overrides_config_file() {
+		assert_eq!(
+			resolve_api_key(None, Some("environment"), Some("config"), None)
+				.as_deref(),
+			Some("environment")
+		);
+	}
+
+	#[test]
+	fn environment_overrides_built_in() {
+		assert_eq!(
+			resolve_api_key(None, Some("environment"), None, Some("built-in"))
+				.as_deref(),
+			Some("environment")
+		);
+	}
+
+	#[test]
+	fn config_file_overrides_built_in() {
+		assert_eq!(
+			resolve_api_key(None, None, Some("config"), Some("built-in"))
+				.as_deref(),
+			Some("config")
+		);
+	}
+
+	#[test]
+	fn resolution_applies_to_every_setting() {
+		let command_line = TBAConfig {
+			api_key: Some("cli".to_string()),
+			..TBAConfig::empty()
+		};
+		let environment = TBAConfig {
+			base_url: Some("environment".to_string()),
+			..TBAConfig::empty()
+		};
+		let config_file = TBAConfig {
+			output_format: Some(OutputFormat::JSONPrettyTabs),
+			..TBAConfig::empty()
+		};
+		let built_in = TBAConfig {
+			print_e_tag: Some(false),
+			..TBAConfig::empty()
+		};
+
+		let resolved = command_line.resolve(environment, config_file, built_in);
+
+		assert_eq!(resolved.api_key.as_deref(), Some("cli"));
+		assert_eq!(resolved.base_url.as_deref(), Some("environment"));
+		assert!(matches!(
+			resolved.output_format,
+			Some(OutputFormat::JSONPrettyTabs)
+		));
+		assert_eq!(resolved.print_e_tag, Some(false));
 	}
 }

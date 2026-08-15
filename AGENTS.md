@@ -120,9 +120,8 @@ subcommands are `get`, `config`, `completions`, and `install-completions`.
   library. Add endpoint-specific CLI behavior to the macro/declaration path
   rather than duplicating the endpoint list.
 - The default config path is `~/.tbarc`; `--config` selects another file.
-- CLI flags are merged with config values before `APIClient` falls back to
-  environment variables. Preserve this behavior unless the task explicitly
-  changes precedence.
+- CLI settings resolve command-line flags first, environment variables second,
+  config values third, and built-in defaults last.
 - JSON and the three pretty-JSON variants are implemented. `jsonl`, `csv`, and
   `tsv` are declared output choices but currently return an unimplemented
   error; do not document them as working formats.
