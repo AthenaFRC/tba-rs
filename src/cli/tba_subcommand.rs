@@ -1,4 +1,4 @@
-use crate::cli::handlers::*;
+use crate::cli::{handlers::*, ConfigSubcommandArgs};
 
 #[derive(clap::Subcommand, Debug)]
 pub enum TBASubcommand {
@@ -8,6 +8,12 @@ pub enum TBASubcommand {
 	Get {
 		#[clap(flatten)]
 		args: CLIGetCommandArgs,
+	},
+
+	#[command(about = "Manages the configuration file for the TBA CLI.")]
+	Config {
+		#[clap(flatten)]
+		args: ConfigSubcommandArgs,
 	},
 
 	#[command(
@@ -30,6 +36,7 @@ impl TBASubcommand {
 	pub async fn execute(self) -> Result<(), String> {
 		match self {
 			TBASubcommand::Get { args } => get_endpoint(args).await,
+			TBASubcommand::Config { args } => args.subcommand.execute().await,
 			TBASubcommand::Completions { args } => print_completions(args),
 			TBASubcommand::InstallCompletions { args } => {
 				install_completions(args)

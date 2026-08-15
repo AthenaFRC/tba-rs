@@ -1,3 +1,9 @@
+mod config;
+pub use config::*;
+
+mod config_subcommand;
+pub use config_subcommand::*;
+
 mod determine_shell;
 pub use determine_shell::*;
 
