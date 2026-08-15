@@ -1,5 +1,6 @@
 pub fn home_dir() -> Result<std::path::PathBuf, String> {
-	env_path("HOME")
+	std::env::home_dir()
+		.or_else(|| env_path("HOME"))
 		.or_else(|| env_path("USERPROFILE"))
 		.ok_or("Could not determine home directory.".parse().unwrap())
 }
