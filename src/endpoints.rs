@@ -658,6 +658,10 @@ endpoints!(
 				/// The TBA event key (e.g. `2016nytr`).
 				event_key: String,
 			},
+			// The v3.16.0 OpenAPI schema incorrectly declares `Match` here.
+			// Observed responses and TBA's `test_team_event_matches` contract
+			// use the short field set represented by `MatchSimple`. Keep this
+			// local override covered by `tests/team_event_matches_simple.rs`.
 			output: Vec<crate::models::MatchSimple>,
 		}
 
