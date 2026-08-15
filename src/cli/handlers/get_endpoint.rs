@@ -122,12 +122,12 @@ pub(crate) fn print_result<T: serde::Serialize>(
 	format: OutputFormat,
 ) -> Result<(), String> {
 	match result {
-		APIResult::NotModified => println!("Not modified. (ETag matched)"),
+		APIResult::NotModified => Err("Not modified. (ETag matched)")?,
 		APIResult::Unauthorized => {
-			eprintln!("Authorization failed. Ensure your API key is valid.")
+			Err("Authorization failed. Ensure your API key is valid.")?
 		}
-		APIResult::DecodeError(error) => eprintln!("Error: {error}"),
-		APIResult::Err(message) => eprintln!("Error: {}", message),
+		APIResult::DecodeError(error) => Err(error.to_string())?,
+		APIResult::Err(message) => Err(message)?,
 		APIResult::Ok { result, e_tag } => {
 			println!(
 				"{}",
@@ -137,26 +137,18 @@ pub(crate) fn print_result<T: serde::Serialize>(
 							"Failed to serialize JSON: {}",
 							e
 						))?,
-					OutputFormat::JSONPrettyTabs => {
-						get_pretty_json_string(&result, b"\t")?
-					}
-					OutputFormat::JSONPretty2Spaces => {
-						get_pretty_json_string(&result, b"  ")?
-					}
-					OutputFormat::JSONPretty4Spaces => {
-						get_pretty_json_string(&result, b"    ")?
-					}
-					OutputFormat::JSONL => {
-						return Err(
-							"JSONL output is not implemented".to_string()
-						);
-					}
-					OutputFormat::CSV => {
-						return Err("CSV output is not implemented".to_string());
-					}
-					OutputFormat::TSV => {
-						return Err("TSV output is not implemented".to_string());
-					}
+					OutputFormat::JSONPrettyTabs =>
+						get_pretty_json_string(&result, b"\t")?,
+					OutputFormat::JSONPretty2Spaces =>
+						get_pretty_json_string(&result, b"  ")?,
+					OutputFormat::JSONPretty4Spaces =>
+						get_pretty_json_string(&result, b"    ")?,
+					OutputFormat::JSONL =>
+						Err("JSONL output is not implemented".to_string())?,
+					OutputFormat::CSV =>
+						Err("CSV output is not implemented".to_string())?,
+					OutputFormat::TSV =>
+						Err("TSV output is not implemented".to_string())?,
 				}
 			);
 			if include_e_tag {
