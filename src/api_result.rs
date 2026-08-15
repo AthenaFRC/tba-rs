@@ -1,6 +1,7 @@
-use crate::models::APIError;
-
-const RESPONSE_BODY_EXCERPT_MAX_BYTES: usize = 1024;
+use crate::{
+	models::APIError,
+	util::response_body_excerpt::response_body_excerpt,
+};
 
 #[derive(Debug)]
 pub struct APIResponseDecodeError {
@@ -14,8 +15,8 @@ impl std::fmt::Display for APIResponseDecodeError {
 	fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(
 			formatter,
-			"Failed to decode {} response from {}: {}; response body excerpt: \
-			 {:?}",
+			"Failed to decode {} response from {}: {}; response body \
+			 excerpt:\n{}",
 			self.status,
 			self.request_url,
 			self.source,
@@ -46,16 +47,6 @@ fn sanitized_request_url(response: &reqwest::Response) -> reqwest::Url {
 	request_url.set_query(None);
 	request_url.set_fragment(None);
 	request_url
-}
-
-fn response_body_excerpt(body: &[u8]) -> String {
-	let excerpt_end = body.len().min(RESPONSE_BODY_EXCERPT_MAX_BYTES);
-	let mut excerpt =
-		String::from_utf8_lossy(&body[..excerpt_end]).into_owned();
-	if body.len() > RESPONSE_BODY_EXCERPT_MAX_BYTES {
-		excerpt.push('…');
-	}
-	excerpt
 }
 
 impl<T> APIResult<T>
@@ -124,8 +115,8 @@ mod tests {
 	use super::{
 		APIResponseDecodeError,
 		APIResult,
-		RESPONSE_BODY_EXCERPT_MAX_BYTES,
 	};
+	use crate::util::response_body_excerpt::RESPONSE_BODY_EXCERPT_MAX_BYTES;
 
 	#[derive(Debug, Deserialize)]
 	struct ExpectedObject {
@@ -193,7 +184,7 @@ mod tests {
 		);
 
 		assert_eq!(error.status, reqwest::StatusCode::OK);
-		assert_eq!(error.response_body_excerpt, "{not-json");
+		assert_eq!(error.response_body_excerpt, "{\n  not-json");
 		assert!(error.source.is_syntax());
 	}
 
@@ -216,7 +207,13 @@ mod tests {
 			APIResult::<ExpectedObject>::from_response(response).await,
 		);
 
-		assert_eq!(error.response_body_excerpt, body);
+		assert_eq!(
+			error.response_body_excerpt,
+			"{\n  \"value\": \"not-a-number\"\n}"
+		);
+		assert!(error.to_string().contains(
+			"response body excerpt:\n{\n  \"value\": \"not-a-number\"\n}"
+		));
 		assert!(error.source.is_data());
 	}
 
