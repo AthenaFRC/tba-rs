@@ -5,9 +5,7 @@ use std::path::{
 
 const CONFIG_FILE_NAME: &str = ".tbarc";
 
-#[derive(
-	clap::Args, serde::Serialize, serde::Deserialize, Default, Debug, Clone,
-)]
+#[derive(clap::Args, serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub struct TBAConfig {
 	#[arg(
 		long,
@@ -81,5 +79,17 @@ impl TBAConfig {
 
 	pub fn write_config_file(&self) -> Result<(), String> {
 		self.write_custom_config_file(&Self::get_default_config_file_path()?)
+	}
+}
+
+impl Default for TBAConfig {
+	fn default() -> Self {
+		Self {
+			path: None,
+			api_key: None,
+			base_url: Some(crate::BASE_API_URL_DEFAULT.to_string()),
+			output_format: Some(crate::cli::OutputFormat::default()),
+			print_e_tag: Some(false),
+		}
 	}
 }
