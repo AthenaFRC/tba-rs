@@ -1,0 +1,52 @@
+[
+  {
+    "key": "2020casj_qm1",
+    "event_key": "2020casj",
+    "comp_level": "qm",
+    "set_number": 1,
+    "match_number": 1,
+    "alliances": {
+      "red": {
+        "score": 0,
+        "team_keys": [],
+        "surrogate_team_keys": [],
+        "dq_team_keys": []
+      },
+      "blue": {
+        "score": 0,
+        "team_keys": [],
+        "surrogate_team_keys": [],
+        "dq_team_keys": []
+      }
+    },
+    "winning_alliance": "",
+    "time": null,
+    "actual_time": null,
+    "predicted_time": null
+  },
+  {
+    "key": "2020casj_qm2",
+    "event_key": "2020casj",
+    "comp_level": "qm",
+    "set_number": 1,
+    "match_number": 2,
+    "alliances": {
+      "red": {
+        "score": 0,
+        "team_keys": [],
+        "surrogate_team_keys": [],
+        "dq_team_keys": []
+      },
+      "blue": {
+        "score": 0,
+        "team_keys": [],
+        "surrogate_team_keys": [],
+        "dq_team_keys": []
+      }
+    },
+    "winning_alliance": "",
+    "time": null,
+    "actual_time": null,
+    "predicted_time": null
+  }
+]
