@@ -1,4 +1,22 @@
 #[rustfmt::skip]
+#[cfg(feature = "cli")]
+macro_rules! __tba_endpoint_cli_name {
+	($endpoint_name_pascal:ident, $endpoint_name_snake:ident) => {
+		$crate::__tba_endpoint_cli_name(stringify!($endpoint_name_snake))
+	};
+	($endpoint_name_pascal:ident,) => {
+		paste::paste! {
+			$crate::__tba_endpoint_cli_name(stringify!([<$endpoint_name_pascal:snake>]))
+		}
+	};
+}
+
+#[cfg(feature = "cli")]
+pub fn __tba_endpoint_cli_name(name: &'static str) -> String {
+	name.trim_end_matches('_').replace('_', "-")
+}
+
+#[rustfmt::skip]
 macro_rules! __tba_endpoint_call {
 	(
 		$domain:ident,
@@ -194,7 +212,13 @@ macro_rules! endpoints {
 					pub enum [<$domain Subcommand>] {
 						$(
 							$(#[$endpoint_meta])*
-							#[command(verbatim_doc_comment)]
+							#[command(
+								name = __tba_endpoint_cli_name!(
+									$endpoint_name_pascal,
+									$($endpoint_name_snake)?
+								),
+								verbatim_doc_comment,
+							)]
 							$endpoint_name_pascal {
 								$(
 									$(#[$field_meta])*
