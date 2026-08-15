@@ -942,3 +942,29 @@ endpoints!(
 	}
 
 );
+
+#[cfg(all(test, feature = "cli"))]
+mod tests {
+	use clap::CommandFactory;
+
+	#[test]
+	fn cli_endpoint_names_use_macro_snake_case_names() {
+		let command = crate::cli::TBACommand::command();
+		let get = command
+			.find_subcommand("get")
+			.expect("get subcommand should exist");
+		let event = get
+			.find_subcommand("event")
+			.expect("event subcommand should exist");
+		let match_api = get
+			.find_subcommand("match-api")
+			.expect("match-api subcommand should exist");
+
+		assert!(event.find_subcommand("oprs").is_some());
+		assert!(event.find_subcommand("op-rs").is_none());
+		assert!(event.find_subcommand("district-points").is_some());
+		assert!(event.find_subcommand("district_points").is_none());
+		assert!(match_api.find_subcommand("match").is_some());
+		assert!(match_api.find_subcommand("match-").is_none());
+	}
+}
