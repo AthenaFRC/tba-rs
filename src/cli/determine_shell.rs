@@ -9,7 +9,7 @@
 /// ```rust
 /// use tba::cli::determine_shell;
 /// if let Ok(shell) = determine_shell(None) {
-/// 	println!("Current shell: {:?}", shell);
+///     println!("Current shell: {:?}", shell);
 /// }
 /// ```
 pub fn determine_shell(
