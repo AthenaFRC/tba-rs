@@ -27,8 +27,8 @@ pub struct CLIGetCommandArgs {
 	#[arg(
 		long,
 		global = true,
-		default_value = crate::BASE_API_URL_DEFAULT,
-		help = "The base URL to use for the TBA API.",
+		long_help = &get_endpoint_base_url_help_message(true),
+		help = &get_endpoint_base_url_help_message(false),
 	)]
 	base_url: Option<String>,
 
@@ -59,6 +59,14 @@ pub struct CLIGetCommandArgs {
 
 	#[command(subcommand)]
 	endpoint: GetSubcommand,
+}
+
+fn get_endpoint_base_url_help_message(long_help: bool) -> String {
+	let delimiter = if long_help { "\n\n" } else { " " };
+	format!(
+		"The base URL to use for the TBA API.{delimiter}[default: {}]",
+		crate::BASE_API_URL_DEFAULT,
+	)
 }
 
 pub async fn get_endpoint(
