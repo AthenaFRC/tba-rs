@@ -1,7 +1,10 @@
-pub mod handlers;
+mod determine_shell;
+pub use determine_shell::*;
 
 mod generate_completions;
 pub use generate_completions::*;
+
+pub mod handlers;
 
 mod output_format;
 pub use output_format::*;
