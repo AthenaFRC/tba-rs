@@ -108,7 +108,7 @@ impl TBAConfig {
 	pub fn is_from_default_config_file(&self) -> bool {
 		match &self.path {
 			Some(path) => {
-				path.to_string_lossy().to_string()
+				path.to_string_lossy()
 					== Self::get_apparent_default_config_file_path()
 			}
 			None => false,
