@@ -19,9 +19,7 @@ const BLOCK_END: &str =
 	concat!("# <<< ", env!("CARGO_PKG_NAME"), " completions <<<");
 
 pub fn install_completions(shell: Option<Shell>) -> Result<(), String> {
-	let shell = shell.or_else(Shell::from_env).ok_or(
-		"no shell specified and the current shell could not be determined",
-	)?;
+	let shell = crate::cli::determine_shell(shell)?;
 	let installation = installation_for(shell)?;
 
 	if let Some(parent) = installation.script.parent() {
