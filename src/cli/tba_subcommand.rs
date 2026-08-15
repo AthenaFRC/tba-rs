@@ -7,7 +7,7 @@ pub enum TBASubcommand {
 	)]
 	Get {
 		#[clap(flatten)]
-		command: CLIGetCommand,
+		args: CLIGetCommandArgs,
 	},
 
 	#[command(
@@ -15,26 +15,24 @@ pub enum TBASubcommand {
 	)]
 	Completions {
 		#[clap(flatten)]
-		command: CLIPrintCompletionsCommand,
+		args: CLIPrintCompletionsCommandArgs,
 	},
 
 	#[command(about = "Attempts to install autocompletion scripts for the \
 	                   current shell.")]
 	InstallCompletions {
 		#[clap(flatten)]
-		command: CLIInstallCompletionsCommand,
+		args: CLIInstallCompletionsCommandArgs,
 	},
 }
 
 impl TBASubcommand {
 	pub async fn execute(self) -> Result<(), String> {
 		match self {
-			TBASubcommand::Get { command } => get_endpoint(command).await,
-			TBASubcommand::Completions { command } => {
-				print_completions(command)
-			}
-			TBASubcommand::InstallCompletions { command } => {
-				install_completions(command)
+			TBASubcommand::Get { args } => get_endpoint(args).await,
+			TBASubcommand::Completions { args } => print_completions(args),
+			TBASubcommand::InstallCompletions { args } => {
+				install_completions(args)
 			}
 		}
 	}

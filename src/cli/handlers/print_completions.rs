@@ -1,15 +1,15 @@
 #[derive(clap::Args, Debug, Clone)]
-pub struct CLIPrintCompletionsCommand {
+pub struct CLIPrintCompletionsCommandArgs {
 	/// The shell for which to generate the autocompletion script.
 	#[arg(value_enum)]
 	pub shell: Option<clap_complete::Shell>,
 }
 
 pub fn print_completions(
-	command: CLIPrintCompletionsCommand,
+	args: CLIPrintCompletionsCommandArgs,
 ) -> Result<(), String> {
 	use std::io::Write;
-	let shell = crate::cli::determine_shell(command.shell)?;
+	let shell = crate::cli::determine_shell(args.shell)?;
 	let completions = crate::cli::generate_completions(shell);
 	match std::io::stdout().write_all(&completions) {
 		Ok(_) => Ok(()),

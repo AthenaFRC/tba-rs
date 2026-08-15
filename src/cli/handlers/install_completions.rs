@@ -15,7 +15,7 @@ use clap_complete::{
 use crate::cli::fs_util::*;
 
 #[derive(clap::Args, Debug, Clone)]
-pub struct CLIInstallCompletionsCommand {
+pub struct CLIInstallCompletionsCommandArgs {
 	/// The shell for which to install the autocompletion script.
 	#[arg(value_enum)]
 	pub shell: Option<Shell>,
@@ -28,9 +28,9 @@ const BLOCK_END: &str =
 	concat!("# <<< ", env!("CARGO_PKG_NAME"), " completions <<<");
 
 pub fn install_completions(
-	command: CLIInstallCompletionsCommand,
+	args: CLIInstallCompletionsCommandArgs,
 ) -> Result<(), String> {
-	let shell = crate::cli::determine_shell(command.shell)?;
+	let shell = crate::cli::determine_shell(args.shell)?;
 	let installation = installation_for(shell)?;
 
 	if let Some(parent) = installation.script.parent() {

@@ -13,7 +13,7 @@ use crate::{
 };
 
 #[derive(clap::Args, Debug, Clone)]
-pub struct CLIGetCommand {
+pub struct CLIGetCommandArgs {
 	#[arg(
 		long,
 		global = true,
@@ -43,7 +43,7 @@ pub struct CLIGetCommand {
 		default_value = "json",
 		help = "The format to output the result in."
 	)]
-	format: OutputFormat,
+	output_format: OutputFormat,
 
 	#[arg(
 		long,
@@ -57,8 +57,8 @@ pub struct CLIGetCommand {
 	endpoint: GetSubcommand,
 }
 
-pub async fn get_endpoint(request: CLIGetCommand) -> Result<(), String> {
-	let client = APIClient::new_with(request.api_key, request.base_url)
+pub async fn get_endpoint(args: CLIGetCommandArgs) -> Result<(), String> {
+	let client = APIClient::new_with(args.api_key, args.base_url)
 		.await
 		.map_err(|client_init_error| match client_init_error {
 			APIClientInitError::ReqwestClientInitError(err) => err.to_string(),
@@ -68,8 +68,8 @@ pub async fn get_endpoint(request: CLIGetCommand) -> Result<(), String> {
 				API_KEY_ENV_VAR
 			),
 		})?;
-	let api_result = request.endpoint.get(&client, request.e_tag).await;
-	print_result(api_result, request.print_e_tag, request.format)
+	let api_result = args.endpoint.get(&client, args.e_tag).await;
+	print_result(api_result, args.print_e_tag, args.output_format)
 }
 
 pub(crate) fn print_result<T: serde::Serialize>(
