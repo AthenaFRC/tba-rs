@@ -15,10 +15,8 @@
 pub fn determine_shell(
 	shell: Option<clap_complete::Shell>,
 ) -> Result<clap_complete::Shell, String> {
-	shell
-		.ok_or_else(clap_complete::Shell::from_env)
-		.map_err(|_| {
-			"no shell specified and the current shell could not be determined"
-				.to_string()
-		})
+	shell.or_else(clap_complete::Shell::from_env).ok_or(
+		"no shell specified and the current shell could not be determined"
+			.to_string(),
+	)
 }
