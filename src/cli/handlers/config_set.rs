@@ -5,8 +5,8 @@ pub struct CLIConfigSetCommandArgs {
 	#[arg(
 		short,
 		long,
-		long_help = &config_set_output_path_long_help_message(),
-		help = &config_set_output_path_help_message(),
+		long_help = &config_set_output_path_help_message(true),
+		help = &config_set_output_path_help_message(false),
 	)]
 	output_path: Option<std::path::PathBuf>,
 
@@ -14,18 +14,10 @@ pub struct CLIConfigSetCommandArgs {
 	config: TBAConfig,
 }
 
-const OUTPUT_PATH_HELP_MESSAGE: &str = "The path to the config file to use.";
-
-fn config_set_output_path_help_message() -> String {
+fn config_set_output_path_help_message(long_help: bool) -> String {
+	let delimiter = if long_help { "\n\n" } else { " " };
 	format!(
-		"{OUTPUT_PATH_HELP_MESSAGE} [default: {}]",
-		TBAConfig::get_apparent_default_config_file_path()
-	)
-}
-
-fn config_set_output_path_long_help_message() -> String {
-	format!(
-		"{OUTPUT_PATH_HELP_MESSAGE}\n\n[default: {}]",
+		"The path to the config file to use.{delimiter}[default: {}]",
 		TBAConfig::get_apparent_default_config_file_path()
 	)
 }
