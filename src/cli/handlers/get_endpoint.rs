@@ -37,21 +37,22 @@ pub struct CLIGetCommandArgs {
 	e_tag: Option<String>,
 
 	#[arg(
-		short,
 		long,
 		global = true,
-		default_value = "json",
-		help = "The format to output the result in."
+		help = "The format to output the result in. [default: json]"
 	)]
-	output_format: OutputFormat,
+	output_format: Option<OutputFormat>,
 
 	#[arg(
 		long,
 		global = true,
-		default_value_t = false,
-		help = "Whether to print the ETag value."
+		num_args = 0..=1,
+		require_equals = true,
+		default_missing_value = "true",
+		hide_possible_values = true,
+		help = "Print the response's ETag header value."
 	)]
-	print_e_tag: bool,
+	print_e_tag: Option<bool>,
 
 	#[command(subcommand)]
 	endpoint: GetSubcommand,
