@@ -953,13 +953,38 @@ mod tests {
 		let get = command
 			.find_subcommand("get")
 			.expect("get subcommand should exist");
+		let district = get
+			.find_subcommand("district")
+			.expect("district subcommand should exist");
 		let event = get
 			.find_subcommand("event")
 			.expect("event subcommand should exist");
 		let match_api = get
 			.find_subcommand("match-api")
 			.expect("match-api subcommand should exist");
+		let dcmp_history = district
+			.find_subcommand("dcmp-history")
+			.expect("dcmp-history subcommand should exist");
 
+		assert_eq!(
+			district.get_about().map(ToString::to_string).as_deref(),
+			Some(
+				"Endpoints responsible for information about individual \
+				 competition districts."
+			)
+		);
+		assert_eq!(
+			dcmp_history.get_about().map(ToString::to_string).as_deref(),
+			Some(
+				"Gets a list of DCMP events and awards for the given district \
+				 abbreviation."
+			)
+		);
+		assert!(
+			dcmp_history.clone().render_help().to_string().contains(
+				"The abbreviated district name (e.g. `ne` or `fim`)."
+			)
+		);
 		assert!(event.find_subcommand("oprs").is_some());
 		assert!(event.find_subcommand("op-rs").is_none());
 		assert!(event.find_subcommand("district-points").is_some());
