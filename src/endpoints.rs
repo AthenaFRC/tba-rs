@@ -1,3 +1,5 @@
+use crate::util::endpoints_macro::endpoints;
+
 #[rustfmt::skip]
 endpoints!(
 
@@ -656,7 +658,7 @@ endpoints!(
 				/// The TBA event key (e.g. `2016nytr`).
 				event_key: String,
 			},
-			output: Vec<crate::models::Match>,
+			output: Vec<crate::models::MatchSimple>,
 		}
 
 		/// Gets team status at an event.

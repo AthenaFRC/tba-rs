@@ -1,33 +1,4 @@
 #[rustfmt::skip]
-#[cfg(feature = "cli")]
-macro_rules! __tba_endpoint_cli_name {
-	($endpoint_name_pascal:ident, $endpoint_name_snake:ident) => {
-		$crate::__tba_endpoint_cli_name(stringify!($endpoint_name_snake))
-	};
-	($endpoint_name_pascal:ident,) => {
-		paste::paste! {
-			$crate::__tba_endpoint_cli_name(stringify!([<$endpoint_name_pascal:snake>]))
-		}
-	};
-}
-
-#[cfg(feature = "cli")]
-pub fn __tba_endpoint_cli_name(name: &'static str) -> String {
-	name.trim_end_matches('_').replace('_', "-")
-}
-
-#[cfg(feature = "cli")]
-pub fn __tba_endpoint_doc_comment(lines: &[&'static str]) -> String {
-	lines
-		.iter()
-		.flat_map(|line| line.split('\n'))
-		.map(|line| line.strip_prefix(' ').unwrap_or(line).trim())
-		.filter(|line| !line.is_empty())
-		.collect::<Vec<_>>()
-		.join(" ")
-}
-
-#[rustfmt::skip]
 macro_rules! __tba_endpoint_call {
 	(
 		$domain:ident,
@@ -145,7 +116,7 @@ macro_rules! endpoints {
 			pub enum GetSubcommand {
 				$(
 					#[command(
-						about = $crate::__tba_endpoint_doc_comment(&[$($domain_doc),*])
+						about = $crate::cli::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($domain_doc),*])
 					)]
 					$domain {
 						#[command(subcommand)]
@@ -167,7 +138,7 @@ macro_rules! endpoints {
 								match endpoint {
 									$(
 										[<$domain:snake>]::[<$domain Subcommand>]::$endpoint_name_pascal { $($field,)* } => {
-											let result = __tba_endpoint_call!(
+											let result = $crate::util::endpoints_macro::__tba_endpoint_call!(
 												$domain,
 												$endpoint_name_pascal
 												$(, $endpoint_name_snake)?;
@@ -205,7 +176,7 @@ macro_rules! endpoints {
 				$(#[doc = $domain_doc])*
 				pub mod [<$domain:snake>] {
 					$(
-						__tba_endpoint_fn! {
+						$crate::util::endpoints_macro::__tba_endpoint_fn! {
 							$endpoint_name_pascal
 							$(, $endpoint_name_snake)?;
 							path: $endpoint_path,
@@ -224,16 +195,16 @@ macro_rules! endpoints {
 					pub enum [<$domain Subcommand>] {
 						$(
 							#[command(
-								name = __tba_endpoint_cli_name!(
+								name = $crate::cli::util::macro_helpers::__tba_endpoint_cli_name!(
 									$endpoint_name_pascal,
 									$($endpoint_name_snake)?
 								),
-								about = $crate::__tba_endpoint_doc_comment(&[$($endpoint_doc),*]),
+								about = $crate::cli::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($endpoint_doc),*]),
 							)]
 							$endpoint_name_pascal {
 								$(
 									#[arg(
-										help = $crate::__tba_endpoint_doc_comment(&[$($field_doc),*])
+										help = $crate::cli::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($field_doc),*])
 									)]
 									$field: $field_type,
 								)*
@@ -247,3 +218,7 @@ macro_rules! endpoints {
 		}
 	};
 }
+
+pub(crate) use __tba_endpoint_call;
+pub(crate) use __tba_endpoint_fn;
+pub(crate) use endpoints;
