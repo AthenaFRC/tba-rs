@@ -1,11 +1,5 @@
-use clap::{
-	CommandFactory,
-	Parser,
-};
-use tba::cli::{
-	TBACommand,
-	TBAConfig,
-};
+use clap::{CommandFactory, Parser};
+use tba::cli::{TBACommand, TBAConfig};
 
 #[tokio::main]
 pub async fn main() {

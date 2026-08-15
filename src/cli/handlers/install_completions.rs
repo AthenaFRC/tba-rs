@@ -1,16 +1,9 @@
 use std::{
-	env,
-	fs,
-	path::{
-		Path,
-		PathBuf,
-	},
+	env, fs,
+	path::{Path, PathBuf},
 };
 
-use clap_complete::{
-	Generator,
-	Shell,
-};
+use clap_complete::{Generator, Shell};
 
 use crate::cli::util::fs::*;
 
@@ -184,10 +177,7 @@ fn install_activation(path: &Path, command: &str) -> Result<(), String> {
 
 #[cfg(test)]
 mod tests {
-	use std::time::{
-		SystemTime,
-		UNIX_EPOCH,
-	};
+	use std::time::{SystemTime, UNIX_EPOCH};
 
 	use super::*;
 

@@ -1,7 +1,4 @@
-use std::path::{
-	Path,
-	PathBuf,
-};
+use std::path::{Path, PathBuf};
 
 const CONFIG_FILE_NAME: &str = ".tbarc";
 

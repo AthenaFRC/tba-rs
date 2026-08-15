@@ -1,18 +1,9 @@
-use serde_json::{
-	Serializer,
-	ser::PrettyFormatter,
-};
+use serde_json::{Serializer, ser::PrettyFormatter};
 
 use crate::{
-	API_KEY_ENV_VAR,
-	APIClient,
-	APIClientInitError,
-	APIResult,
+	API_KEY_ENV_VAR, APIClient, APIClientInitError, APIResult,
 	BASE_API_URL_ENV_VAR,
-	cli::{
-		OutputFormat,
-		TBAConfig,
-	},
+	cli::{OutputFormat, TBAConfig},
 	endpoints::GetSubcommand,
 };
 
@@ -175,15 +166,9 @@ fn get_pretty_json_string<T: serde::Serialize>(
 
 #[cfg(test)]
 mod tests {
-	use clap::{
-		CommandFactory,
-		Parser,
-	};
+	use clap::{CommandFactory, Parser};
 
-	use crate::cli::{
-		TBACommand,
-		TBASubcommand,
-	};
+	use crate::cli::{TBACommand, TBASubcommand};
 
 	#[test]
 	fn absent_command_line_settings_remain_none() {

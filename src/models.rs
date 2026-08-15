@@ -4,10 +4,7 @@
 
 #![allow(clippy::struct_excessive_bools)]
 
-use serde::{
-	Deserialize,
-	Serialize,
-};
+use serde::{Deserialize, Serialize};
 
 pub type UnknownJsonObject =
 	std::collections::HashMap<String, serde_json::Value>;

@@ -1,11 +1,5 @@
-use serde_json::{
-	Value,
-	json,
-};
-use tba::models::{
-	InsightV2LeaderboardDataRankingsItemContextsItem,
-	Media,
-};
+use serde_json::{Value, json};
+use tba::models::{InsightV2LeaderboardDataRankingsItemContextsItem, Media};
 
 const MEDIA_FIXTURES: [(&str, &str); 6] = [
 	(

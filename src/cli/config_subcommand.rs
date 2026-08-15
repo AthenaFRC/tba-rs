@@ -1,7 +1,4 @@
-use crate::cli::{
-	TBAConfig,
-	handlers::*,
-};
+use crate::cli::{TBAConfig, handlers::*};
 
 #[derive(clap::Args, Debug)]
 pub struct ConfigSubcommandArgs {

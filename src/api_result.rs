@@ -1,6 +1,5 @@
 use crate::{
-	models::APIError,
-	util::response_body_excerpt::response_body_excerpt,
+	models::APIError, util::response_body_excerpt::response_body_excerpt,
 };
 
 #[derive(Debug)]
@@ -102,20 +101,14 @@ where
 #[cfg(test)]
 mod tests {
 	use std::{
-		io::{
-			Read,
-			Write,
-		},
+		io::{Read, Write},
 		net::TcpListener,
 		thread,
 	};
 
 	use serde::Deserialize;
 
-	use super::{
-		APIResponseDecodeError,
-		APIResult,
-	};
+	use super::{APIResponseDecodeError, APIResult};
 	use crate::util::response_body_excerpt::RESPONSE_BODY_EXCERPT_MAX_BYTES;
 
 	#[derive(Debug, Deserialize)]

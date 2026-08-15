@@ -1,9 +1,5 @@
 #[cfg(feature = "rate-limit")]
-use governor::{
-	DefaultDirectRateLimiter,
-	Quota,
-	RateLimiter,
-};
+use governor::{DefaultDirectRateLimiter, Quota, RateLimiter};
 
 use crate::api_result::APIResult;
 

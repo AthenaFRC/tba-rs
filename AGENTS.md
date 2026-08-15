@@ -131,9 +131,8 @@ subcommands are `get`, `config`, `completions`, and `install-completions`.
 
 ## Style and Change Scope
 
-- Use the repository's nightly rustfmt configuration in `.rustfmt.toml`. It
-  enforces hard tabs, vertically laid-out imports, an 80-column width, and
-  formatted strings/comments.
+- The repository's style guidelines enforce hard tabs, vertically laid-out
+- imports, an 80-column width, and formatted strings/comments.
 - Follow Rust 2024 idioms and the existing naming style.
 - Keep public types and endpoint responses strongly typed.
 - Add focused tests for behavior changes, including feature-gated tests when
@@ -150,7 +149,6 @@ subcommands are `get`, `config`, `completions`, and `install-completions`.
 Run the checks relevant to the change. For a full handoff, use:
 
 ```sh
-cargo +nightly fmt -- --check
 cargo check
 cargo test
 cargo check --all-features

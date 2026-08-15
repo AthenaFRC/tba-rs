@@ -1,12 +1,4 @@
-error_on_line_overflow = true
-error_on_unformatted = true
-format_strings = true
 hard_tabs = true
-imports_layout = "Vertical"
 max_width = 80
-imports_granularity = "Crate"
 newline_style = "Unix"
-normalize_comments = true
 reorder_imports = true
-group_imports = "StdExternalCrate"
-wrap_comments = true
