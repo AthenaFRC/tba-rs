@@ -24,7 +24,7 @@ pub struct CLIGetCommandArgs {
 	#[arg(
 		long,
 		global = true,
-		default_value = crate::BASE_API_URL_FALLBACK,
+		default_value = crate::BASE_API_URL_DEFAULT,
 		help = "The base URL to use for the TBA API.",
 	)]
 	base_url: Option<String>,

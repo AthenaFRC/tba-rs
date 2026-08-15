@@ -9,8 +9,7 @@ use crate::api_result::APIResult;
 
 pub const API_KEY_ENV_VAR: &str = "X_TBA_AUTH_KEY";
 pub const BASE_API_URL_ENV_VAR: &str = "BASE_API_URL";
-pub const BASE_API_URL_FALLBACK: &str =
-	"https://www.thebluealliance.com/api/v3";
+pub const BASE_API_URL_DEFAULT: &str = "https://www.thebluealliance.com/api/v3";
 
 pub enum APIClientInitError {
 	ReqwestClientInitError(reqwest::Error),
@@ -57,7 +56,7 @@ impl APIClient {
 				})?,
 			base_api_url: base_api_url.unwrap_or_else(|| {
 				std::env::var(BASE_API_URL_ENV_VAR)
-					.unwrap_or_else(|_| BASE_API_URL_FALLBACK.to_string())
+					.unwrap_or_else(|_| BASE_API_URL_DEFAULT.to_string())
 			}),
 			#[cfg(feature = "rate-limit")]
 			rate_limiter: None,
