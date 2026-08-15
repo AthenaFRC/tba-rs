@@ -27,7 +27,7 @@ pub struct TBACommand {
 		action = clap::ArgAction::Version,
 		help = "Prints version information."
 	)]
-	version: Option<bool>,
+	pub version: Option<bool>,
 
 	#[arg(
 		short,
@@ -36,7 +36,7 @@ pub struct TBACommand {
 		action = clap::ArgAction::Help,
 		help = "Prints help information."
 	)]
-	help: Option<bool>,
+	pub help: Option<bool>,
 
 	#[command(subcommand)]
 	pub subcommand: Option<crate::cli::TBASubcommand>,
