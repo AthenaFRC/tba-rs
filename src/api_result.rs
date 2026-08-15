@@ -107,3 +107,145 @@ where
 		}
 	}
 }
+
+#[cfg(test)]
+mod tests {
+	use std::{
+		io::{
+			Read,
+			Write,
+		},
+		net::TcpListener,
+		thread,
+	};
+
+	use serde::Deserialize;
+
+	use super::{
+		APIResponseDecodeError,
+		APIResult,
+		RESPONSE_BODY_EXCERPT_MAX_BYTES,
+	};
+
+	#[derive(Debug, Deserialize)]
+	struct ExpectedObject {
+		#[serde(rename = "value")]
+		_value: u64,
+	}
+
+	#[derive(Debug, Deserialize)]
+	#[serde(rename_all = "snake_case")]
+	enum ExpectedEnum {
+		Known,
+	}
+
+	async fn successful_response(body: &str) -> reqwest::Response {
+		let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+		let address = listener.local_addr().unwrap();
+		let body = body.to_owned();
+		let server = thread::spawn(move || {
+			let (mut stream, _) = listener.accept().unwrap();
+			let mut request = Vec::new();
+			let mut buffer = [0; 1024];
+			loop {
+				let bytes_read = stream.read(&mut buffer).unwrap();
+				request.extend_from_slice(&buffer[..bytes_read]);
+				if bytes_read == 0
+					|| request.windows(4).any(|window| window == b"\r\n\r\n")
+				{
+					break;
+				}
+			}
+			write!(
+				stream,
+				"HTTP/1.1 200 OK\r\nContent-Type: \
+				 application/json\r\nContent-Length: {}\r\nConnection: \
+				 close\r\n\r\n{}",
+				body.len(),
+				body,
+			)
+			.unwrap();
+		});
+
+		let response = reqwest::get(format!(
+			"http://{address}/response?api_key=super-secret"
+		))
+		.await
+		.unwrap();
+		server.join().unwrap();
+		response
+	}
+
+	fn decode_error<T: std::fmt::Debug>(
+		result: APIResult<T>,
+	) -> APIResponseDecodeError {
+		match result {
+			APIResult::DecodeError(error) => error,
+			other => panic!("expected decode error, got {other:?}"),
+		}
+	}
+
+	#[tokio::test]
+	async fn malformed_json_returns_decode_error() {
+		let response = successful_response("{not-json").await;
+		let error = decode_error(
+			APIResult::<ExpectedObject>::from_response(response).await,
+		);
+
+		assert_eq!(error.status, reqwest::StatusCode::OK);
+		assert_eq!(error.response_body_excerpt, "{not-json");
+		assert!(error.source.is_syntax());
+	}
+
+	#[tokio::test]
+	async fn empty_body_returns_decode_error() {
+		let response = successful_response("").await;
+		let error = decode_error(
+			APIResult::<ExpectedObject>::from_response(response).await,
+		);
+
+		assert!(error.response_body_excerpt.is_empty());
+		assert!(error.source.is_eof());
+	}
+
+	#[tokio::test]
+	async fn schema_mismatch_returns_decode_error() {
+		let body = r#"{"value":"not-a-number"}"#;
+		let response = successful_response(body).await;
+		let error = decode_error(
+			APIResult::<ExpectedObject>::from_response(response).await,
+		);
+
+		assert_eq!(error.response_body_excerpt, body);
+		assert!(error.source.is_data());
+	}
+
+	#[tokio::test]
+	async fn unknown_enum_value_returns_decode_error() {
+		let response = successful_response(r#""future_value""#).await;
+		let error = decode_error(
+			APIResult::<ExpectedEnum>::from_response(response).await,
+		);
+
+		assert!(error.source.is_data());
+		assert!(error.source.to_string().contains("unknown variant"));
+	}
+
+	#[tokio::test]
+	async fn decode_error_context_is_bounded_and_sanitized() {
+		let body = "x".repeat(RESPONSE_BODY_EXCERPT_MAX_BYTES + 100);
+		let response = successful_response(&body).await;
+		let error = decode_error(
+			APIResult::<ExpectedObject>::from_response(response).await,
+		);
+
+		assert_eq!(error.request_url.path(), "/response");
+		assert!(error.request_url.query().is_none());
+		assert!(!error.to_string().contains("super-secret"));
+		assert_eq!(
+			error.response_body_excerpt.chars().count(),
+			RESPONSE_BODY_EXCERPT_MAX_BYTES + 1
+		);
+		assert!(error.response_body_excerpt.ends_with('…'));
+	}
+}
