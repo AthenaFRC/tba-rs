@@ -62,7 +62,7 @@ impl TBAConfig {
 
 	pub fn from_custom_config_file(
 		config_file_path: &Path,
-	) -> Result<Option<TBAConfig>, String> {
+	) -> Result<Option<Self>, String> {
 		if !config_file_path.exists() {
 			return Ok(None);
 		}
@@ -76,7 +76,7 @@ impl TBAConfig {
 		Ok(Some(config))
 	}
 
-	pub fn from_config_file() -> Result<Option<TBAConfig>, String> {
+	pub fn from_config_file() -> Result<Option<Self>, String> {
 		Self::from_custom_config_file(&Self::get_default_config_file_path()?)
 	}
 
@@ -94,7 +94,7 @@ impl TBAConfig {
 	pub fn write_config_file(&self) -> Result<(), String> {
 		self.write_custom_config_file(&Self::get_default_config_file_path()?)
 	}
-	
+
 	pub fn or(self, other: Self) -> Self {
 		Self {
 			path: None,
