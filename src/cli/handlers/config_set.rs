@@ -35,7 +35,7 @@ pub fn config_set(
 		.write_custom_config_file(&config_file_path)?;
 	println!(
 		"Initialized config file at {}.",
-		config_file_path.to_string_lossy().to_string(),
+		config_file_path.to_string_lossy(),
 	);
 	Ok(())
 }
