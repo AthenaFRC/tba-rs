@@ -1,5 +1,5 @@
-mod config_init;
-pub use config_init::*;
+mod config_set;
+pub use config_set::*;
 
 mod config_show;
 pub use config_show::*;

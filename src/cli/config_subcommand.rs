@@ -11,10 +11,10 @@ pub struct ConfigSubcommandArgs {
 
 #[derive(clap::Subcommand, Debug)]
 pub enum ConfigSubcommand {
-	#[command(about = "Initializes the TBA CLI config file.")]
-	Init {
+	#[command(about = "Modify the TBA CLI config file.")]
+	Set {
 		#[clap(flatten)]
-		args: CLIConfigInitCommandArgs,
+		args: CLIConfigSetCommandArgs,
 	},
 
 	#[command(about = "Prints the current configuration.")]
@@ -27,7 +27,7 @@ pub enum ConfigSubcommand {
 impl ConfigSubcommand {
 	pub async fn execute(self, config: &TBAConfig) -> Result<(), String> {
 		match self {
-			ConfigSubcommand::Init { args } => config_init(args, config),
+			ConfigSubcommand::Set { args } => config_set(args, config),
 			ConfigSubcommand::Show { args } => config_show(args, config),
 		}
 	}

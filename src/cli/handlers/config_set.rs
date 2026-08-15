@@ -1,12 +1,12 @@
 use crate::cli::TBAConfig;
 
 #[derive(clap::Args, Debug, Clone)]
-pub struct CLIConfigInitCommandArgs {
+pub struct CLIConfigSetCommandArgs {
 	#[arg(
 		short,
 		long,
-		long_help = &config_init_long_help_message(),
-		help = &config_init_help_message(),
+		long_help = &config_set_output_path_long_help_message(),
+		help = &config_set_output_path_help_message(),
 	)]
 	output_path: Option<std::path::PathBuf>,
 
@@ -14,22 +14,24 @@ pub struct CLIConfigInitCommandArgs {
 	config: TBAConfig,
 }
 
-fn config_init_help_message() -> String {
+const OUTPUT_PATH_HELP_MESSAGE: &str = "The path to the config file to use.";
+
+fn config_set_output_path_help_message() -> String {
 	format!(
-		"The path at which to generate the config file. [default: {}]",
+		"{OUTPUT_PATH_HELP_MESSAGE} [default: {}]",
 		TBAConfig::get_apparent_default_config_file_path()
 	)
 }
 
-fn config_init_long_help_message() -> String {
+fn config_set_output_path_long_help_message() -> String {
 	format!(
-		"The path at which to generate the config file.\n\n[default: {}]",
+		"{OUTPUT_PATH_HELP_MESSAGE}\n\n[default: {}]",
 		TBAConfig::get_apparent_default_config_file_path()
 	)
 }
 
-pub fn config_init(
-	args: CLIConfigInitCommandArgs,
+pub fn config_set(
+	args: CLIConfigSetCommandArgs,
 	config: &TBAConfig,
 ) -> Result<(), String> {
 	let config_file_path = args
