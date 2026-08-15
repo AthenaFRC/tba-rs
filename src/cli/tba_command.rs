@@ -3,7 +3,6 @@
 	about,
 	version,
 	propagate_version = true,
-	max_term_width = 120,
 	arg_required_else_help = true,
 	help_expected = true,
 	disable_version_flag = true,
