@@ -13,7 +13,7 @@ use crate::{
 };
 
 #[derive(clap::Args, Debug, Clone)]
-pub struct CLIGetRequest {
+pub struct CLIGetCommand {
 	#[arg(
 		long,
 		global = true,
@@ -57,7 +57,7 @@ pub struct CLIGetRequest {
 	endpoint: GetSubcommand,
 }
 
-pub async fn get_endpoint(request: CLIGetRequest) -> Result<(), String> {
+pub async fn get_endpoint(request: CLIGetCommand) -> Result<(), String> {
 	let client = APIClient::new_with(request.api_key, request.base_url)
 		.await
 		.map_err(|client_init_error| match client_init_error {

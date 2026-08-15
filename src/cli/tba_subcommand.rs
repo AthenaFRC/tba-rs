@@ -7,7 +7,7 @@ pub enum TBASubcommand {
 	)]
 	Get {
 		#[clap(flatten)]
-		request: CLIGetRequest,
+		request: CLIGetCommand,
 	},
 
 	#[command(
