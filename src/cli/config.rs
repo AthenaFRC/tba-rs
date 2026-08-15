@@ -31,6 +31,7 @@ pub struct TBAConfig {
 		num_args = 0..=1,
 		require_equals = true,
 		default_missing_value = "true",
+		hide_possible_values = true,
 		help = "Whether to print ETag values when fetching data from the API."
 	)]
 	pub print_e_tag: Option<bool>,
