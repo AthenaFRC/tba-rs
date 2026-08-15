@@ -66,7 +66,7 @@ impl TBAConfig {
 		if !config_file_path.exists() {
 			return Ok(None);
 		}
-		let config_file_content = std::fs::read_to_string(&config_file_path)
+		let config_file_content = std::fs::read_to_string(config_file_path)
 			.map_err(|e| format!("Failed to read config file: {}", e))?;
 		let mut config: Self = match toml::from_str(&config_file_content) {
 			Ok(config) => Ok(config),
