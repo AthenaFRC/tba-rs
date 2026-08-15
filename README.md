@@ -3,10 +3,10 @@
 `tba` is an async Rust client for
 [The Blue Alliance API v3](https://www.thebluealliance.com/apidocs/v3).
 
-The crate provides generated endpoint accessors, serde response models, ETag
-support, optional client-side rate limiting, and a feature-gated `tba` CLI. It
-is intended for FRC tools that want typed access to TBA data without
-hand-building request URLs.
+The workspace provides generated endpoint accessors, serde response models,
+ETag support, optional client-side rate limiting, and a `tba` CLI. It is
+intended for FRC tools that want typed access to TBA data without hand-building
+request URLs.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -35,10 +35,11 @@ tba = "0.1"
 ## Optional Features
 
 - `rate-limit` enables `APIClient::with_rate_limiter`.
-- `cli` builds the `tba` command-line client. Install it with:
+- The `cli` workspace package builds the `tba` command-line client. Run it
+  from a checkout with:
 
   ```sh
-  cargo install tba --features cli
+  cargo run -p cli -- --help
   ```
 
   With `X_TBA_AUTH_KEY` set, an endpoint can then be queried with commands such

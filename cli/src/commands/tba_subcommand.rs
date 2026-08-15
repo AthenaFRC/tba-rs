@@ -1,4 +1,4 @@
-use crate::cli::{ConfigSubcommandArgs, TBAConfig, handlers::*};
+use crate::{ConfigSubcommandArgs, TBAConfig, handlers::*};
 
 #[derive(clap::Subcommand, Debug)]
 pub enum TBASubcommand {

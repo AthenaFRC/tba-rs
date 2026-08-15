@@ -1,0 +1,25 @@
+[package]
+name = "tba-cli"
+version = "0.1.0"
+edition = "2024"
+authors = ["Trevor Sears <trevor@trevorsears.com>"]
+description = "A command line interface for The Blue Alliance API."
+readme = "../README.md"
+license = "LGPL-3.0-or-later"
+documentation = "https://docs.rs/tba-cli"
+repository = "https://github.com/AthenaFRC/tba"
+keywords = ["frc", "first-robotics", "the-blue-alliance", "cli"]
+categories = ["command-line-utilities", "science::robotics"]
+
+[[bin]]
+name = "tba"
+path = "src/main.rs"
+
+[dependencies]
+clap.workspace = true
+clap_complete.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tba = { version = "0.1.0", path = "../lib", features = ["cli", "rate-limit"] }
+tokio.workspace = true
+toml.workspace = true

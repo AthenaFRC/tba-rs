@@ -1,0 +1,28 @@
+[package]
+name = "tba"
+version = "0.1.0"
+edition = "2024"
+authors = ["Trevor Sears <trevor@trevorsears.com>"]
+description = "An async Rust client for The Blue Alliance API."
+readme = "../README.md"
+license = "LGPL-3.0-or-later"
+documentation = "https://docs.rs/tba"
+repository = "https://github.com/AthenaFRC/tba"
+keywords = ["frc", "first-robotics", "the-blue-alliance", "api", "async"]
+categories = ["api-bindings", "web-programming::http-client", "science::robotics"]
+
+[features]
+default = []
+rate-limit = ["dep:governor"]
+cli = ["dep:clap"]
+
+[dependencies]
+clap = { workspace = true, optional = true }
+governor = { workspace = true, optional = true }
+paste.workspace = true
+reqwest.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+[dev-dependencies]
+tokio.workspace = true

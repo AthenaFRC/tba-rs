@@ -1,4 +1,4 @@
-use crate::cli::TBAConfig;
+use crate::TBAConfig;
 
 #[derive(clap::Args, Debug, Clone)]
 pub struct CLIConfigSetCommandArgs {

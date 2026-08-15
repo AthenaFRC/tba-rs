@@ -1,5 +1,19 @@
+pub mod commands;
+pub use commands::*;
+
+pub mod config;
+pub use config::*;
+
+pub mod handlers;
+
+pub mod output_format;
+pub use output_format::*;
+
+pub mod util;
+
+pub use tba::*;
+
 use clap::{CommandFactory, Parser};
-use tba::cli::{TBACommand, TBAConfig};
 
 #[tokio::main]
 pub async fn main() {

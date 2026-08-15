@@ -2,9 +2,7 @@ use serde_json::{Serializer, ser::PrettyFormatter};
 
 use crate::{
 	API_KEY_ENV_VAR, APIClient, APIClientInitError, APIResult,
-	BASE_API_URL_ENV_VAR,
-	cli::{OutputFormat, TBAConfig},
-	endpoints::GetSubcommand,
+	BASE_API_URL_ENV_VAR, OutputFormat, TBAConfig, endpoints::GetSubcommand,
 };
 
 #[derive(clap::Args, Debug, Clone)]
@@ -168,7 +166,7 @@ fn get_pretty_json_string<T: serde::Serialize>(
 mod tests {
 	use clap::{CommandFactory, Parser};
 
-	use crate::cli::{TBACommand, TBASubcommand};
+	use crate::{TBACommand, TBASubcommand};
 
 	#[test]
 	fn absent_command_line_settings_remain_none() {
@@ -205,5 +203,51 @@ mod tests {
 			help.contains(crate::BASE_API_URL_DEFAULT),
 			"unexpected help output: {help}"
 		);
+	}
+
+	#[test]
+	fn cli_endpoint_names_use_macro_snake_case_names() {
+		let command = TBACommand::command();
+		let get = command
+			.find_subcommand("get")
+			.expect("get subcommand should exist");
+		let district = get
+			.find_subcommand("district")
+			.expect("district subcommand should exist");
+		let event = get
+			.find_subcommand("event")
+			.expect("event subcommand should exist");
+		let match_api = get
+			.find_subcommand("match-api")
+			.expect("match-api subcommand should exist");
+		let dcmp_history = district
+			.find_subcommand("dcmp-history")
+			.expect("dcmp-history subcommand should exist");
+
+		assert_eq!(
+			district.get_about().map(ToString::to_string).as_deref(),
+			Some(
+				"Endpoints responsible for information about individual \
+				 competition districts."
+			)
+		);
+		assert_eq!(
+			dcmp_history.get_about().map(ToString::to_string).as_deref(),
+			Some(
+				"Gets a list of DCMP events and awards for the given district \
+				 abbreviation."
+			)
+		);
+		assert!(
+			dcmp_history.clone().render_help().to_string().contains(
+				"The abbreviated district name (e.g. `ne` or `fim`)."
+			)
+		);
+		assert!(event.find_subcommand("oprs").is_some());
+		assert!(event.find_subcommand("op-rs").is_none());
+		assert!(event.find_subcommand("district-points").is_some());
+		assert!(event.find_subcommand("district_points").is_none());
+		assert!(match_api.find_subcommand("match").is_some());
+		assert!(match_api.find_subcommand("match-").is_none());
 	}
 }

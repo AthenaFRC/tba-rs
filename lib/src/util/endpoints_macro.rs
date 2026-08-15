@@ -116,7 +116,7 @@ macro_rules! endpoints {
 			pub enum GetSubcommand {
 				$(
 					#[command(
-						about = $crate::cli::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($domain_doc),*])
+						about = $crate::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($domain_doc),*])
 					)]
 					$domain {
 						#[command(subcommand)]
@@ -195,16 +195,16 @@ macro_rules! endpoints {
 					pub enum [<$domain Subcommand>] {
 						$(
 							#[command(
-								name = $crate::cli::util::macro_helpers::__tba_endpoint_cli_name!(
+								name = $crate::util::macro_helpers::__tba_endpoint_cli_name!(
 									$endpoint_name_pascal,
 									$($endpoint_name_snake)?
 								),
-								about = $crate::cli::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($endpoint_doc),*]),
+								about = $crate::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($endpoint_doc),*]),
 							)]
 							$endpoint_name_pascal {
 								$(
 									#[arg(
-										help = $crate::cli::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($field_doc),*])
+										help = $crate::util::attribute_helpers::__tba_endpoint_doc_comment(&[$($field_doc),*])
 									)]
 									$field: $field_type,
 								)*
@@ -219,6 +219,7 @@ macro_rules! endpoints {
 	};
 }
 
+#[cfg(feature = "cli")]
 pub(crate) use __tba_endpoint_call;
 pub(crate) use __tba_endpoint_fn;
 pub(crate) use endpoints;

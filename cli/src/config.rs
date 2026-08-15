@@ -20,7 +20,7 @@ pub struct TBAConfig {
 	pub base_url: Option<String>,
 
 	#[arg(long, global = true, help = "The format to output results in.")]
-	pub output_format: Option<crate::cli::OutputFormat>,
+	pub output_format: Option<crate::output_format::OutputFormat>,
 
 	#[arg(
 		long,
@@ -36,11 +36,11 @@ pub struct TBAConfig {
 
 impl TBAConfig {
 	pub fn get_default_config_file_path() -> Result<PathBuf, String> {
-		Ok(crate::cli::util::fs::home_dir()?.join(CONFIG_FILE_NAME))
+		Ok(crate::util::fs::home_dir()?.join(CONFIG_FILE_NAME))
 	}
 
 	pub fn get_apparent_default_config_file_path() -> String {
-		crate::cli::util::fs::home_dir()
+		crate::util::fs::home_dir()
 			.unwrap_or_else(|_| PathBuf::from("."))
 			.join(CONFIG_FILE_NAME)
 			.to_string_lossy()
@@ -130,7 +130,7 @@ impl Default for TBAConfig {
 			path: None,
 			api_key: None,
 			base_url: Some(crate::BASE_API_URL_DEFAULT.to_string()),
-			output_format: Some(crate::cli::OutputFormat::default()),
+			output_format: Some(crate::OutputFormat::default()),
 			print_e_tag: Some(false),
 		}
 	}
@@ -139,7 +139,7 @@ impl Default for TBAConfig {
 #[cfg(test)]
 mod tests {
 	use super::TBAConfig;
-	use crate::cli::OutputFormat;
+	use crate::OutputFormat;
 
 	fn config_with_api_key(api_key: Option<&str>) -> TBAConfig {
 		let mut config = TBAConfig::empty();

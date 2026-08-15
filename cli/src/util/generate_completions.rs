@@ -1,7 +1,7 @@
 use clap::CommandFactory;
 
 pub fn generate_completions(shell: clap_complete::Shell) -> Vec<u8> {
-	let mut cmd = crate::cli::TBACommand::command();
+	let mut cmd = crate::TBACommand::command();
 	let name = cmd.get_name().to_string();
 	let mut buffer = Vec::new();
 

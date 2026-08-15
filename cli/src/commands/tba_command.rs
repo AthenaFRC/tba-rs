@@ -1,4 +1,4 @@
-use crate::cli::TBAConfig;
+use crate::TBAConfig;
 
 #[derive(clap::Parser, Debug)]
 #[command(
@@ -41,5 +41,5 @@ pub struct TBACommand {
 	pub help: Option<bool>,
 
 	#[command(subcommand)]
-	pub subcommand: Option<crate::cli::TBASubcommand>,
+	pub subcommand: Option<crate::TBASubcommand>,
 }
