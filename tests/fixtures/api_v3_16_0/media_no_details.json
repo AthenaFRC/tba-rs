@@ -1,0 +1,9 @@
+{
+  "type": "youtube",
+  "foreign_key": "dQw4w9WgXcQ",
+  "preferred": false,
+  "team_keys": ["frc254"],
+  "direct_url": "https://example.test/video.mp4",
+  "view_url": "https://example.test/watch",
+  "details": {}
+}

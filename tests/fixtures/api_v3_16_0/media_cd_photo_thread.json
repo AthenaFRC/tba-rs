@@ -1,0 +1,11 @@
+{
+  "type": "cdphotothread",
+  "foreign_key": "1234",
+  "preferred": false,
+  "team_keys": ["frc254", "frc1678"],
+  "direct_url": "https://example.test/photo.jpg",
+  "view_url": "https://example.test/photos/1234",
+  "details": {
+    "image_partial": "photo-partial"
+  }
+}

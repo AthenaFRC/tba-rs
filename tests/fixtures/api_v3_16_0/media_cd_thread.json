@@ -1,0 +1,12 @@
+{
+  "type": "cd-thread",
+  "foreign_key": "5678",
+  "preferred": true,
+  "team_keys": ["frc254"],
+  "direct_url": null,
+  "view_url": "https://example.test/thread/5678",
+  "details": {
+    "thread_title": "Robot build thread",
+    "image_url": null
+  }
+}

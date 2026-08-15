@@ -1,0 +1,11 @@
+{
+  "type": "avatar",
+  "foreign_key": "avatar-254",
+  "preferred": true,
+  "team_keys": ["frc254"],
+  "direct_url": "https://example.test/avatar.png",
+  "view_url": "https://example.test/avatar",
+  "details": {
+    "base64Image": "aW1hZ2U="
+  }
+}

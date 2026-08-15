@@ -1554,32 +1554,8 @@ pub struct MediaAvatarDetails {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaAvatar {
-	#[serde(rename = "type")]
-	pub type_: String,
-	pub foreign_key: String,
-	pub preferred: Option<bool>,
-	pub team_keys: Vec<String>,
-	pub direct_url: Option<String>,
-	pub view_url: Option<String>,
-	pub details: Option<MediaAvatarDetails>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct MediaCdPhotoThreadDetails {
 	pub image_partial: String,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaCdPhotoThread {
-	#[serde(rename = "type")]
-	pub type_: String,
-	pub foreign_key: String,
-	pub preferred: Option<bool>,
-	pub team_keys: Vec<String>,
-	pub direct_url: Option<String>,
-	pub view_url: Option<String>,
-	pub details: Option<MediaCdPhotoThreadDetails>,
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -1589,35 +1565,11 @@ pub struct MediaCdThreadDetails {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaCdThread {
-	#[serde(rename = "type")]
-	pub type_: String,
-	pub foreign_key: String,
-	pub preferred: Option<bool>,
-	pub team_keys: Vec<String>,
-	pub direct_url: Option<String>,
-	pub view_url: Option<String>,
-	pub details: Option<MediaCdThreadDetails>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct MediaGrabCadDetails {
 	pub model_created: String,
 	pub model_description: Option<String>,
 	pub model_image: String,
 	pub model_name: String,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaGrabCad {
-	#[serde(rename = "type")]
-	pub type_: String,
-	pub foreign_key: String,
-	pub preferred: Option<bool>,
-	pub team_keys: Vec<String>,
-	pub direct_url: Option<String>,
-	pub view_url: Option<String>,
-	pub details: Option<MediaGrabCadDetails>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
@@ -1637,18 +1589,6 @@ pub enum MediaNoDetailsType {
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaNoDetails {
-	#[serde(rename = "type")]
-	pub type_: MediaNoDetailsType,
-	pub foreign_key: String,
-	pub preferred: Option<bool>,
-	pub team_keys: Vec<String>,
-	pub direct_url: Option<String>,
-	pub view_url: Option<String>,
-	pub details: Option<UnknownJsonObject>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
 pub struct MediaOnshapeDetails {
 	pub model_created: String,
 	pub model_description: Option<String>,
@@ -1656,72 +1596,293 @@ pub struct MediaOnshapeDetails {
 	pub model_name: String,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaOnshape {
-	#[serde(rename = "type")]
-	pub type_: String,
-	pub foreign_key: String,
-	pub preferred: Option<bool>,
-	pub team_keys: Vec<String>,
-	pub direct_url: Option<String>,
-	pub view_url: Option<String>,
-	pub details: Option<MediaOnshapeDetails>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(untagged)]
+// The OpenAPI discriminator is authoritative here. A derived untagged union
+// cannot distinguish missing details or the identical GrabCAD/Onshape shapes.
+#[derive(Debug, Clone)]
 pub enum Media {
-	MediaAvatar(MediaAvatar),
-	MediaCdPhotoThread(MediaCdPhotoThread),
-	MediaCdThread(MediaCdThread),
-	MediaGrabCad(MediaGrabCad),
-	MediaNoDetails(MediaNoDetails),
-	MediaOnshape(MediaOnshape),
+	Avatar {
+		foreign_key: String,
+		preferred: Option<bool>,
+		team_keys: Vec<String>,
+		direct_url: Option<String>,
+		view_url: Option<String>,
+		details: Option<MediaAvatarDetails>,
+	},
+	CdPhotoThread {
+		foreign_key: String,
+		preferred: Option<bool>,
+		team_keys: Vec<String>,
+		direct_url: Option<String>,
+		view_url: Option<String>,
+		details: Option<MediaCdPhotoThreadDetails>,
+	},
+	CdThread {
+		foreign_key: String,
+		preferred: Option<bool>,
+		team_keys: Vec<String>,
+		direct_url: Option<String>,
+		view_url: Option<String>,
+		details: Option<MediaCdThreadDetails>,
+	},
+	GrabCad {
+		foreign_key: String,
+		preferred: Option<bool>,
+		team_keys: Vec<String>,
+		direct_url: Option<String>,
+		view_url: Option<String>,
+		details: Option<MediaGrabCadDetails>,
+	},
+	NoDetails {
+		type_: MediaNoDetailsType,
+		foreign_key: String,
+		preferred: Option<bool>,
+		team_keys: Vec<String>,
+		direct_url: Option<String>,
+		view_url: Option<String>,
+		details: Option<UnknownJsonObject>,
+	},
+	Onshape {
+		foreign_key: String,
+		preferred: Option<bool>,
+		team_keys: Vec<String>,
+		direct_url: Option<String>,
+		view_url: Option<String>,
+		details: Option<MediaOnshapeDetails>,
+	},
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MediaAvatarExtrasDetails {
-	pub base64_image: String,
+#[derive(Deserialize)]
+struct MediaFields<D> {
+	foreign_key: String,
+	preferred: Option<bool>,
+	team_keys: Vec<String>,
+	direct_url: Option<String>,
+	view_url: Option<String>,
+	details: Option<D>,
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaAvatarExtras {
+#[derive(Serialize)]
+struct MediaFieldsRef<'a, T, D> {
 	#[serde(rename = "type")]
-	pub type_: Option<String>,
-	pub details: Option<MediaAvatarExtrasDetails>,
+	type_: T,
+	foreign_key: &'a str,
+	preferred: &'a Option<bool>,
+	team_keys: &'a [String],
+	direct_url: &'a Option<String>,
+	view_url: &'a Option<String>,
+	details: &'a Option<D>,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize, Serialize)]
-#[serde(rename_all = "kebab-case")]
-pub enum MediaBaseType {
-	Youtube,
-	Cdphotothread,
-	Imgur,
-	FacebookProfile,
-	YoutubeChannel,
-	TwitterProfile,
-	GithubProfile,
-	InstagramProfile,
-	PeriscopeProfile,
-	GitlabProfile,
-	Grabcad,
-	InstagramImage,
-	ExternalLink,
-	Avatar,
-	Onshape,
-	CdThread,
+impl<'de> Deserialize<'de> for Media {
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		use serde::de::Error;
+
+		let value = serde_json::Value::deserialize(deserializer)?;
+		let type_ = value
+			.get("type")
+			.ok_or_else(|| {
+				D::Error::custom("missing media discriminator `type`")
+			})?
+			.as_str()
+			.ok_or_else(|| {
+				D::Error::custom("media discriminator `type` must be a string")
+			})?
+			.to_owned();
+
+		macro_rules! deserialize_variant {
+			($details:ty, $variant:ident) => {{
+				let fields: MediaFields<$details> =
+					serde_json::from_value(value).map_err(D::Error::custom)?;
+				Self::$variant {
+					foreign_key: fields.foreign_key,
+					preferred: fields.preferred,
+					team_keys: fields.team_keys,
+					direct_url: fields.direct_url,
+					view_url: fields.view_url,
+					details: fields.details,
+				}
+			}};
+		}
+
+		Ok(match type_.as_str() {
+			"avatar" => deserialize_variant!(MediaAvatarDetails, Avatar),
+			"cdphotothread" => {
+				deserialize_variant!(MediaCdPhotoThreadDetails, CdPhotoThread)
+			}
+			"cd-thread" => deserialize_variant!(MediaCdThreadDetails, CdThread),
+			"grabcad" => deserialize_variant!(MediaGrabCadDetails, GrabCad),
+			"onshape" => deserialize_variant!(MediaOnshapeDetails, Onshape),
+			"youtube" | "imgur" | "facebook-profile" | "youtube-channel"
+			| "twitter-profile" | "github-profile" | "instagram-profile"
+			| "periscope-profile" | "gitlab-profile" | "instagram-image"
+			| "external-link" => {
+				let type_ =
+					serde_json::from_value(serde_json::Value::String(type_))
+						.map_err(D::Error::custom)?;
+				let fields: MediaFields<UnknownJsonObject> =
+					serde_json::from_value(value).map_err(D::Error::custom)?;
+				Self::NoDetails {
+					type_,
+					foreign_key: fields.foreign_key,
+					preferred: fields.preferred,
+					team_keys: fields.team_keys,
+					direct_url: fields.direct_url,
+					view_url: fields.view_url,
+					details: fields.details,
+				}
+			}
+			unknown => {
+				return Err(D::Error::custom(format!(
+					"unknown media discriminator `{unknown}`"
+				)));
+			}
+		})
+	}
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct MediaBase {
-	#[serde(rename = "type")]
-	pub type_: MediaBaseType,
-	pub foreign_key: String,
-	pub preferred: Option<bool>,
-	pub team_keys: Vec<String>,
-	pub direct_url: Option<String>,
-	pub view_url: Option<String>,
+impl Serialize for Media {
+	fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+	where
+		S: serde::Serializer,
+	{
+		macro_rules! serialize_variant {
+			($type:expr, $fields:expr) => {{
+				let (
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details,
+				) = $fields;
+				MediaFieldsRef {
+					type_: $type,
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details,
+				}
+				.serialize(serializer)
+			}};
+		}
+
+		match self {
+			Self::Avatar {
+				foreign_key,
+				preferred,
+				team_keys,
+				direct_url,
+				view_url,
+				details,
+			} => serialize_variant!(
+				"avatar",
+				(
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details
+				)
+			),
+			Self::CdPhotoThread {
+				foreign_key,
+				preferred,
+				team_keys,
+				direct_url,
+				view_url,
+				details,
+			} => serialize_variant!(
+				"cdphotothread",
+				(
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details
+				)
+			),
+			Self::CdThread {
+				foreign_key,
+				preferred,
+				team_keys,
+				direct_url,
+				view_url,
+				details,
+			} => serialize_variant!(
+				"cd-thread",
+				(
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details
+				)
+			),
+			Self::GrabCad {
+				foreign_key,
+				preferred,
+				team_keys,
+				direct_url,
+				view_url,
+				details,
+			} => serialize_variant!(
+				"grabcad",
+				(
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details
+				)
+			),
+			Self::NoDetails {
+				type_,
+				foreign_key,
+				preferred,
+				team_keys,
+				direct_url,
+				view_url,
+				details,
+			} => serialize_variant!(
+				type_,
+				(
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details
+				)
+			),
+			Self::Onshape {
+				foreign_key,
+				preferred,
+				team_keys,
+				direct_url,
+				view_url,
+				details,
+			} => serialize_variant!(
+				"onshape",
+				(
+					foreign_key,
+					preferred,
+					team_keys,
+					direct_url,
+					view_url,
+					details
+				)
+			),
+		}
+	}
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
@@ -1806,26 +1967,59 @@ pub enum InsightV2LeaderboardDataRankingsItemKeys {
 	Vec2(Vec<Vec<String>>),
 }
 
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct InsightV2LeaderboardDataRankingsItemContextsItemVariant1 {
-	pub event_keys: Option<Vec<String>>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
-pub struct InsightV2LeaderboardDataRankingsItemContextsItemVariant2 {
-	pub match_key: String,
-	pub alliance: Vec<String>,
-}
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
+// This shape-only union uses match markers to avoid letting the optional
+// event-list shape absorb a match/alliance context.
+#[derive(Debug, Clone, Serialize)]
 #[serde(untagged)]
 pub enum InsightV2LeaderboardDataRankingsItemContextsItem {
-	InsightV2LeaderboardDataRankingsItemContextsItemVariant1(
-		InsightV2LeaderboardDataRankingsItemContextsItemVariant1,
-	),
-	InsightV2LeaderboardDataRankingsItemContextsItemVariant2(
-		InsightV2LeaderboardDataRankingsItemContextsItemVariant2,
-	),
+	MatchAlliance {
+		match_key: String,
+		alliance: Vec<String>,
+	},
+	EventList {
+		event_keys: Option<Vec<String>>,
+	},
+}
+
+#[derive(Deserialize)]
+struct InsightV2LeaderboardMatchAllianceContext {
+	match_key: String,
+	alliance: Vec<String>,
+}
+
+#[derive(Deserialize)]
+struct InsightV2LeaderboardEventListContext {
+	event_keys: Option<Vec<String>>,
+}
+
+impl<'de> Deserialize<'de>
+	for InsightV2LeaderboardDataRankingsItemContextsItem
+{
+	fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+	where
+		D: serde::Deserializer<'de>,
+	{
+		use serde::de::Error;
+
+		let value = serde_json::Value::deserialize(deserializer)?;
+		let object = value.as_object().ok_or_else(|| {
+			D::Error::custom("insight leaderboard context must be an object")
+		})?;
+		if object.contains_key("match_key") || object.contains_key("alliance") {
+			let context: InsightV2LeaderboardMatchAllianceContext =
+				serde_json::from_value(value).map_err(D::Error::custom)?;
+			Ok(Self::MatchAlliance {
+				match_key: context.match_key,
+				alliance: context.alliance,
+			})
+		} else {
+			let context: InsightV2LeaderboardEventListContext =
+				serde_json::from_value(value).map_err(D::Error::custom)?;
+			Ok(Self::EventList {
+				event_keys: context.event_keys,
+			})
+		}
+	}
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

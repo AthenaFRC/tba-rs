@@ -1,0 +1,14 @@
+{
+  "type": "grabcad",
+  "foreign_key": "cad-model",
+  "preferred": true,
+  "team_keys": ["frc254"],
+  "direct_url": "https://example.test/model.step",
+  "view_url": "https://example.test/model",
+  "details": {
+    "model_created": "2026-01-02T03:04:05Z",
+    "model_description": "Competition robot",
+    "model_image": "https://example.test/model.png",
+    "model_name": "2026 Robot"
+  }
+}
