@@ -1,4 +1,8 @@
-use crate::cli::{handlers::*, ConfigSubcommandArgs};
+use crate::cli::{
+	ConfigSubcommandArgs,
+	TBAConfig,
+	handlers::*,
+};
 
 #[derive(clap::Subcommand, Debug)]
 pub enum TBASubcommand {
@@ -33,10 +37,12 @@ pub enum TBASubcommand {
 }
 
 impl TBASubcommand {
-	pub async fn execute(self) -> Result<(), String> {
+	pub async fn execute(self, config: &TBAConfig) -> Result<(), String> {
 		match self {
-			TBASubcommand::Get { args } => get_endpoint(args).await,
-			TBASubcommand::Config { args } => args.subcommand.execute().await,
+			TBASubcommand::Get { args } => get_endpoint(args, config).await,
+			TBASubcommand::Config { args } => {
+				args.subcommand.execute(config).await
+			}
 			TBASubcommand::Completions { args } => print_completions(args),
 			TBASubcommand::InstallCompletions { args } => {
 				install_completions(args)

@@ -12,20 +12,17 @@ pub struct CLIConfigShowCommandArgs {
 	include_defaults: bool,
 }
 
-pub fn config_show(args: CLIConfigShowCommandArgs) -> Result<(), String> {
-	let config_file_path = TBAConfig::get_default_config_file_path()
-		.map_err(|e| format!("Failed to get default config file path: {}", e))?;
-	match TBAConfig::from_custom_config_file(&config_file_path) {
-		Ok(Some(config)) => {
-			let config_string = toml::to_string_pretty(&config)
-				.map_err(|e| format!("Failed to serialize config: {}", e))?;
-			println!("{config_string}");
-			Ok(())
-		}
-		Ok(None) => Err(format!(
-			"Failed to find config file at {}",
-			config_file_path.to_string_lossy().to_string(),
-		)),
-		Err(e) => Err(format!("Failed to read config file: {e}")),
-	}
+pub fn config_show(
+	args: CLIConfigShowCommandArgs,
+	config: &TBAConfig,
+) -> Result<(), String> {
+	let config = if args.include_defaults {
+		config.clone().or(TBAConfig::default())
+	} else {
+		config.clone()
+	};
+	let config_string = toml::to_string_pretty(&config)
+		.map_err(|e| format!("Failed to serialize config: {}", e))?;
+	print!("{config_string}");
+	Ok(())
 }

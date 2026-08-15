@@ -1,4 +1,7 @@
-use crate::cli::handlers::*;
+use crate::cli::{
+	TBAConfig,
+	handlers::*,
+};
 
 #[derive(clap::Args, Debug)]
 pub struct ConfigSubcommandArgs {
@@ -22,10 +25,10 @@ pub enum ConfigSubcommand {
 }
 
 impl ConfigSubcommand {
-	pub async fn execute(self) -> Result<(), String> {
+	pub async fn execute(self, config: &TBAConfig) -> Result<(), String> {
 		match self {
-			ConfigSubcommand::Init { args } => config_init(args),
-			ConfigSubcommand::Show { args } => config_show(args),
+			ConfigSubcommand::Init { args } => config_init(args, config),
+			ConfigSubcommand::Show { args } => config_show(args, config),
 		}
 	}
 }

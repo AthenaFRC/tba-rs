@@ -8,7 +8,10 @@ use crate::{
 	APIClient,
 	APIClientInitError,
 	APIResult,
-	cli::OutputFormat,
+	cli::{
+		OutputFormat,
+		TBAConfig,
+	},
 	endpoints::GetSubcommand,
 };
 
@@ -58,19 +61,31 @@ pub struct CLIGetCommandArgs {
 	endpoint: GetSubcommand,
 }
 
-pub async fn get_endpoint(args: CLIGetCommandArgs) -> Result<(), String> {
-	let client = APIClient::new_with(args.api_key, args.base_url)
-		.await
-		.map_err(|client_init_error| match client_init_error {
-			APIClientInitError::ReqwestClientInitError(err) => err.to_string(),
-			APIClientInitError::APIKeyError(_) => format!(
-				"API key must be provided either via the '--api-key' flag or \
-				 in the environment variable '{}'",
-				API_KEY_ENV_VAR
-			),
-		})?;
+pub async fn get_endpoint(
+	args: CLIGetCommandArgs,
+	config: &TBAConfig,
+) -> Result<(), String> {
+	let client = APIClient::new_with(
+		args.api_key.or(config.api_key.clone()),
+		args.base_url.or(config.base_url.clone()),
+	)
+	.await
+	.map_err(|client_init_error| match client_init_error {
+		APIClientInitError::ReqwestClientInitError(err) => err.to_string(),
+		APIClientInitError::APIKeyError(_) => format!(
+			"API key must be provided via either 1) the '--api-key' flag or \
+			 2) the environment variable '{}', or 3) the config file.",
+			API_KEY_ENV_VAR
+		),
+	})?;
 	let api_result = args.endpoint.get(&client, args.e_tag).await;
-	print_result(api_result, args.print_e_tag, args.output_format)
+	print_result(
+		api_result,
+		args.print_e_tag.or(config.print_e_tag).unwrap_or(false),
+		args.output_format
+			.or(config.output_format.clone())
+			.unwrap_or(OutputFormat::JSON),
+	)
 }
 
 pub(crate) fn print_result<T: serde::Serialize>(
