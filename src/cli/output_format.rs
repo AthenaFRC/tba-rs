@@ -1,4 +1,4 @@
-#[derive(clap::ValueEnum, Debug, Clone)]
+#[derive(clap::ValueEnum, serde::Serialize, serde::Deserialize, Debug, Clone)]
 pub enum OutputFormat {
 	/// Standard JSON format, without line breaks or indentation.
 	#[value(name = "json")]
