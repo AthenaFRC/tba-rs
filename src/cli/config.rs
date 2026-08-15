@@ -17,17 +17,13 @@ pub struct TBAConfig {
 		global = true,
 		help = "The API key to use to authenticate to the TBA API."
 	)]
-	api_key: Option<String>,
+	pub api_key: Option<String>,
 
 	#[arg(long, global = true, help = "The base URL to use for the TBA API.")]
-	base_url: Option<String>,
+	pub base_url: Option<String>,
 
-	#[arg(
-		long,
-		global = true,
-		help = "The format to output results in."
-	)]
-	output_format: Option<crate::cli::OutputFormat>,
+	#[arg(long, global = true, help = "The format to output results in.")]
+	pub output_format: Option<crate::cli::OutputFormat>,
 
 	#[arg(
 		long,
@@ -37,7 +33,7 @@ pub struct TBAConfig {
 		default_missing_value = "true",
 		help = "Whether to print ETag values when fetching data from the API."
 	)]
-	print_e_tag: Option<bool>,
+	pub print_e_tag: Option<bool>,
 }
 
 impl TBAConfig {
