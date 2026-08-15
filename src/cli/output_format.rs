@@ -33,3 +33,9 @@ pub enum OutputFormat {
 	/// Tab separated value format.
 	TSV,
 }
+
+impl Default for OutputFormat {
+	fn default() -> Self {
+		OutputFormat::JSON
+	}
+}
