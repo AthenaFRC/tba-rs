@@ -13,7 +13,7 @@ pub async fn main() {
 	let config = match TBAConfig::from_custom_config_file(&tba_command.config) {
 		Ok(Some(config)) => config,
 		Ok(None) => {
-			if tba_command.config.to_string_lossy().to_string()
+			if tba_command.config.to_string_lossy()
 				== TBAConfig::get_apparent_default_config_file_path()
 			{
 				let mut result = TBAConfig::empty();
@@ -22,7 +22,7 @@ pub async fn main() {
 			} else {
 				eprintln!(
 					"Failed to find config file at {}",
-					tba_command.config.to_string_lossy().to_string()
+					tba_command.config.to_string_lossy()
 				);
 				std::process::exit(1);
 			}
