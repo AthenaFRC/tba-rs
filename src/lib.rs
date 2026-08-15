@@ -9,4 +9,4 @@ pub mod cli;
 
 pub mod endpoints;
 pub mod models;
-pub mod util;
+pub(crate) mod util;
