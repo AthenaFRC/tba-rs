@@ -12,14 +12,23 @@ use clap_complete::{
 	Shell,
 };
 
+#[derive(clap::Args, Debug, Clone)]
+pub struct CLIInstallCompletionsCommand {
+	/// The shell for which to install the autocompletion script.
+	#[arg(value_enum)]
+	pub shell: Option<Shell>,
+}
+
 const COMMAND_NAME: &str = env!("CARGO_PKG_NAME");
 const BLOCK_START: &str =
 	concat!("# >>> ", env!("CARGO_PKG_NAME"), " completions >>>");
 const BLOCK_END: &str =
 	concat!("# <<< ", env!("CARGO_PKG_NAME"), " completions <<<");
 
-pub fn install_completions(shell: Option<Shell>) -> Result<(), String> {
-	let shell = crate::cli::determine_shell(shell)?;
+pub fn install_completions(
+	command: CLIInstallCompletionsCommand,
+) -> Result<(), String> {
+	let shell = crate::cli::determine_shell(command.shell)?;
 	let installation = installation_for(shell)?;
 
 	if let Some(parent) = installation.script.parent() {
