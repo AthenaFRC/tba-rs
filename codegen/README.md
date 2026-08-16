@@ -25,13 +25,13 @@ then formatted with the workspace's nightly rustfmt configuration.
 From the workspace root, regenerate the output with:
 
 ```sh
-cargo run -p codegen -- generate
+cargo regen-models
 ```
 
 Verify that the checked-in output is current without modifying it with:
 
 ```sh
-cargo run -p codegen -- check
+cargo check-models
 ```
 
 The generated output is `lib/src/models/generated.rs`. Do not edit that file

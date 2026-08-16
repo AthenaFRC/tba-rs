@@ -19,7 +19,7 @@ fn check_generated_file(path: &Path, generated: &str) -> Result<(), String> {
 	})?;
 	if existing != generated {
 		return Err(format!(
-			"{} is out of date; run `cargo run -p codegen -- generate`",
+			"{} is out of date; run `cargo regen-models`",
 			path.display()
 		));
 	}
