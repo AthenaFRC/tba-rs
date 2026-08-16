@@ -1,0 +1,20 @@
+spec_file_path = "tba_api_v3_16_0.openapi.json"
+expected_openapi_version = "3.1.1"
+expected_api_version = "3.16.0"
+generated_models_file_path = "lib/src/models/generated.rs"
+
+# Rust API compatibility overrides applied after reading the pinned OpenAPI
+# document. The generator fails when an override no longer matches.
+
+[overrides.models.AllianceColor.variants]
+NO_ALLIANCE = "Empty"
+
+[overrides.models.Comp_Level.variants]
+qm = "QualificationMatch"
+ef = "EighthFinal"
+qf = "QuarterFinal"
+sf = "SemiFinal"
+f = "Final"
+
+[overrides.models.Position_2016.variants]
+"" = "Empty"

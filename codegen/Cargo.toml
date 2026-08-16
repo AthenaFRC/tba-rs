@@ -1,0 +1,15 @@
+[package]
+name = "tba-codegen"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+clap.workspace = true
+prettyplease = "0.2"
+proc-macro2 = "1.0.107"
+quote = "1.0.47"
+serde.workspace = true
+serde_json.workspace = true
+syn = { version = "2.0.119", features = ["full"] }
+toml.workspace = true
