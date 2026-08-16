@@ -1,9 +1,6 @@
 [workspace]
 resolver = "3"
-members = [
-	"cli",
-	"lib",
-]
+members = ["cli", "codegen", "lib"]
 
 [workspace.dependencies]
 clap = { version = "4.6.6", features = ["derive", "string", "wrap_help"] }

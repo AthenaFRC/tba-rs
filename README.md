@@ -39,7 +39,7 @@ tba = "0.1"
   from a checkout with:
 
   ```sh
-  cargo run -p cli -- --help
+  cargo run -p tba-cli -- --help
   ```
 
   With `X_TBA_AUTH_KEY` set, an endpoint can then be queried with commands such
@@ -209,6 +209,13 @@ year-specific event insights, media entries with no details schema, and match
 timeseries objects. Those parts of the TBA API are either explicitly
 year-specific or declared as empty objects in the upstream schema.
 
+Top-level string and integer enum models are generated from the pinned OpenAPI
+document. Regenerate them with
+`cargo run -p tba-codegen -- generate`, or verify the checked-in output with
+`cargo run -p tba-codegen -- check`. Generator inputs and expected schema
+versions, along with Rust compatibility overrides, are pinned in the
+workspace-root `codegen.toml`.
+
 ## Development
 
 Run the formatter and all checks before submitting changes:
@@ -217,6 +224,7 @@ Run the formatter and all checks before submitting changes:
 cargo +nightly fmt
 cargo check
 cargo test
+cargo run -p tba-codegen -- check
 cargo clippy --all-targets -- -D warnings
 ```
 
