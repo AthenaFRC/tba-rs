@@ -42,10 +42,12 @@ The public library surface is centered on:
   `APIResult<T>` and successful-response decode diagnostics.
 - `lib/src/endpoints.rs`: the complete `endpoints!` declaration, grouped by
   TBA API domain/tag.
-- `lib/src/models.rs`: serde model definitions currently maintained outside
-  the generator, plus re-exports of generated definitions.
+- `lib/src/models.rs`: model module root, generated-model re-exports, and the
+  few endpoint-only compatibility types absent from the component schemas.
 - `lib/src/models/generated.rs`: checked-in output owned by `codegen`; do
   not edit it directly.
+- `lib/src/models/media.rs` and `lib/src/models/insight_v2.rs`: focused manual
+  serde implementations for discriminator-sensitive schema families.
 - `lib/src/util/`: internal endpoint-macro support and response-body excerpt
   formatting.
 - `lib/tests/`: library integration tests and versioned API fixtures.
@@ -141,10 +143,11 @@ and CLI command surfaces.
 
 ## Models and OpenAPI
 
-`lib/src/models.rs` represents schemas from the checked-in TBA OpenAPI
-document. The generator currently owns all top-level string and integer enums
-in `lib/src/models/generated.rs`; the remainder of `lib/src/models.rs` cannot
-yet be reproduced automatically.
+`lib/src/models/generated.rs` represents every ordinary component schema from
+the checked-in TBA OpenAPI document, including objects, nested definitions,
+collections, nullable fields, aliases, enums, and shape-based unions. The
+module root re-exports those definitions alongside the small set of manual
+discriminator-sensitive models.
 
 Regenerate or verify generator-owned source with:
 
@@ -166,8 +169,8 @@ rendering. Keep cross-model dispatch and validation in the orchestration layer.
 Generated tokens are validated with `syn`, normalized with Prettyplease, and
 formatted with nightly rustfmt; preserve that pipeline as coverage expands.
 
-The model file contains intentional manual corrections where the upstream
-schema or shape-only serde derivation is insufficient. In particular:
+Manual model modules contain intentional corrections where shape-only serde
+derivation is insufficient. In particular:
 
 - `Media` uses discriminator-aware serialization and deserialization.
 - Insight leaderboard contexts use marker-aware deserialization.

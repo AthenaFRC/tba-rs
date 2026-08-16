@@ -28,6 +28,9 @@ pub fn variant_name(name: &str) -> Result<String, String> {
 }
 
 pub fn wire_variant_name(value: &str) -> Result<String, String> {
+	if value.is_empty() {
+		return Ok("Empty".into());
+	}
 	let normalized = value
 		.chars()
 		.map(|character| {
@@ -39,6 +42,39 @@ pub fn wire_variant_name(value: &str) -> Result<String, String> {
 		})
 		.collect::<String>();
 	type_name(&normalized)
+}
+
+pub fn field_name(name: &str) -> Result<String, String> {
+	let mut result = String::new();
+	let mut previous = None;
+	for character in name.chars() {
+		if !character.is_ascii_alphanumeric() && character != '_' {
+			return Err(format!(
+				"cannot convert `{name}` into a Rust field name"
+			));
+		}
+		if character.is_ascii_uppercase()
+			&& previous.is_some_and(|previous: char| {
+				previous.is_ascii_lowercase() || previous.is_ascii_digit()
+			}) && !result.ends_with('_')
+		{
+			result.push('_');
+		}
+		result.push(character.to_ascii_lowercase());
+		previous = Some(character);
+	}
+	if result.is_empty()
+		|| !result
+			.chars()
+			.next()
+			.is_some_and(|character| character.is_ascii_alphabetic())
+	{
+		return Err(format!("`{name}` produces invalid Rust field `{result}`"));
+	}
+	if RUST_KEYWORDS.contains(&result.as_str()) {
+		result.push('_');
+	}
+	Ok(result)
 }
 
 fn capitalize(value: &str) -> String {
@@ -88,5 +124,14 @@ mod tests {
 		assert!(type_name("3d_model").is_err());
 		assert!(variant_name("SELF").is_err());
 		assert!(type_name("with-hyphen").is_err());
+	}
+
+	#[test]
+	fn converts_wire_fields_to_snake_case() {
+		assert_eq!(field_name("autoPoints").unwrap(), "auto_points");
+		assert_eq!(field_name("tba_rpEarned").unwrap(), "tba_rp_earned");
+		assert_eq!(field_name("A_ChevalDeFrise").unwrap(), "a_cheval_de_frise");
+		assert_eq!(field_name("base64Image").unwrap(), "base64_image");
+		assert_eq!(field_name("type").unwrap(), "type_");
 	}
 }

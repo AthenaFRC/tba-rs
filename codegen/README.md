@@ -3,16 +3,21 @@
 `codegen` produces checked-in Rust source from the pinned TBA OpenAPI
 document. It is a workspace development tool and is not published.
 
-The generator currently owns every top-level string and integer enum in the
-schema. When present, variant names come from the schema's
-`x-enum-varnames` extension; other string-enum names are derived from their
-wire values. Integer enums include an `Unknown(i64)` variant that preserves the
-library's existing ability to accept values introduced by newer API versions.
+The generator owns all ordinary component schemas: objects, nested objects,
+arrays, maps, references, nullable fields, aliases, string and integer enums,
+and shape-based unions. The discriminator-aware `Media` and Insight v2 model
+families remain explicit manual overrides because a generic untagged derive
+would select the wrong variant for valid payloads. When present, enum variant
+names come from the schema's `x-enum-varnames` extension; other string-enum
+names are derived from their wire values. Integer enums include an
+`Unknown(i64)` variant that preserves the library's ability to accept values
+introduced by newer API versions.
 
 Generator inputs are configured by the workspace-root `codegen.toml`. It
 selects the OpenAPI document and pins both the OpenAPI dialect version and the
-TBA API version. Its `overrides` table contains Rust compatibility adjustments;
-the generator fails if an override no longer matches the schema. Relative file
+TBA API version. Its `overrides` table contains manual model selections and
+Rust compatibility adjustments for generated type and variant names. The
+generator fails if an override no longer matches the schema. Relative file
 paths are resolved from the config file's directory. Select another config
 with the global `--config <FILE>` option.
 

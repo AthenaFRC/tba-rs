@@ -209,8 +209,10 @@ year-specific event insights, media entries with no details schema, and match
 timeseries objects. Those parts of the TBA API are either explicitly
 year-specific or declared as empty objects in the upstream schema.
 
-Top-level string and integer enum models are generated from the pinned OpenAPI
-document. Regenerate them with
+Ordinary response models are generated from the pinned OpenAPI document,
+including nested objects, collections, nullable fields, and unions. A small
+set of discriminator-sensitive models remains hand-written and is checked by
+fixture tests. Regenerate the generated models with
 `cargo run -p codegen -- generate`, or verify the checked-in output with
 `cargo run -p codegen -- check`. Generator inputs and expected schema
 versions, along with Rust compatibility overrides, are pinned in the

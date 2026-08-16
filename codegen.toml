@@ -6,6 +6,30 @@ generated_models_file_path = "lib/src/models/generated.rs"
 # Rust API compatibility overrides applied after reading the pinned OpenAPI
 # document. The generator fails when an override no longer matches.
 
+[overrides]
+manual_models = [
+	"InsightV2",
+	"InsightV2_Base",
+	"InsightV2_Leaderboard",
+	"InsightV2_Leaderboard_Extras",
+	"InsightV2_Streak",
+	"InsightV2_Streak_Extras",
+	"InsightV2_Timeseries",
+	"InsightV2_Timeseries_Extras",
+	"InsightV2LeaderboardData",
+	"InsightV2StreakData",
+	"InsightV2TimeseriesData",
+	"Media",
+	"Media_Avatar",
+	"Media_Avatar_Extras",
+	"Media_Base",
+	"Media_CdPhotoThread",
+	"Media_CdThread",
+	"Media_GrabCad",
+	"Media_NoDetails",
+	"Media_Onshape",
+]
+
 [overrides.models.AllianceColor.variants]
 NO_ALLIANCE = "Empty"
 
@@ -18,3 +42,6 @@ f = "Final"
 
 [overrides.models.Position_2016.variants]
 "" = "Empty"
+
+[overrides.models.Regional_Advancement.types]
+RegionalAdvancementCmpStatus = "RegionalAdvancementCMPStatus"

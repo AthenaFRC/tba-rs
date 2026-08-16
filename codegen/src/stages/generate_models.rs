@@ -39,11 +39,20 @@ mod tests {
 		let config = workspace_config();
 		let generated = generate_models(&config).unwrap();
 
+		assert!(generated.contains("pub struct APIStatus"));
+		assert!(generated.contains("pub struct Event"));
+		assert!(generated.contains("pub struct Match"));
+		assert!(generated.contains("pub struct Team"));
+		assert!(generated.contains("pub type EventCOPRs"));
+		assert!(generated.contains("pub enum MatchScoreBreakdown"));
 		assert!(generated.contains("pub enum AllianceColor"));
 		assert!(generated.contains("pub enum AwardType"));
 		assert!(generated.contains("pub enum EventType"));
 		assert!(generated.contains("pub enum PlayoffType"));
+		assert!(generated.contains("pub enum RegionalAdvancementCMPStatus"));
 		assert!(generated.contains("pub enum WebcastStatus"));
+		assert!(!generated.contains("pub enum Media"));
+		assert!(!generated.contains("pub enum InsightV2"));
 	}
 
 	#[test]

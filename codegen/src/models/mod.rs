@@ -1,14 +1,18 @@
 mod integer_enum;
+mod object;
+mod rust_type;
 mod string_enum;
 
 use std::collections::BTreeSet;
 
 pub use integer_enum::IntegerEnum;
+pub use object::Object;
 pub use string_enum::StringEnum;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum Model {
 	IntegerEnum(IntegerEnum),
+	Object(Object),
 	StringEnum(StringEnum),
 }
 
@@ -16,6 +20,7 @@ impl Model {
 	pub fn name(&self) -> &str {
 		match self {
 			Self::IntegerEnum(model) => model.name(),
+			Self::Object(model) => model.name(),
 			Self::StringEnum(model) => model.name(),
 		}
 	}
@@ -23,6 +28,7 @@ impl Model {
 	pub fn render(&self) -> proc_macro2::TokenStream {
 		match self {
 			Self::IntegerEnum(model) => model.render(),
+			Self::Object(model) => model.render(),
 			Self::StringEnum(model) => model.render(),
 		}
 	}

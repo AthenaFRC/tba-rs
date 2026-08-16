@@ -1,4 +1,8 @@
-use std::{collections::BTreeMap, fs, path::Path};
+use std::{
+	collections::{BTreeMap, BTreeSet},
+	fs,
+	path::Path,
+};
 
 use serde::Deserialize;
 
@@ -21,6 +25,8 @@ struct Components {
 
 #[derive(Debug, Deserialize)]
 pub struct Schema {
+	#[serde(rename = "$ref")]
+	pub reference: Option<String>,
 	pub title: Option<String>,
 	pub description: Option<String>,
 	#[serde(rename = "type")]
@@ -29,6 +35,24 @@ pub struct Schema {
 	pub values: Option<Vec<serde_json::Value>>,
 	#[serde(rename = "x-enum-varnames")]
 	pub variant_names: Option<Vec<String>>,
+	#[serde(default)]
+	pub properties: BTreeMap<String, Schema>,
+	#[serde(default)]
+	pub required: BTreeSet<String>,
+	pub items: Option<Box<Schema>>,
+	#[serde(rename = "additionalProperties")]
+	pub additional_properties: Option<AdditionalProperties>,
+	#[serde(rename = "oneOf", default)]
+	pub one_of: Vec<Schema>,
+	#[serde(rename = "allOf", default)]
+	pub all_of: Vec<Schema>,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(untagged)]
+pub enum AdditionalProperties {
+	Bool(bool),
+	Schema(Box<Schema>),
 }
 
 impl OpenApiDocument {
@@ -76,6 +100,25 @@ impl OpenApiDocument {
 impl Schema {
 	pub fn simple_type(&self) -> Option<&str> {
 		self.type_.as_ref().and_then(serde_json::Value::as_str)
+	}
+
+	pub fn has_type(&self, expected: &str) -> bool {
+		match &self.type_ {
+			Some(serde_json::Value::String(type_)) => type_ == expected,
+			Some(serde_json::Value::Array(types)) => {
+				types.iter().any(|type_| type_.as_str() == Some(expected))
+			}
+			_ => false,
+		}
+	}
+
+	pub fn is_nullable(&self) -> bool {
+		self.has_type("null")
+			|| self.one_of.iter().any(|schema| schema.has_type("null"))
+	}
+
+	pub fn is_null(&self) -> bool {
+		self.simple_type() == Some("null")
 	}
 }
 
