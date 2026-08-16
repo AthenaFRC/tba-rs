@@ -1,7 +1,7 @@
 use std::process::ExitCode;
 
 use clap::{CommandFactory, Parser};
-use tba_codegen::{commands::CodegenCommand, inputs::Config};
+use codegen::{commands::CodegenCommand, inputs::Config};
 
 fn main() -> ExitCode {
 	match execute(CodegenCommand::parse()) {

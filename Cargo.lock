@@ -206,6 +206,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "codegen"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "prettyplease",
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_json",
+ "syn 2.0.119",
+ "toml",
+]
+
+[[package]]
 name = "colorchoice"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1578,20 +1592,6 @@ dependencies = [
  "serde_json",
  "tba",
  "tokio",
- "toml",
-]
-
-[[package]]
-name = "tba-codegen"
-version = "0.1.0"
-dependencies = [
- "clap",
- "prettyplease",
- "proc-macro2",
- "quote",
- "serde",
- "serde_json",
- "syn 2.0.119",
  "toml",
 ]
 

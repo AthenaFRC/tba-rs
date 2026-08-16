@@ -211,8 +211,8 @@ year-specific or declared as empty objects in the upstream schema.
 
 Top-level string and integer enum models are generated from the pinned OpenAPI
 document. Regenerate them with
-`cargo run -p tba-codegen -- generate`, or verify the checked-in output with
-`cargo run -p tba-codegen -- check`. Generator inputs and expected schema
+`cargo run -p codegen -- generate`, or verify the checked-in output with
+`cargo run -p codegen -- check`. Generator inputs and expected schema
 versions, along with Rust compatibility overrides, are pinned in the
 workspace-root `codegen.toml`.
 
@@ -224,7 +224,7 @@ Run the formatter and all checks before submitting changes:
 cargo +nightly fmt
 cargo check
 cargo test
-cargo run -p tba-codegen -- check
+cargo run -p codegen -- check
 cargo clippy --all-targets -- -D warnings
 ```
 

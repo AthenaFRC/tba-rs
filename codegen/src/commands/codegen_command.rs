@@ -54,7 +54,7 @@ mod tests {
 	#[test]
 	fn parses_a_global_custom_config_path() {
 		let command = CodegenCommand::try_parse_from([
-			"tba-codegen",
+			"codegen",
 			"check",
 			"--config",
 			"custom-codegen.toml",

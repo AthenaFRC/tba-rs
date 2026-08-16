@@ -8,7 +8,7 @@ The workspace root is a virtual manifest and contains three packages:
 - `tba` in `lib/`: the reusable asynchronous API client library.
 - `tba-cli` in `cli/`: the command-line application whose installed binary is
   named `tba`.
-- `tba-codegen` in `codegen/`: a non-published generator for checked-in Rust
+- `codegen` in `codegen/`: a non-published generator for checked-in Rust
   source derived from the pinned OpenAPI document.
 
 The library's default feature set is empty. The CLI is a separate package that
@@ -32,7 +32,7 @@ The public library surface is centered on:
 - `Cargo.toml`: virtual workspace manifest and shared dependency versions.
 - `Cargo.lock`: lockfile shared by all workspace packages.
 - `codegen.toml`: generator input path and expected OpenAPI/TBA API versions.
-- `codegen/`: source and tests for the non-published `tba-codegen` package.
+- `codegen/`: source and tests for the non-published `codegen` package.
 - `lib/Cargo.toml`: manifest for the published `tba` library package.
 - `lib/src/lib.rs`: library exports and module wiring.
 - `lib/src/api_client.rs`: Reqwest client construction, authentication,
@@ -44,7 +44,7 @@ The public library surface is centered on:
   TBA API domain/tag.
 - `lib/src/models.rs`: serde model definitions currently maintained outside
   the generator, plus re-exports of generated definitions.
-- `lib/src/models/generated.rs`: checked-in output owned by `tba-codegen`; do
+- `lib/src/models/generated.rs`: checked-in output owned by `codegen`; do
   not edit it directly.
 - `lib/src/util/`: internal endpoint-macro support and response-body excerpt
   formatting.
@@ -76,7 +76,7 @@ cargo test -p tba
 cargo run -p tba-cli -- --help
 ```
 
-The package names are `tba`, `tba-cli`, and `tba-codegen`; `cli`, `codegen`,
+The package names are `tba`, `tba-cli`, and `codegen`; `cli`, `codegen`,
 and `lib` are directory names, not Cargo package names. The `tba-cli` package
 produces a binary named `tba`.
 
@@ -86,7 +86,7 @@ depend on the library, but the library must not depend on the CLI package.
 
 The `tba` and `tba-cli` packages are independently publishable. Keep their
 versions and the `tba-cli` dependency on `tba` synchronized when preparing a
-release. `tba-codegen` is marked `publish = false`.
+release. `codegen` is marked `publish = false`.
 
 ## Library Features
 
@@ -149,8 +149,8 @@ yet be reproduced automatically.
 Regenerate or verify generator-owned source with:
 
 ```sh
-cargo run -p tba-codegen -- generate
-cargo run -p tba-codegen -- check
+cargo run -p codegen -- generate
+cargo run -p codegen -- check
 ```
 
 The workspace-root `codegen.toml` selects the specification and expected
@@ -254,8 +254,8 @@ cargo check -p tba --all-features
 cargo test -p tba --all-features
 cargo check -p tba-cli
 cargo test -p tba-cli
-cargo test -p tba-codegen
-cargo run -p tba-codegen -- check
+cargo test -p codegen
+cargo run -p codegen -- check
 cargo check --workspace --all-features
 cargo test --workspace --all-features
 cargo clippy --workspace --all-targets --all-features -- -D warnings

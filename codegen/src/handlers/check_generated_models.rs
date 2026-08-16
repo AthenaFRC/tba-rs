@@ -19,7 +19,7 @@ fn check_generated_file(path: &Path, generated: &str) -> Result<(), String> {
 	})?;
 	if existing != generated {
 		return Err(format!(
-			"{} is out of date; run `cargo run -p tba-codegen -- generate`",
+			"{} is out of date; run `cargo run -p codegen -- generate`",
 			path.display()
 		));
 	}
@@ -38,7 +38,7 @@ mod tests {
 			.unwrap()
 			.as_nanos();
 		std::env::temp_dir()
-			.join(format!("tba-codegen-{}-{unique}.rs", std::process::id()))
+			.join(format!("codegen-{}-{unique}.rs", std::process::id()))
 	}
 
 	#[test]

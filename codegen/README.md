@@ -1,6 +1,6 @@
-# tba-codegen
+# codegen
 
-`tba-codegen` produces checked-in Rust source from the pinned TBA OpenAPI
+`codegen` produces checked-in Rust source from the pinned TBA OpenAPI
 document. It is a workspace development tool and is not published.
 
 The generator currently owns every top-level string and integer enum in the
@@ -25,13 +25,13 @@ then formatted with the workspace's nightly rustfmt configuration.
 From the workspace root, regenerate the output with:
 
 ```sh
-cargo run -p tba-codegen -- generate
+cargo run -p codegen -- generate
 ```
 
 Verify that the checked-in output is current without modifying it with:
 
 ```sh
-cargo run -p tba-codegen -- check
+cargo run -p codegen -- check
 ```
 
 The generated output is `lib/src/models/generated.rs`. Do not edit that file
