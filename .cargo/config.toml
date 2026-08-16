@@ -1,0 +1,4 @@
+[alias]
+codegen = "run --package codegen"
+regen-models = "codegen generate"
+check-models = "codegen check"
